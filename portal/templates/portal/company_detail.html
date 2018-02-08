@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block body %}
+
+    {% with company=object %}
+        <h1>{{ company.name }}</h1>
+        <p>{{ company.id }}</p>
+        {#<p>type: {{ object.type }}</p>#}
+        <p>Published: {{ company.created_at|date }}</p>
+        <p>Date: {{ now|date }}</p>
+    {% endwith %}
+
+{% endblock %}

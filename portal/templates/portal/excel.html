@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='excel' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='excel' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+
+
+{% block body %}
+
+
+    <form action="/portal/excel/" enctype="multipart/form-data" method="post" style="width: 100%">
+
+        {% csrf_token %}
+
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card lx-form">
+
+            <div class="mdl-card__title">
+                导入
+            </div>
+
+            <div class="mdl-card__actions mdl-card--border mdl-grid">
+
+                {#    {{ form }}#}
+                {#    {{ form.as_table }}#}
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--11-col-desktop mdl-cell--7-col-tablet mdl-cell--4-col-phone">
+                    <input class="mdl-textfield__input" type="file" name="file" required id="id_file"/>
+                    <label class="mdl-textfield__label" for="id_file"></label>
+                </div>
+
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-cell mdl-cell--1-col">
+                    导入
+                </button>
+
+            </div>
+        </div>
+    </form>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet" style="overflow-x: auto">
+        {% load tz %}
+        {% get_current_timezone as TIME_ZONE %}
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+            <thead>
+            <tr>
+                <th style="width: 58px;">#</th>
+                <th>开始时间({{ TIME_ZONE }})</th>
+                <th>结束时间({{ TIME_ZONE }})</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for excel_log in object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        {{ excel_log.datetime_start|date:"Y-m-d H:i:s" }}
+                    </td>
+                    <td>
+                        {{ excel_log.datetime_end|date:"Y-m-d H:i:s" }}
+                    </td>
+                    {#                    <td>{{ excel_log.created_at|date:"Y-m-d H:i:s" }}</td>#}
+                    <td>
+                        {# {{ excel_log.status }} #}
+                        {% ifequal excel_log.status 0 %}开始{% endifequal %}
+                        {% ifequal excel_log.status 1 %}完成{% endifequal %}
+                        {% ifequal excel_log.status -1 %}失败{% endifequal %}
+                    </td>
+                    <td>
+                        <a href="{{ excel_log.file_excel.url }}">查看文件</a>
+                        <a href="{{ excel_log.file_log.url }}">查看日志</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No excel log yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
+                    {% endif %}
+
+                    <span class="current mdl-button" disabled>
+                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "portal/artist_detail.html" %}
+
+{% load static %}
+
+{% load thumbnail %}
+{% load watermark %}
+
+{% block tab_bar %}
+    {% with mdl_tabs_tab_is_active='artist-detail-record-list-involved' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block tabs %}
+
+    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+        {% for record in object_list %}
+            <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="lx-card mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__media">
+
+                        <a href="{% url 'portal:record-detail' record.id %}">
+                            <div class="lx-square-container">
+                                <div class="lx-square-text">
+                                    {% if record.recordcover and record.recordcover.image_exists %}
+                                        <div class="lx-center">
+                                            {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}
+                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                            {% endthumbnail %}
+                                        </div>
+                                    {% else %}
+                                        <div class="lx-center">
+                                            <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class="mdl-card__title mdl-card--border">
+                        <h6 class="mdl-card__title-text">
+                            <a href="{% url 'portal:record-detail' record.id %}">{{ record.title }}</a>
+                        </h6>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <span>年代：{{ record.release }}</span>
+                        <br>
+                        <span>介质：{{ record.format_value }}</span>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        {% for artist in record.artists.all %}
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div>
+                <div>暂无唱片</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
+        <div class="mdl-card mdl-shadow--2dp lx-pagination-parent-0">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
+                    {% endif %}
+
+                    <span class="current mdl-button" disabled>
+                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

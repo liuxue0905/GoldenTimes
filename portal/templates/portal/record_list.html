@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load thumbnail %}
+{% load watermark %}
+{#{% load material_form %}#}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='record-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='record-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block title %}
+    <title>流金岁月唱片库 - 唱片</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="mdl-cell mdl-cell--12-col mdl-card lx-form" style="width: 100%">
+        <form method="get" action="#">
+
+            {% csrf_token %}
+
+            <div class="mdl-card__actions mdl-card--border mdl-grid">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                    <input class="mdl-textfield__input" type="text" id="sample1" name="title" value="{{ request.GET.title }}">
+                    <label class="mdl-textfield__label" for="sample1">唱片标题</label>
+                </div>
+
+                <select name="format" class="mdl-cell mdl-cell--1-col">
+                    <option value="" selected>全部</option>
+                    <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>CD
+                    </option>
+                    <option value="2" {% ifequal request.GET.format '2' %}selected{% endifequal %}>LP
+                    </option>
+                    <option value="3" {% ifequal request.GET.format '3' %}selected{% endifequal %}>MC
+                    </option>
+                    <option value="4" {% ifequal request.GET.format '4' %}selected{% endifequal %}>DATA
+                    </option>
+                </select>
+
+                <button type="submit" class="abc mdl-button mdl-js-button mdl-button--raised mdl-cell mdl-cell--1-col">
+                    搜索
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+        {% for record in object_list %}
+            <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+                <div class="lx-card mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__media">
+
+                        <a href="{% url 'portal:record-detail' record.id %}">
+                            <div class="lx-square-container">
+                                <div class="lx-square-text">
+                                    {% if record.recordcover and record.recordcover.image_exists %}
+                                        <div class="lx-center">
+                                            {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}
+                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                            {% endthumbnail %}
+                                        </div>
+                                    {% else %}
+                                        <div class="lx-center">
+                                            <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class="mdl-card__title mdl-card--border">
+                        <h4 class="mdl-card__title-text">
+                            <a href="{% url 'portal:record-detail' record.id %}">
+                                {{ record.title }}
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        <span>年代：{{ record.release }}</span>
+                        <br>
+                        <span>介质：{{ record.format_value }}</span>
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--border">
+                        {% for artist in record.artists.all %}
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div>
+                <div>No artists yet.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
+                    {% else %}
+                        <a class="mdl-button" href disabled>&laquo; 上一页</a>
+                    {% endif %}
+
+                    <span class="current mdl-button" disabled>
+                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
+                    {% else %}
+                        <a class="mdl-button" href disabled>下一页 &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

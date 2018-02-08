@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load thumbnail %}
+{% load watermark %}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='record-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='record-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block body %}
+
+    {% with record=object %}
+
+        <div class="mdl-card mdl-shadow--4dp mdl-grid mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet">
+            <div class="mdl-card__media mdl-cell mdl-cell--12-col-tablet" style="background-color: transparent">
+                <div class="lx-square-container">
+                    <div class="lx-square-text">
+                        {% if record.recordcover and record.recordcover.image_exists %}
+                            <div class="lx-center">
+                                {% thumbnail record.recordcover.image "320x320" crop="noop" as im %}
+                                    <a class="android-image-link" href="{{ im0.url }}" target="_blank">
+                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                    </a>
+                                {% endthumbnail %}
+                            </div>
+                        {% else %}
+                            <div class="lx-center">
+                                <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--8-col">
+                <h2 class="mdl-card__title-text">{{ record.title }}</h2>
+                <div class="mdl-card__supporting-text padding-top">
+                    <p>
+                        <span>歌手:</span>
+                        {% for artist in record.artists.all %}
+                            <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                        {% endfor %}
+                    </p>
+
+                    <p>
+                        介质：{{ record.format_value }}
+                        <br>
+                        年代: {{ record.release }}
+                        <br>
+                        编号: {{ record.number }}
+                        <br>
+                        {% if record.company %}
+                            唱片公司: {{ record.company.name }}
+                        {% endif %}
+                    </p>
+                    {#<div id="tt1" class=" icon material-icons portfolio-share-btn" tabindex="0">#}
+                    {#share#}
+                    {#</div>#}
+                    {#<div class="mdl-tooltip" for="tt1" data-upgraded=",MaterialTooltip" style="left: 1077.72px; margin-left: -68.5px; top: 345px;">#}
+                    {#Share via social media#}
+                    {#</div>#}
+                </div>
+                <div class="mdl-card__supporting-text no-left-padding">
+                    <p>
+                        监制: {{ record.producer|default_if_none:'-' }}
+                        <br>
+                        录音: {{ record.recorder|default_if_none:'-' }}
+                        <br>
+                        混音: {{ record.mixer|default_if_none:'-' }}
+                        <br>
+                        乐手: {{ record.bandsman|default_if_none:'-' }}
+                        <br>
+                        说明: {{ record.description|default_if_none:'-' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet">
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%">
+                <thead>
+                <tr>
+                    <th style="width: 58px;">序号</th>
+                    <th>标题</th>
+                    <th>歌手</th>
+                    <th style="width: 58px;">作曲</th>
+                    <th style="width: 58px;">作词</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for song in record.song_set.all %}
+                    <tr>
+                        <td>{{ song.track }}</td>
+                        <td>
+                            <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></td>
+                        <td>
+                            {% for artist in song.artists.all %}
+                                <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                            {% endfor %}
+                        </td>
+                        <td>{{ song.composer }}</td>
+                        <td>{{ song.lyricist }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if record.recordimages_set.all %}
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
+                <div class="android-screen-section mdl-typography--text-center">
+                    <a name="screens"></a>
+                    <div class="android-screens" style="text-align: left;">
+                        {% for recordimage in record.recordimages_set.all %}
+                            <div class="android-auto android-screen">
+                                <div class="lx-square-container">
+                                    <div class="lx-square-text">
+                                        {% thumbnail recordimage.image "320x320" crop="noop" watermark_size="80x80" as im %}
+                                            <a class="android-image-link" href="{{ im0.url }}" target="_blank">
+                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                            </a>
+                                        {% endthumbnail %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endwith %}
+
+{% endblock %}

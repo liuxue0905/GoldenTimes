@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='song-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='song-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="mdl-card mdl-cell mdl-cell--12-col mdl-grid">
+
+        <div class="mdl-card__media mdl-cell mdl-cell--2-col mdl-cell--12-col-tablet" style="background-color: transparent">
+            <i class="material-icons" style="color: gray; font-size: 160px;">music_note</i>
+        </div>
+
+        <div class="mdl-cell mdl-cell--10-col">
+            <h2 class="mdl-card__title-text">{{ object.track }} {{ object.title }}</h2>
+
+            <div class="mdl-card__supporting-text padding-top">
+                <p>
+                    专辑:
+                    <a href="{% url 'portal:record-detail' song.record.id %}">{{ object.record.title }}</a>
+                </p>
+                <p>
+                    歌手:
+                    {% for artist in song.artists.all %}
+                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                    {% endfor %}
+                </p>
+                <p>
+                    作曲: {{ object.composer|default:"" }}
+                    <br>
+                    作词: {{ object.lyricist|default:"" }}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <tbody>
+        <tr>
+            <th style="width: 58px">编曲</th>
+            <td>{{ object.arranger|default:"" }}</td>
+        </tr>
+        <tr>
+            <th>和音</th>
+            <td>{{ object.vocalist|default:"" }}</td>
+        </tr>
+        <tr>
+            <th>监制</th>
+            <td>{{ object.producer|default:"" }}</td>
+        </tr>
+        <tr>
+            <th>乐手</th>
+            <td>{{ object.bandsman|default:"" }}</td>
+        </tr>
+        <tr>
+            <th>说明</th>
+            <td>{{ object.description|default:"" }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

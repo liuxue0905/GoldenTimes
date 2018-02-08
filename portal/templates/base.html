@@ -1,0 +1,131 @@
+{% load static %}
+<!doctype html>
+
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Introducing Lollipop, a sweet new take on Android.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    {#    <title>Android</title>#}
+    {% block title %}
+    {% endblock %}
+
+    {#    <link rel="stylesheet"#}
+    {#          href="{% static 'node_modules/material-components-web/dist/material-components-web.css' %}">#}
+
+    <link rel="stylesheet" href="{% static 'mdl/material.min.css' %}">
+    <script src="{% static 'mdl/material.min.js' %}"></script>
+    {#    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">#}
+    <link rel="stylesheet" href="https://fonts.conf.top/icon?family=Material+Icons">
+
+
+    <link rel="stylesheet" href="{% static 'mdl-template-android-dot-com/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'mdl-template-portfolio/styles.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/lx.css' %}">
+
+    {% block style %}
+    {% endblock %}
+
+    {% block script %}
+    {% endblock %}
+</head>
+
+<body>
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {% block android_header %}
+        <div class="android-header mdl-layout__header mdl-layout__header--waterfall">
+            <div class="mdl-layout__header-row">
+                <span class="android-title mdl-layout-title">
+                    <img class="android-logo-image" src="{% static 'mdl-template-android-dot-com/images/android-logo.png' %}">
+                </span>
+                <!-- Add spacer, to align navigation to the right in desktop -->
+                <div class="android-header-spacer mdl-layout-spacer"></div>
+                <div class="android-search-box mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right mdl-textfield--full-width">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="search-field">
+                        <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" id="search-field">
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <div class="android-navigation-container">
+                    <nav class="android-navigation mdl-navigation">
+                        <a class="mdl-navigation__link mdl-typography--text-uppercase{% ifequal mdl_navigation__link__current 'dashboard' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:dashboard' %}">首页</a>
+                        <a class="mdl-navigation__link mdl-typography--text-uppercase{% ifequal mdl_navigation__link__current 'record-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:record-list' %}">唱片</a>
+                        <a class="mdl-navigation__link mdl-typography--text-uppercase{% ifequal mdl_navigation__link__current 'artist-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:artist-list' %}">歌手</a>
+                        <a class="mdl-navigation__link mdl-typography--text-uppercase{% ifequal mdl_navigation__link__current 'song-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:song-list' %}">歌曲</a>
+                    </nav>
+                </div>
+                <span class="android-mobile-title mdl-layout-title">
+                    <img class="android-logo-image" src="{% static 'mdl-template-android-dot-com/images/android-logo.png' %}">
+                </span>
+                <button class="android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
+                    <i class="material-icons">more_vert</i>
+                </button>
+                <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect" for="more-button">
+                    {#                    <li class="mdl-menu__item">#}
+                    {#                        <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'excel' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:excel' %}">#}
+                    {#                            导入 Excel#}
+                    {#                        </a>#}
+                    {#                    </li>#}
+                    <li class="mdl-menu__item">流金唱片库</li>
+                    <li disabled class="mdl-menu__item">&copy; 2017 L&X</li>
+                </ul>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block android_drawer %}
+        <div class="android-drawer mdl-layout__drawer">
+            <span class="mdl-layout-title">
+                <img class="android-logo-image" src="{% static 'mdl-template-android-dot-com/images/android-logo-white.png' %}">
+            </span>
+            <nav class="mdl-navigation demo-navigation">
+                <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'dashboard' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:dashboard' %}">首页</a>
+                <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'record-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:record-list' %}">唱片</a>
+                <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'artist-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:artist-list' %}">歌手</a>
+                <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'song-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:song-list' %}">歌曲</a>
+                <div class="android-drawer-separator"></div>
+                <span class="mdl-navigation__link" href="">管理员</span>
+                {% if not user.is_authenticated %}
+                    <a class="mdl-navigation__link" href="{% url 'admin:login' %}?next=/portal/dashboard/">登录</a>
+                {% else %}
+                    <a class="mdl-navigation__link" href="{% url 'admin:index' %}">后台</a>
+                    <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'excel' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:excel' %}">导入</a>
+                    <a class="mdl-navigation__link" href="{% url 'admin:logout' %}?next=/portal/dashboard/">退出</a>
+                {% endif %}
+            </nav>
+        </div>
+    {% endblock %}
+
+    <main class="mdl-layout__content">
+        <div class="mdl-grid portfolio-max-width">
+            {% block body %}
+            {% endblock %}
+        </div>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">流金唱片库</div>
+            </div>
+            <div class="mdl-mini-footer__right-section">
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Privacy & Terms</a></li>
+                    <li><a href="#">&copy; 2017</a></li>
+                </ul>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<script src="{% static 'node_modules/material-components-web/dist/material-components-web.js' %}"></script>
+<script>mdc.autoInit()</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block body %}
+
+    {% with company=object %}
+        <h1>{{ company.name }}</h1>
+        {#<p>type: {{ object.type }}</p>#}
+        <p>Published: {{ company.created_at|date }}</p>
+        <p>Date: {{ now|date }}</p>
+    {% endwith %}
+
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th></th>
+            <th>标题</th>
+            <th>年代</th>
+            <th>介质</th>
+            <th>歌手</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for record in object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><img src="{{ record.recordcover.image.url }}" style="width: 15px; height: 15px"></td>
+                <td><a href="{% url 'portal:record-detail' record.id %}">{{ record.title }}</a></td>
+                <td>{{ record.release }}</td>
+                <td>{{ record.format_value }}</td>
+                <td>
+                    {% for artist in record.artists.all %}
+                        <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>
+                    暂无唱片
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+{% endblock %}

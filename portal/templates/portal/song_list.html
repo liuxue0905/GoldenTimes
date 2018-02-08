@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='song-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='song-list' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block title %}
+    <title>流金岁月唱片库 - 歌曲</title>
+{% endblock %}
+
+{#{% block style %}#}
+{#    <style>#}
+{#        .lx-form {#}
+{#            min-height: 0;#}
+{#        }#}
+{##}
+{#        .lx-form .mdl-card__actions {#}
+{#            display: flex;#}
+{#            box-sizing: border-box;#}
+{#            align-items: center;#}
+{#        }#}
+{#    </style>#}
+{#{% endblock %}#}
+
+{% block body %}
+
+    <div class="mdl-cell mdl-cell--12-col mdl-card lx-form">
+        <form method="get" action="#">
+
+            {% csrf_token %}
+
+            <div class="mdl-card__actions mdl-card--border mdl-grid">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--11-col-desktop mdl-cell--7-col-tablet mdl-cell--4-col-phone">
+                    <input class="mdl-textfield__input" type="text" id="sample1" name="title" value="{{ request.GET.title }}">
+                    <label class="mdl-textfield__label" for="sample1">歌曲标题</label>
+                </div>
+
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-cell mdl-cell--1-col">
+                    搜索
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet" style="overflow-x: auto">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+            <thead>
+            <tr>
+                <th style="width: 58px;">#</th>
+                <th style="width: 58px;">序号</th>
+                <th>标题</th>
+                <th>歌手</th>
+                <th>唱片</th>
+                <th>作曲</th>
+                <th>作词</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for song in object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ song.track }}</td>
+                    <td>
+                        <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></td>
+                    <td>
+                        {% for artist in song.artists.all %}
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
+                    </td>
+                    <td>{{ song.composer|default:"" }}</td>
+                    <td>{{ song.lyricist|default:"" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8">No songs yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
+                    {% endif %}
+
+                    <span class="current mdl-button" disabled>
+                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
+                    {% else %}
+                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
