@@ -7,6 +7,7 @@ GoldenTimes Python Django
 $ mkdir ~/.virtualenvs
 $ python3 -m venv ~/.virtualenvs/djangodev
 ```
+The final step in setting up your virtualenv is to activate it:
 ```
 $ source ~/.virtualenvs/djangodev/bin/activate
 ```
