@@ -26,6 +26,15 @@ $ pip install sorl-thumbnail
 $ pip install django-watermark(deprecated)
 $ pip install openpyxl
 ```
+### django-watermark
+```
+$ pip install git+https://github.com/liuxue0905/django-watermark.git
+```
+or
+```
+$ git clone https://github.com/liuxue0905/django-watermark.git
+$ python setup.py install
+```
 
 ## manage
 
@@ -34,14 +43,4 @@ $ python manage.py migrate
 $ python manage.py makemigrations
 $ python manage.py createsuperuser
 $ python manage.py runserver 0:8888
-```
-
-## django-watermark
-```
-$ pip install git+https://github.com/liuxue0905/django-watermark.git
-```
-or
-```
-$ git clone https://github.com/liuxue0905/django-watermark.git
-$ python setup.py install
 ```
