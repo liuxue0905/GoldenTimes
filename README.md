@@ -37,7 +37,9 @@ $ python manage.py runserver 0:8888
 ```
 
 ## django-watermark
-
+```
+$ pip install git+https://github.com/liuxue0905/django-watermark.git
+```
 ```
 $ python setup.py install
 ```
