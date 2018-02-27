@@ -2,7 +2,9 @@
 GoldenTimes Python Django
 
 ## virtualenvs
-
+```
+$ apt-get install python3-venv
+```
 ```
 $ mkdir ~/.virtualenvs
 $ python3 -m venv ~/.virtualenvs/djangodev
