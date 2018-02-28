@@ -2,6 +2,7 @@
 GoldenTimes Python Django
 
 ## virtualenvs
+If not install venv
 ```
 $ apt-get install python3-venv
 ```
