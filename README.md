@@ -6,6 +6,7 @@ If not install venv
 ```
 $ apt-get install python3-venv
 ```
+Create virtualenv
 ```
 $ mkdir ~/.virtualenvs
 $ python3 -m venv ~/.virtualenvs/djangodev
