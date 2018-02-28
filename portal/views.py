@@ -31,6 +31,20 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     # return HttpResponse("Hello, world. You're at the odm index.")
+
+    # print(request)
+    # print(type(request))
+    # # < WSGIRequest: GET '/portal/' >
+    # # < class 'django.core.handlers.wsgi.WSGIRequest'>
+    # # import django.core.handlers.wsgi.WSGIRequest
+    #
+    # print('request.path', request.path)
+    # print('request.body', request.body)
+    # print('request.META', request.META)
+    # print('request.COOKIES', request.COOKIES)
+    #
+    # print('request.META[\'HTTP_ACCEPT_LANGUAGE\']', request.META['HTTP_ACCEPT_LANGUAGE'])
+
     return HttpResponseRedirect(reverse('portal:dashboard', args=()))
 
 
