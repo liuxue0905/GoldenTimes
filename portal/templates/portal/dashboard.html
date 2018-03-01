@@ -37,7 +37,7 @@
 {#                                    <i class="material-icons mdl-list__item-avatar">person</i>#}
                                       {% if artist.artistavatar and artist.artistavatar.image_exists %}
                                           {% thumbnail artist.artistavatar.image "120x120" crop="noop" as im %}
-                                              <img class="material-icons mdl-list__item-avatar mdl-chip__contact" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.15" }}">
+                                              <img class="material-icons mdl-list__item-avatar mdl-chip__contact" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.15" }}">
                                           {% endthumbnail %}
                                       {% else %}
                                           <i class="material-icons mdl-list__item-avatar">person</i>

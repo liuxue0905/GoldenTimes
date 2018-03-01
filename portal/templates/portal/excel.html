@@ -14,7 +14,31 @@
     {% endwith %}
 {% endblock %}
 
+{% block script %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
 
+        $(document).ready(function () {
+            var body = document.getElementsByTagName('body')[0];
+            var serverOffset = body.getAttribute('data-admin-utc-offset');
+            console.log('serverOffset', serverOffset);
+            // Date.getTimezoneOffset()
+            // 本地时间与 GMT 时间之间的时间差，以分钟为单位。
+            console.log('new Date().getTimezoneOffset()', new Date().getTimezoneOffset());
+            if (serverOffset) {
+                var localOffset = new Date().getTimezoneOffset() * -60;
+                var timezoneOffset = localOffset - serverOffset;
+
+                console.log('localOffset', localOffset);
+                console.log('timezoneOffset', timezoneOffset);
+
+                var timezoneOffset = timezoneOffset / 3600;
+                console.log('timezoneOffset', timezoneOffset);
+            }
+        });
+
+    </script>
+{% endblock %}
 
 {% block body %}
 
@@ -30,9 +54,6 @@
             </div>
 
             <div class="mdl-card__actions mdl-card--border mdl-grid">
-
-                {#    {{ form }}#}
-                {#    {{ form.as_table }}#}
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--11-col-desktop mdl-cell--7-col-tablet mdl-cell--4-col-phone">
                     <input class="mdl-textfield__input" type="file" name="file" required id="id_file"/>

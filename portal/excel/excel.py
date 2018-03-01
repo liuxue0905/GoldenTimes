@@ -21,8 +21,6 @@ from .excel_logging import LOGGING
 
 logger = logging.getLogger('xlsx')
 
-from django.conf import settings
-
 ws_record_titles = ['唱片标题', '唱片监制', '唱片编号', '介质', '发布时间', '发布时间排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
                     '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
 ws_artist_titles = ['歌手姓名', '歌手类型']
@@ -30,10 +28,6 @@ ws_artist_titles = ['歌手姓名', '歌手类型']
 
 class ExcelParser(object):
     def __init__(self, filename_excel, filename_log):
-
-        # filename = 'document_template.xltx'
-        # # filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425.xlsx'
-        # filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425的副本.xlsx'
 
         self.filename_excel = filename_excel
         self.filename_log = filename_log
@@ -147,15 +141,15 @@ class ExcelParser(object):
                 'company': company,
             }
 
-            record = Record.objects.update_or_create(title=record_defaults['title'],
+            obj, created = Record.objects.update_or_create(title=record_defaults['title'],
                                                      number=record_defaults['number'],
-                                                     defaults=record_defaults)[0]
+                                                     defaults=record_defaults)
 
-            # print('record.artists', 'start', record.artists, record.artists.all())
-            record.artists.set(artists)
-            # print('record.artists', 'stop', record.artists, record.artists.all())
+            # print('record.artists', 'start', obj.artists, obj.artists.all())
+            obj.artists.set(artists)
+            # print('record.artists', 'stop', obj.artists, obj.artists.all())
 
-            return record
+            return obj
 
         def _save_record_song(record, row):
             xlxs_song_track = row[12].value
@@ -201,13 +195,13 @@ class ExcelParser(object):
                 'record': record
             }
 
-            song = Song.objects.update_or_create(track=song_defaults['track'], title=song_defaults['title'],
-                                                 defaults=song_defaults)[0]
-            # print('song.artists', 'start', song.artists, song.artists.all())
-            song.artists.set(artists)
-            # print('song.artists', 'stop', song.artists, song.artists.all())
+            obj, created = Song.objects.update_or_create(track=song_defaults['track'], title=song_defaults['title'],
+                                                 defaults=song_defaults)
+            # print('song.artists', 'start', obj.artists, obj.artists.all())
+            obj.artists.set(artists)
+            # print('song.artists', 'stop', obj.artists, obj.artists.all())
 
-            return song
+            return obj
 
         def get_merged_cell_ranges_a(merged_cell_ranges):
             range_string_a = []

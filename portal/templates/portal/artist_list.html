@@ -89,7 +89,7 @@
                                     {% if artist.artistavatar and artist.artistavatar.image_exists %}
                                         <div class="lx-center">
                                             {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}
-                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                             {% endthumbnail %}
                                         </div>
                                     {% else %}

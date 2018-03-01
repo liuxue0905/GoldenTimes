@@ -26,9 +26,9 @@
                     <div class="lx-square-text">
                         {% if artist.artistavatar and artist.artistavatar.image_exists %}
                             <div class="lx-center">
-                                {% thumbnail artist.artistavatar.image "240x240" crop="noop" watermark_size="60x60" as im %}
+                                {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}
                                     <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                     </a>
                                 {% endthumbnail %}
                             </div>
@@ -90,9 +90,9 @@
                             <div class="android-auto android-screen">
                                 <div class="lx-square-container">
                                     <div class="lx-square-text">
-                                        {% thumbnail artistimage.image "320x320" crop="noop" watermark_size="80x80" as im %}
+                                        {% thumbnail artistimage.image "320x320" crop="noop" as im %}
                                             <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                             </a>
                                         {% endthumbnail %}
                                     </div>

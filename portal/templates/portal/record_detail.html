@@ -28,7 +28,7 @@
                             <div class="lx-center">
                                 {% thumbnail record.recordcover.image "320x320" crop="noop" as im %}
                                     <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                     </a>
                                 {% endthumbnail %}
                             </div>
@@ -123,9 +123,9 @@
                             <div class="android-auto android-screen">
                                 <div class="lx-square-container">
                                     <div class="lx-square-text">
-                                        {% thumbnail recordimage.image "320x320" crop="noop" watermark_size="80x80" as im %}
+                                        {% thumbnail recordimage.image "320x320" crop="noop" as im %}
                                             <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark_3,opacity=70,position=br,scale=0.30" }}">
+                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                             </a>
                                         {% endthumbnail %}
                                     </div>
