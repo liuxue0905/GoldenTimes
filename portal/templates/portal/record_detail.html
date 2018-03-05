@@ -26,7 +26,7 @@
                     <div class="lx-square-text">
                         {% if record.recordcover and record.recordcover.image_exists %}
                             <div class="lx-center">
-                                {% thumbnail record.recordcover.image "320x320" crop="noop" as im %}
+                                {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}
                                     <a class="android-image-link" href="{{ im0.url }}" target="_blank">
                                         <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                     </a>
@@ -123,7 +123,7 @@
                             <div class="android-auto android-screen">
                                 <div class="lx-square-container">
                                     <div class="lx-square-text">
-                                        {% thumbnail recordimage.image "320x320" crop="noop" as im %}
+                                        {% thumbnail recordimage.image "240x240" crop="noop" as im %}
                                             <a class="android-image-link" href="{{ im0.url }}" target="_blank">
                                                 <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
                                             </a>
