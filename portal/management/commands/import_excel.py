@@ -56,8 +56,10 @@ class Command(BaseCommand):
 
         with open(path, 'rb') as f:
             with open(filename_excel, 'wb+') as destination:
-                for chunk in f.chunks():
-                    destination.write(chunk)
+                destination.write(f.read())
+                destination.truncate()
+                # for chunk in f.chunks():
+                #     destination.write(chunk)
 
         def parse(filename_excel, filename_log):
             excel_log = ExcelLog()
