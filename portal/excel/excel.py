@@ -17,7 +17,7 @@ from portal.models import Record, Song, Artist, Company
 
 import logging
 import logging.config
-from .excel_logging import LOGGING
+from portal.excel.excel_logging import LOGGING
 
 logger = logging.getLogger('xlsx')
 
@@ -29,15 +29,19 @@ ws_artist_titles = ['歌手姓名', '歌手类型']
 class ExcelParser(object):
     def __init__(self, filename_excel, filename_log):
 
+        print('excel', '__init__()')
+
         self.filename_excel = filename_excel
         self.filename_log = filename_log
 
+        print('excel', "##### 导入 开始 #####")
         logger.info("##### 导入 开始 #####")
 
         LOGGING['handlers']['file']['filename'] = self.filename_log
         logging.config.dictConfig(LOGGING)
 
     def parse(self):
+        print('excel', 'parse()')
         wb = openpyxl.load_workbook(filename=self.filename_excel)
 
         logger.info(wb.get_sheet_names())
@@ -48,6 +52,7 @@ class ExcelParser(object):
             self.parse_worksheet_record(wb.worksheets[0])
             self.parse_worksheet_artist(wb.worksheets[1])
         except Exception as e:
+            print('excel', 'parse()', e)
             logger.error("导入 异常错误: {0}".format(e))
 
             import sys, traceback
@@ -65,9 +70,11 @@ class ExcelParser(object):
             logger.error(msg)
 
         finally:
+            print('parse()', '##### 导入 结束 #####')
             logger.info("##### 导入 结束 #####")
 
     def parse_worksheet_record(self, ws):
+        print('excel', '===== 专辑 处理开始 =====')
         logger.info('===== 专辑 处理开始 =====')
         logger.info("工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
 
@@ -302,6 +309,7 @@ class ExcelParser(object):
         logger.info('===== 专辑 处理结束 =====')
 
     def parse_worksheet_artist(self, ws):
+        print('excel', '===== 歌手 处理开始 =====')
         logger.info('===== 歌手 处理开始 =====')
         logger.info("工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
 
