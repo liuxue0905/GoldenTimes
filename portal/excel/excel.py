@@ -111,6 +111,7 @@ class ExcelParser(object):
 
             xlsx_cell_record_artists = row[7].value
 
+            # print('_save_record()')
             # logger.info('[{0}][{1}]'.format(xlsx_record_title, xlsx_record_number))
 
             # Company
@@ -301,11 +302,22 @@ class ExcelParser(object):
             #     logger.debug('正在处理: {0}/{1} {2}'.format(record_size, record_count, xlsx_record_title))
             #     record = _save_record(row)
 
-            if not record or ((xlsx_record_title is not None) and (record.title != xlsx_record_title)):
+
+            def should_new_record():
+                if record is None:
+                    return True
+                else:
+                    if xlsx_record_title is not None and xlsx_record_title != record.title:
+                        return True
+                    elif xlsx_record_number is not None and xlsx_record_number != record.number:
+                        return True
+                return False
+
+            if should_new_record():
                 record_size += 1
                 logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
-                                                                                record_title=xlsx_record_title,
-                                                                                record_number=xlsx_record_number))
+                                                                                 record_title=xlsx_record_title,
+                                                                                 record_number=xlsx_record_number))
                 record = _save_record(row)
 
             _save_record_song(record=record, row=row)
