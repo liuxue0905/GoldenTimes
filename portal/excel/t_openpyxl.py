@@ -5,6 +5,9 @@ import openpyxl
 # filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425的副本.xlsx'
 filename = '/Users/liuxue/Documents/20180306.xlsx'
 
+s = None
+print(type(str(s)))
+
 # wb = openpyxl.load_workbook(filename=filename, read_only=True)
 wb = openpyxl.load_workbook(filename=filename, read_only=True)
 # print(wb.get_sheet_names())

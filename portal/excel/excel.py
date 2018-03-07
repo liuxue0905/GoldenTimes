@@ -26,6 +26,13 @@ ws_record_titles = ['唱片标题', '唱片监制', '唱片编号', '介质', '�
 ws_artist_titles = ['歌手姓名', '歌手类型']
 
 
+def str_strip(value):
+    s = str(value) if value else None
+    if s:
+        s = s.strip()
+    return s
+
+
 class ExcelParser(object):
     def __init__(self, filename_excel, filename_log):
 
@@ -96,9 +103,9 @@ class ExcelParser(object):
             return artists
 
         def _save_record(row):
-            xlsx_record_title = row[0].value
+            xlsx_record_title = str_strip(row[0].value)
             xlsx_record_producer = row[1].value
-            xlsx_record_number = row[2].value
+            xlsx_record_number = str_strip(row[2].value)
             xlsx_record_format = row[3].value
             xlsx_record_release = row[4].value
             xlsx_record_release_order = row[5].value
@@ -130,9 +137,9 @@ class ExcelParser(object):
             artists = _get_or_create_artists(artist_name_list)
 
             record_defaults = {
-                'title': row[0].value,
+                'title': xlsx_record_title,
                 'producer': row[1].value,
-                'number': row[2].value,
+                'number': xlsx_record_number,
                 'format': Record.format_value_to_key(row[3].value),
                 'release': row[4].value,
                 'release_order': row[5].value,
@@ -154,8 +161,8 @@ class ExcelParser(object):
             return obj
 
         def _save_record_song(record, row):
-            xlxs_song_track = row[12].value
-            xlxs_song_title = row[14].value
+            xlxs_song_track = str_strip(row[12].value)
+            xlxs_song_title = str_strip(row[14].value)
             xlxs_song_composer = row[15].value
             xlxs_song_lyricist = row[16].value
             xlxs_song_arranger = row[17].value
@@ -273,9 +280,9 @@ class ExcelParser(object):
             # print(('col0', 'coordinate', 'row', 'column', 'col_idx'),
             #       (col0, col0.coordinate, col0.row, col0.column, col0.col_idx))
 
-            xlsx_record_title = row[0].value
+            xlsx_record_title = str_strip(row[0].value)
             xlsx_record_producer = row[1].value
-            xlsx_record_number = row[2].value
+            xlsx_record_number = str_strip(row[2].value)
             xlsx_record_format = row[3].value
             xlsx_record_release = row[4].value
             xlsx_record_release_order = row[5].value
@@ -307,9 +314,9 @@ class ExcelParser(object):
                 if record is None:
                     return True
                 else:
-                    if xlsx_record_title is not None and xlsx_record_title != record.title:
+                    if xlsx_record_title and xlsx_record_title and xlsx_record_title != record.title:
                         return True
-                    elif xlsx_record_number is not None and xlsx_record_number != record.number:
+                    elif xlsx_record_number and xlsx_record_number and xlsx_record_number != record.number:
                         return True
                 return False
 
