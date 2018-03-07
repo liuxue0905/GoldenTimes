@@ -1,12 +1,14 @@
 import openpyxl
 
-filename = 'document_template.xltx'
+# filename = 'document_template.xltx'
 # filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425.xlsx'
-filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425的副本.xlsx'
+# filename = '/Users/liuxue/Downloads/Developer/GoldenTimes/唱片资料20170425的副本.xlsx'
+filename = '/Users/liuxue/Documents/20180306.xlsx'
 
 # wb = openpyxl.load_workbook(filename=filename, read_only=True)
-wb = openpyxl.load_workbook(filename=filename)
-print(wb.get_sheet_names())
+wb = openpyxl.load_workbook(filename=filename, read_only=True)
+# print(wb.get_sheet_names())
+print(wb.sheetnames)
 print("The number of worksheets is {0}".format(len(wb.worksheets)))
 print("Worksheet name(s): {0}".format(wb.get_sheet_names()))
 ws = wb.worksheets[0]
@@ -17,13 +19,23 @@ print("Cell D30 is {0}".format(ws.cell(row=30, column=4).value))
 # [['唱片标题', '唱片监制', '唱片编号', '介质', '发布时间', '发布时间排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明', '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']]
 
 print(ws.rows)
-for row in ws.rows:
-    content = []
 
-    line = [col.value for col in row]
-    content.append(line)
+# for row in ws.rows:
+#     content = []
+#
+#     line = [col.value for col in row]
+#     content.append(line)
+#
+#     print(content)
 
-    print(content)
+
+with open('/Users/liuxue/Documents/20180306.xlsx.txt', 'w') as f:
+    for row in ws.rows:
+        # print(row[0].value, '\t', row[2].value, row[12].value, row[14].value)
+        s = '[{record_title}][{record_number}]\t[{song_track}][{song_title}]'.format(record_title=row[0].value, record_number=row[2].value, song_track=row[12].value, song_title=row[14].value)
+        print(s)
+        f.write(s)
+        f.write('\n')
 
 # 太耗时
 # print('merged_cells', ws.merged_cells)
@@ -71,7 +83,3 @@ print(tuple)
 
 
 # from portal.models import Song
-
-
-
-

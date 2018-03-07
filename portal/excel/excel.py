@@ -29,31 +29,27 @@ ws_artist_titles = ['歌手姓名', '歌手类型']
 class ExcelParser(object):
     def __init__(self, filename_excel, filename_log):
 
-        print('excel', '__init__()')
-
         self.filename_excel = filename_excel
         self.filename_log = filename_log
-
-        print('excel', "##### 导入 开始 #####")
-        logger.info("##### 导入 开始 #####")
 
         LOGGING['handlers']['file']['filename'] = self.filename_log
         logging.config.dictConfig(LOGGING)
 
-    def parse(self):
-        print('excel', 'parse()')
-        wb = openpyxl.load_workbook(filename=self.filename_excel)
+        logger.info("[Excel]初始化")
 
-        logger.info(wb.get_sheet_names())
-        logger.info("导入 工作表数量: {0}".format(len(wb.worksheets)))
-        logger.info("导入 工作表名称: {0}".format(wb.get_sheet_names()))
+    def parse(self):
+        logger.info("[Excel]开始加载")
+        wb = openpyxl.load_workbook(filename=self.filename_excel, read_only=True)
+        logger.info("[Excel]加载完毕")
+
+        logger.info("[Excel]工作表数量: {0}".format(len(wb.worksheets)))
+        logger.info("[Excel]工作表名称: {0}".format(wb.sheetnames))
 
         try:
             self.parse_worksheet_record(wb.worksheets[0])
             self.parse_worksheet_artist(wb.worksheets[1])
         except Exception as e:
-            print('excel', 'parse()', e)
-            logger.error("导入 异常错误: {0}".format(e))
+            logger.error("[Excel]异常错误: {0}".format(e))
 
             import sys, traceback
 
@@ -70,13 +66,11 @@ class ExcelParser(object):
             logger.error(msg)
 
         finally:
-            print('parse()', '##### 导入 结束 #####')
-            logger.info("##### 导入 结束 #####")
+            logger.info("[Excel]导入结束")
 
     def parse_worksheet_record(self, ws):
-        print('excel', '===== 专辑 处理开始 =====')
-        logger.info('===== 专辑 处理开始 =====')
-        logger.info("工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
+        logger.info('[Record]处理开始')
+        logger.info("[Record]工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
 
         def _get_or_create_company(company_name):
             company_defaults = {
@@ -117,7 +111,7 @@ class ExcelParser(object):
 
             xlsx_cell_record_artists = row[7].value
 
-            logger.info('专辑 {0}'.format(xlsx_record_title))
+            # logger.info('[{0}][{1}]'.format(xlsx_record_title, xlsx_record_number))
 
             # Company
             company = None
@@ -149,8 +143,8 @@ class ExcelParser(object):
             }
 
             obj, created = Record.objects.update_or_create(title=record_defaults['title'],
-                                                     number=record_defaults['number'],
-                                                     defaults=record_defaults)
+                                                           number=record_defaults['number'],
+                                                           defaults=record_defaults)
 
             # print('record.artists', 'start', obj.artists, obj.artists.all())
             obj.artists.set(artists)
@@ -172,7 +166,11 @@ class ExcelParser(object):
             xlsx_song_artists = row[13].value
             xlsx_song_artists_part = row[19].value
 
-            logger.info('专辑 {0} 歌曲 {1} {2}'.format(record.title, xlxs_song_track, xlxs_song_title))
+            logger.info(
+                '[{record_title}][{record_number}] [{song_track}][{song_title}]'.format(record_title=record.title,
+                                                                                        record_number=record.number,
+                                                                                        song_track=xlxs_song_track,
+                                                                                        song_title=xlxs_song_title))
 
             # Song Artists
 
@@ -203,57 +201,57 @@ class ExcelParser(object):
             }
 
             obj, created = Song.objects.update_or_create(track=song_defaults['track'], title=song_defaults['title'],
-                                                 defaults=song_defaults)
+                                                         defaults=song_defaults)
             # print('song.artists', 'start', obj.artists, obj.artists.all())
             obj.artists.set(artists)
             # print('song.artists', 'stop', obj.artists, obj.artists.all())
 
             return obj
 
-        def get_merged_cell_ranges_a(merged_cell_ranges):
-            range_string_a = []
+        # def get_merged_cell_ranges_a(merged_cell_ranges):
+        #     range_string_a = []
+        #
+        #     for range_string in merged_cell_ranges:
+        #         min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
+        #         if get_column_letter(min_col) == get_column_letter(max_col) == 'A':
+        #             range_string_a.append(range_string)
+        #
+        #     return range_string_a
 
-            for range_string in merged_cell_ranges:
-                min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
-                if get_column_letter(min_col) == get_column_letter(max_col) == 'A':
-                    range_string_a.append(range_string)
+        # def is_range_string_start(range_string, cell):
+        #     range = range_string.split(':')
+        #     if cell.coordinate == range[0]:
+        #         return True
+        #     return False
 
-            return range_string_a
+        # def get_range_string(merged_cell_ranges, cell):
+        #     # print('get_range_string')
+        #     # print(('cell', 'coordinate', 'row', 'column', 'col_idx'),
+        #     #       (cell, cell.coordinate, cell.row, cell.column, cell.col_idx))
+        #     for range_string in merged_cell_ranges:
+        #         # print('get_range_string', 'range_boundaries(range_string.upper()', range_boundaries(range_string.upper()))
+        #         min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
+        #
+        #         if cell.col_idx == min_col == max_col:
+        #             if min_row <= cell.row <= max_row:
+        #                 return range_string
+        #
+        #     return None
 
-        def is_range_string_start(range_string, cell):
-            range = range_string.split(':')
-            if cell.coordinate == range[0]:
-                return True
-            return False
-
-        def get_range_string(merged_cell_ranges, cell):
-            # print('get_range_string')
-            # print(('cell', 'coordinate', 'row', 'column', 'col_idx'),
-            #       (cell, cell.coordinate, cell.row, cell.column, cell.col_idx))
-            for range_string in merged_cell_ranges:
-                # print('get_range_string', 'range_boundaries(range_string.upper()', range_boundaries(range_string.upper()))
-                min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
-
-                if cell.col_idx == min_col == max_col:
-                    if min_row <= cell.row <= max_row:
-                        return range_string
-
-            return None
-
-        def get_record_count(ws, merged_cell_ranges_a):
-            count = 0
-
-            count += len(merged_cell_ranges_a)
-
-            ws_rows = iter(ws.rows)
-            next(ws_rows)
-            for row in ws_rows:
-                col0 = row[0]
-                range_string = get_range_string(merged_cell_ranges_a, col0)
-                if not range_string:
-                    count += 1
-
-            return count
+        # def get_record_count(ws, merged_cell_ranges_a):
+        #     count = 0
+        #
+        #     count += len(merged_cell_ranges_a)
+        #
+        #     ws_rows = iter(ws.rows)
+        #     next(ws_rows)
+        #     for row in ws_rows:
+        #         col0 = row[0]
+        #         range_string = get_range_string(merged_cell_ranges_a, col0)
+        #         if not range_string:
+        #             count += 1
+        #
+        #     return count
 
         ws_rows = iter(ws.rows)
         row0 = next(ws_rows)
@@ -262,10 +260,9 @@ class ExcelParser(object):
             ws_record_titles[22]):
             return
 
-        merged_cell_ranges_a = get_merged_cell_ranges_a(ws.merged_cell_ranges)
-
-        record_count = get_record_count(ws, merged_cell_ranges_a)
-        logger.info('专辑数量: {0}'.format(record_count))
+        # merged_cell_ranges_a = get_merged_cell_ranges_a(ws.merged_cell_ranges)
+        # record_count = get_record_count(ws, merged_cell_ranges_a)
+        # logger.info('专辑数量: {0}'.format(record_count))
 
         record = None
         record_size = 0
@@ -297,21 +294,27 @@ class ExcelParser(object):
             xlsx_song_artists = row[13].value
             xlsx_song_artists_part = row[19].value
 
-            range_string = get_range_string(merged_cell_ranges_a, col0)
+            # range_string = get_range_string(merged_cell_ranges_a, col0)
+            #
+            # if not range_string or is_range_string_start(range_string, col0):
+            #     record_size += 1
+            #     logger.debug('正在处理: {0}/{1} {2}'.format(record_size, record_count, xlsx_record_title))
+            #     record = _save_record(row)
 
-            if not range_string or is_range_string_start(range_string, col0):
+            if not record or ((xlsx_record_title is not None) and (record.title != xlsx_record_title)):
                 record_size += 1
-                logger.debug('正在处理: {0}/{1} {2}'.format(record_size, record_count, xlsx_record_title))
+                logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
+                                                                                record_title=xlsx_record_title,
+                                                                                record_number=xlsx_record_number))
                 record = _save_record(row)
 
             _save_record_song(record=record, row=row)
 
-        logger.info('===== 专辑 处理结束 =====')
+        logger.info('[Record]处理结束')
 
     def parse_worksheet_artist(self, ws):
-        print('excel', '===== 歌手 处理开始 =====')
-        logger.info('===== 歌手 处理开始 =====')
-        logger.info("工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
+        logger.info('[Artist]处理开始')
+        logger.info("[Artist]工作表名称: {0}; 最大行数: {1}; 最大列数: {2};".format(ws.title, ws.max_row, ws.max_column))
 
         ws_rows = iter(ws.rows)
         row0 = next(ws_rows, None)
@@ -320,7 +323,7 @@ class ExcelParser(object):
             return
 
         artist_count = ws.max_row - 1
-        logger.info('歌手数量: {0}'.format(artist_count))
+        logger.info('[Artist]歌手数量: {0}'.format(artist_count))
 
         for row in ws_rows:
             xlsx_name = row[0].value
@@ -336,4 +339,4 @@ class ExcelParser(object):
 
             Artist.objects.update_or_create(name=artist_defaults['name'], defaults=artist_defaults)
 
-        logger.info('===== 歌手 处理结束 =====')
+        logger.info('[Artist]处理结束')
