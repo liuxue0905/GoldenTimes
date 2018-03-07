@@ -177,7 +177,7 @@ class ExcelLogView(LoginRequiredMixin, FormView, ListView):
 class RecordListView(ListView):
     model = Record
     # context_object_name = 'my_favorite_publishers'
-    paginate_by = 8
+    paginate_by = 20
 
     def get_queryset(self):
         title = self.request.GET.get('title')
@@ -210,7 +210,7 @@ class RecordDetailView(DetailView):
 class ArtistListView(ListView):
     model = Artist
     # context_object_name = 'my_favorite_publishers'
-    paginate_by = 8
+    paginate_by = 20
 
     def get_queryset(self):
 
@@ -339,7 +339,7 @@ class ArtistRecordList(ListView):
     model = Record
     template_name = 'portal/artist_detail_record_list.html'
     # context_object_name = ''
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super(ArtistRecordList, self).get_queryset()
@@ -401,7 +401,7 @@ class ArtistRecordListInvolved(ListView):
     model = Record
     template_name = 'portal/artist_detail_record_list_involved.html'
     # context_object_name = ''
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super(ArtistRecordListInvolved, self).get_queryset()
