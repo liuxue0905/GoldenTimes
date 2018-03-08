@@ -59,10 +59,10 @@ ROOT_URLCONF = 'GoldenTimes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': True,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -133,7 +133,7 @@ STATICFILES_DIRS = [
 ]
 
 # WARNING
-TEMPLATE_DEBUG = True
+# TEMPLATE_DEBUG = True
 
 ## Thumbnail settings
 THUMBNAIL_DEBUG = True
