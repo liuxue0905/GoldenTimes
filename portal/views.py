@@ -411,10 +411,16 @@ class ArtistRecordListInvolved(ListView):
 
         # Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
 
-        queryset = queryset.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        # queryset = queryset.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        #
+        # # Record Involved
+        # record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        # setattr(self.artist, 'record_involved_set', record_involved_set)
+
+        queryset = queryset.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist).distinct()
 
         # Record Involved
-        record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        record_involved_set = queryset
         setattr(self.artist, 'record_involved_set', record_involved_set)
 
         return queryset
