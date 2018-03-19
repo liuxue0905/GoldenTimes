@@ -18,7 +18,7 @@ class SongAdmin(admin.StackedInline):
 
 
 class RecordCoverAdmin(admin.StackedInline):
-# class RecordCoverAdmin(admin.TabularInline):
+    # class RecordCoverAdmin(admin.TabularInline):
     model = RecordCover
     fields = ('image',)
 
@@ -37,7 +37,7 @@ class RecordAdmin(admin.ModelAdmin):
     inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
     # list_display = ('cover', 'title', 'artist_list', 'release', 'number', 'format', 'company')
-    list_display = ('title', 'artist_list', 'release', 'number', 'format', 'company')
+    list_display = ('title', 'number', 'artist_list', 'release', 'format', 'company')
     list_display_links = ('title', 'number',)
     list_filter = ('format',)
     list_per_page = 100
@@ -47,27 +47,30 @@ class RecordAdmin(admin.ModelAdmin):
 
     # ordering = ('title', 'release')
 
-    def cover(self, object):
-        return '<img src="{src}" width="13" height="13">'.format(src=object.recordcover.image.url)
-
-    cover.allow_tags = True
-    cover.short_description = ''
-
     def artist_list(self, object):
-        artist_list = ''
-        for index, artist in enumerate(object.artists.all()):
-            if index != 0:
-                # artist_list += '&nbsp;'
-                artist_list += '/'
-            artist_list += '<a href="/admin/portal/artist/{id}">{name}</a>'.format(id=artist.id, name=artist.name)
-        return artist_list
+        from django.utils.html import format_html_join
+        from django.utils.safestring import mark_safe
 
-    artist_list.allow_tags = True
+        # # assuming get_full_address() returns a list of strings
+        # # for each line of the address and you want to separate each
+        # # line by a linebreak
+        # return format_html_join(
+        #     mark_safe('<br/>'),
+        #     '{}',
+        #     ((line,) for line in instance.get_full_address()),
+        # ) or mark_safe("<span class='errors'>I can't determine this address.</span>")
+
+        return format_html_join(
+            mark_safe('<br/>'),
+            '<a href="/admin/portal/artist/{}">{}</a>',
+            ((artist.id, artist.name) for artist in object.artists.all()),
+        ) or mark_safe("<span class='errors'></span>")
+
     artist_list.short_description = '歌手'
 
 
 class ArtistAvatarAdmin(admin.StackedInline):
-# class ArtistAvatarAdmin(admin.TabularInline):
+    # class ArtistAvatarAdmin(admin.TabularInline):
     model = ArtistAvatar
     fields = ('image',)
 
