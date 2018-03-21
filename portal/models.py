@@ -19,30 +19,61 @@ from django.core.files.storage import FileSystemStorage
 
 
 class FileStorage(FileSystemStorage):
+    def generate_filename(self, filename):
+        self.filename = filename
+        print('filename', filename)
+        return super().generate_filename(filename)
+
     def get_valid_name(self, name):
         print('FileStorage', 'get_valid_name', 'name', name)
+
         ret = super().get_valid_name(name)
-        print('FileStorage', 'get_valid_name', 'ret', ret)
+        print('FileStorage', 'get_valid_name', 'super().get_valid_name(name)', ret)
+
         import portal.util as util
-        ret = util.lx_quote(name)
-        return ret
+        name = util.lx_quote(name)
+        print('FileStorage', 'get_valid_name', 'name2', name)
+        return name
+
+    # def get_available_name(self, name, max_length=None):
+    #     print('FileStorage', 'get_available_name', name, max_length)
+    #     ret = super().get_available_name(name, max_length)
+    #     print('FileStorage', 'get_available_name', 'ret', ret)
+    #     return ret
 
     def get_available_name(self, name, max_length=None):
-        print('FileStorage', 'get_available_name', name, max_length)
-        ret = super().get_available_name(name, max_length)
-        print('FileStorage', 'get_available_name', 'ret', ret)
-        return ret
-
-
-
-        # def get_available_name(self, name, max_length=None):
-        #     # print('GTStorage', 'get_available_name', name)
-        #     # print('GTStorage', 'self.location', self.location)
-        #     # return super().get_available_name(name, max_length)
-        #
-        #     if self.exists(name):
-        #         os.remove(os.path.join(self.location, name))
-        #     return name
+        """
+        Return a filename that's free on the target storage system and
+        available for new content to be written to.
+        """
+        from django.core.exceptions import SuspiciousFileOperation
+        from django.utils.crypto import get_random_string
+        dir_name, file_name = os.path.split(name)
+        file_root, file_ext = os.path.splitext(file_name)
+        # If the filename already exists, add an underscore and a random 7
+        # character alphanumeric string (before the file extension, if one
+        # exists) to the filename until the generated filename doesn't exist.
+        # Truncate original name if required, so the new filename does not
+        # exceed the max_length.
+        name = os.path.join(dir_name, "%s_%s%s" % (file_root, get_random_string(7), file_ext))
+        while self.exists(name) or (max_length and len(name) > max_length):
+            # file_ext includes the dot.
+            name = os.path.join(dir_name, "%s_%s%s" % (file_root, get_random_string(7), file_ext))
+            if max_length is None:
+                continue
+            # Truncate file_root if max_length exceeded.
+            truncation = len(name) - max_length
+            if truncation > 0:
+                file_root = file_root[:-truncation]
+                # Entire file_root was truncated in attempt to find an available filename.
+                if not file_root:
+                    raise SuspiciousFileOperation(
+                        'Storage can not find an available filename for "%s". '
+                        'Please make sure that the corresponding file field '
+                        'allows sufficient "max_length".' % name
+                    )
+                name = os.path.join(dir_name, "%s_%s%s" % (file_root, get_random_string(7), file_ext))
+        return name
 
 
 fs = FileStorage()
