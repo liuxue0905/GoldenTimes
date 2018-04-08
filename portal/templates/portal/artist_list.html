@@ -125,7 +125,7 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a class="mdl-button" href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
+                        <a class="mdl-button" href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}&name={{ request.GET.name }}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -135,7 +135,7 @@
                     </span>
 
                     {% if page_obj.has_next %}
-                        <a class="mdl-button" href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
+                        <a class="mdl-button" href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}&name={{ request.GET.name }}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}

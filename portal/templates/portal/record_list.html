@@ -117,9 +117,9 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
+                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">&laquo; 上一页</a>
                     {% else %}
-                        <a class="mdl-button" href disabled>&laquo; 上一页</a>
+                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
 
                     <span class="current mdl-button" disabled>
@@ -127,9 +127,9 @@
                     </span>
 
                     {% if page_obj.has_next %}
-                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
+                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">下一页 &raquo;</a>
                     {% else %}
-                        <a class="mdl-button" href disabled>下一页 &raquo;</a>
+                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}
                 </span>
             </div>
