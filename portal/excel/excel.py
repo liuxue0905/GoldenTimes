@@ -33,6 +33,104 @@ def str_strip(value):
     return s
 
 
+class WSRowRecord:
+    class WSRecord:
+        title: str = None
+        producer: str = None
+        number: str = None
+        format: str = None
+        release: str = None
+        release_order: str = None
+        recorder: str = None
+        mixer: str = None
+        bandsman: str = None
+        description: str = None
+
+        company_name: str = None
+
+        artists: str = None
+
+        @staticmethod
+        def read_from_row(row):
+            record = WSRowRecord.WSRecord()
+
+            record.title = str_strip(row[0].value)
+            record.producer = row[1].value
+            record.number = str_strip(row[2].value)
+            record.format = row[3].value
+            record.release = row[4].value
+            record.release_order = row[5].value
+            record.recorder = row[8].value
+            record.mixer = row[9].value
+            record.bandsman = row[11].value
+            record.description = row[10].value
+
+            record.company_name = row[6].value
+
+            record.artists = row[7].value
+
+            return record
+
+    class WSSong:
+        track: str = None
+        title: str = None
+        composer: str = None
+        lyricist: str = None
+        arranger: str = None
+        bandsman: str = None
+        vocalist: str = None
+        producer: str = None
+        description: str = None
+
+        artists: str = None
+        artists_part: str = None
+
+        @staticmethod
+        def read_from_row(row):
+            song = WSRowRecord.WSSong()
+
+            song.track = str_strip(row[12].value)
+            song.title = str_strip(row[14].value)
+            song.composer = row[15].value
+            song.lyricist = row[16].value
+            song.arranger = row[17].value
+            song.bandsman = row[18].value
+            song.vocalist = row[20].value
+            song.producer = row[21].value
+            song.description = row[22].value
+
+            song.artists = row[13].value
+            song.artists_part = row[19].value
+
+            return song
+
+    record: WSRecord = None
+    song: WSSong = None
+
+    @staticmethod
+    def read_from_row(row):
+        ws_row = WSRowRecord()
+
+        ws_row.record = WSRowRecord.WSRecord.read_from_row(row)
+        ws_row.song = WSRowRecord.WSSong.read_from_row(row)
+
+        return ws_row
+
+
+class WSRowArtist:
+    name: str = None
+    type: str = None
+
+    @staticmethod
+    def read_from_row(row):
+        ws_row = WSRowArtist()
+
+        ws_row.name = str_strip(row[0].value)
+        ws_row.type = str_strip(row[1].value)
+
+        return ws_row
+
+
 class ExcelParser(object):
     def __init__(self, filename_excel, filename_log):
 
@@ -63,10 +161,10 @@ class ExcelParser(object):
             # traceback.print_exc()
 
             exc_type, exc_value, exc_traceback = sys.exc_info()
-            list = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            str_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
 
             msg = '\r\n'
-            for str in list:
+            for str in str_list:
                 msg += str
                 msg += '\r\n'
 
@@ -103,50 +201,34 @@ class ExcelParser(object):
             return artists
 
         def _save_record(row):
-            xlsx_record_title = str_strip(row[0].value)
-            xlsx_record_producer = row[1].value
-            xlsx_record_number = str_strip(row[2].value)
-            xlsx_record_format = row[3].value
-            xlsx_record_release = row[4].value
-            xlsx_record_release_order = row[5].value
-            xlsx_record_recorder = row[8].value
-            xlsx_record_mixer = row[9].value
-            xlsx_record_bandsman = row[11].value
-            xlsx_record_description = row[10].value
-
-            xlsx_record_company_name = row[6].value
-
-            xlsx_cell_record_artists = row[7].value
-
-            # print('_save_record()')
-            # logger.info('[{0}][{1}]'.format(xlsx_record_title, xlsx_record_number))
+            ws_row = WSRowRecord.read_from_row(row)
 
             # Company
             company = None
-            if xlsx_record_company_name:
-                company = _get_or_create_company(company_name=xlsx_record_company_name)
+            if ws_row.record.company_name:
+                company = _get_or_create_company(company_name=ws_row.record.company_name)
 
             # Record Artists
             def xlxs_record_artist_name_list(cell):
                 if cell:
-                    return xlsx_cell_record_artists.split('/')
+                    return ws_row.record.artists.split('/')
                 return None
 
-            artist_name_list = xlxs_record_artist_name_list(xlsx_cell_record_artists)
+            artist_name_list = xlxs_record_artist_name_list(ws_row.record.artists)
 
             artists = _get_or_create_artists(artist_name_list)
 
             record_defaults = {
-                'title': xlsx_record_title,
-                'producer': row[1].value,
-                'number': xlsx_record_number,
-                'format': Record.format_value_to_key(row[3].value),
-                'release': row[4].value,
-                'release_order': row[5].value,
-                'recorder': row[8].value,
-                'mixer': row[9].value,
-                'bandsman': row[11].value,
-                'description': row[10].value,
+                'title': ws_row.record.title,
+                'producer': ws_row.record.producer,
+                'number': ws_row.record.number,
+                'format': Record.format_value_to_key(ws_row.record.format),
+                'release': ws_row.record.release,
+                'release_order': ws_row.record.release_order,
+                'recorder': ws_row.record.recorder,
+                'mixer': ws_row.record.mixer,
+                'bandsman': ws_row.record.bandsman,
+                'description': ws_row.record.description,
                 'company': company,
             }
 
@@ -161,24 +243,13 @@ class ExcelParser(object):
             return obj
 
         def _save_record_song(record, row):
-            xlxs_song_track = str_strip(row[12].value)
-            xlxs_song_title = str_strip(row[14].value)
-            xlxs_song_composer = row[15].value
-            xlxs_song_lyricist = row[16].value
-            xlxs_song_arranger = row[17].value
-            xlxs_song_bandsman = row[18].value
-            xlxs_song_vocalist = row[20].value
-            xlxs_song_producer = row[21].value
-            xlxs_song_description = row[22].value
-
-            xlsx_song_artists = row[13].value
-            xlsx_song_artists_part = row[19].value
+            ws_row = WSRowRecord.read_from_row(row)
 
             logger.info(
                 '[{record_title}][{record_number}] [{song_track}][{song_title}]'.format(record_title=record.title,
                                                                                         record_number=record.number,
-                                                                                        song_track=xlxs_song_track,
-                                                                                        song_title=xlxs_song_title))
+                                                                                        song_track=ws_row.song.track,
+                                                                                        song_title=ws_row.song.title))
 
             # Song Artists
 
@@ -190,21 +261,21 @@ class ExcelParser(object):
                     artist_name_list += cell_artists_part.split('/')
                 return artist_name_list
 
-            artist_name_list = xlsx_song_artist_name_list(xlsx_song_artists, xlsx_song_artists_part)
+            artist_name_list = xlsx_song_artist_name_list(ws_row.song.artists, ws_row.song.artists_part)
             # print('song artist_name_list', artist_name_list)
 
             artists = _get_or_create_artists(artist_name_list)
 
             song_defaults = {
-                'track': xlxs_song_track,
-                'title': xlxs_song_title,
-                'composer': row[15].value,
-                'lyricist': row[16].value,
-                'arranger': row[17].value,
-                'bandsman': row[18].value,
-                'vocalist': row[20].value,
-                'producer': row[21].value,
-                'description': row[22].value,
+                'track': ws_row.song.track,
+                'title': ws_row.song.title,
+                'composer': ws_row.song.composer,
+                'lyricist': ws_row.song.lyricist,
+                'arranger': ws_row.song.arranger,
+                'bandsman': ws_row.song.bandsman,
+                'vocalist': ws_row.song.vocalist,
+                'producer': ws_row.song.producer,
+                'description': ws_row.song.description,
                 'record': record
             }
 
@@ -215,51 +286,6 @@ class ExcelParser(object):
             # print('song.artists', 'stop', obj.artists, obj.artists.all())
 
             return obj
-
-        # def get_merged_cell_ranges_a(merged_cell_ranges):
-        #     range_string_a = []
-        #
-        #     for range_string in merged_cell_ranges:
-        #         min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
-        #         if get_column_letter(min_col) == get_column_letter(max_col) == 'A':
-        #             range_string_a.append(range_string)
-        #
-        #     return range_string_a
-
-        # def is_range_string_start(range_string, cell):
-        #     range = range_string.split(':')
-        #     if cell.coordinate == range[0]:
-        #         return True
-        #     return False
-
-        # def get_range_string(merged_cell_ranges, cell):
-        #     # print('get_range_string')
-        #     # print(('cell', 'coordinate', 'row', 'column', 'col_idx'),
-        #     #       (cell, cell.coordinate, cell.row, cell.column, cell.col_idx))
-        #     for range_string in merged_cell_ranges:
-        #         # print('get_range_string', 'range_boundaries(range_string.upper()', range_boundaries(range_string.upper()))
-        #         min_col, min_row, max_col, max_row = range_boundaries(range_string.upper())
-        #
-        #         if cell.col_idx == min_col == max_col:
-        #             if min_row <= cell.row <= max_row:
-        #                 return range_string
-        #
-        #     return None
-
-        # def get_record_count(ws, merged_cell_ranges_a):
-        #     count = 0
-        #
-        #     count += len(merged_cell_ranges_a)
-        #
-        #     ws_rows = iter(ws.rows)
-        #     next(ws_rows)
-        #     for row in ws_rows:
-        #         col0 = row[0]
-        #         range_string = get_range_string(merged_cell_ranges_a, col0)
-        #         if not range_string:
-        #             count += 1
-        #
-        #     return count
 
         ws_rows = iter(ws.rows)
         row0 = next(ws_rows)
@@ -276,55 +302,27 @@ class ExcelParser(object):
         record_size = 0
 
         for row in ws_rows:
-            col0 = row[0]
+            # col0 = row[0]
             # print(('col0', 'coordinate', 'row', 'column', 'col_idx'),
             #       (col0, col0.coordinate, col0.row, col0.column, col0.col_idx))
 
-            xlsx_record_title = str_strip(row[0].value)
-            xlsx_record_producer = row[1].value
-            xlsx_record_number = str_strip(row[2].value)
-            xlsx_record_format = row[3].value
-            xlsx_record_release = row[4].value
-            xlsx_record_release_order = row[5].value
-            xlsx_record_recorder = row[8].value
-            xlsx_record_mixer = row[9].value
-            xlsx_record_bandsman = row[11].value
-            xlsx_record_description = row[10].value
-            xlxs_song_track = row[12].value
-            xlxs_song_title = row[14].value
-            xlxs_song_composer = row[15].value
-            xlxs_song_lyricist = row[16].value
-            xlxs_song_arranger = row[17].value
-            xlxs_song_bandsman = row[18].value
-            xlxs_song_vocalist = row[20].value
-            xlxs_song_producer = row[21].value
-            xlxs_song_description = row[22].value
-            xlsx_song_artists = row[13].value
-            xlsx_song_artists_part = row[19].value
-
-            # range_string = get_range_string(merged_cell_ranges_a, col0)
-            #
-            # if not range_string or is_range_string_start(range_string, col0):
-            #     record_size += 1
-            #     logger.debug('正在处理: {0}/{1} {2}'.format(record_size, record_count, xlsx_record_title))
-            #     record = _save_record(row)
-
+            ws_row = WSRowRecord.read_from_row(row)
 
             def should_new_record():
                 if record is None:
                     return True
                 else:
-                    if xlsx_record_title and xlsx_record_title and xlsx_record_title != record.title:
+                    if ws_row.record.title and ws_row.record.title != record.title:
                         return True
-                    elif xlsx_record_number and xlsx_record_number and xlsx_record_number != record.number:
+                    elif ws_row.record.number and ws_row.record.number != record.number:
                         return True
                 return False
 
             if should_new_record():
                 record_size += 1
                 logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
-                                                                                 record_title=xlsx_record_title,
-                                                                                 record_number=xlsx_record_number))
+                                                                                 record_title=ws_row.record.title,
+                                                                                 record_number=ws_row.record.number))
                 record = _save_record(row)
 
             _save_record_song(record=record, row=row)
@@ -345,15 +343,14 @@ class ExcelParser(object):
         logger.info('[Artist]歌手数量: {0}'.format(artist_count))
 
         for row in ws_rows:
-            xlsx_name = row[0].value
-            xlsx_type = row[1].value
+            ws_row = WSRowArtist.read_from_row(row)
 
             # print(('col0', 'coordinate', 'row', 'column', 'col_idx'),
             #       (col0, col0.coordinate, col0.row, col0.column, col0.col_idx))
 
             artist_defaults = {
-                'name': xlsx_name,
-                'type': Artist.type_value_to_key(xlsx_type)
+                'name': ws_row.name,
+                'type': Artist.type_value_to_key(ws_row.type)
             }
 
             Artist.objects.update_or_create(name=artist_defaults['name'], defaults=artist_defaults)
