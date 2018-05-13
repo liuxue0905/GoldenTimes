@@ -269,6 +269,8 @@ class RecordCover(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # image_thumbnail
+
     def image_exists(self):
         return fs.exists(self.image.name)
 
