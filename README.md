@@ -25,25 +25,33 @@ $ . ~/.virtualenvs/djangodev/bin/activate
 ```
 $ pip install django
 $ pip install sorl-thumbnail
-$ pip install django-watermark(deprecated)
 $ pip install openpyxl
 $ pip install django-imagekit
 ```
+
 ### django-watermark
 ```
+$ pip install django-watermark(deprecated)
+
 $ pip install git+https://github.com/liuxue0905/django-watermark.git
-```
-or
-```
+
 $ git clone https://github.com/liuxue0905/django-watermark.git
 $ python setup.py install
+```
+
+### django-imagekit
+```
+https://github.com/matthewwithanm/django-imagekit.git
+
+$ pip install git+https://github.com/mmv/django-imagekit.git
+http://miguelventura.pt/django-imagekit-watermarks.html
 ```
 
 ## manage
 
 ```
-$ python manage.py migrate
 $ python manage.py makemigrations
+$ python manage.py migrate
 $ python manage.py createsuperuser
 $ python manage.py runserver 0:8888
 ```
