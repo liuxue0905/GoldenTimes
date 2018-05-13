@@ -13,11 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.db.models import Q
 
-from portal.models import Record, Song, Artist, Company, ExcelLog
-from portal.excel.excel import ExcelParser
+from portal.models import Record, Song, Artist, Company
 
 import portal.forms as forms
-from .forms import ExcelForms
 
 from django.views.generic import ListView, DetailView, FormView
 # from django.views import generic
@@ -64,114 +62,6 @@ def dashboard(request):
     context['object_list'] = object_list
 
     return render(request, 'portal/dashboard.html', context)
-
-
-handle_uploaded_file_doing = False
-
-
-def handle_uploaded_file(f):
-    # import django.core.files.uploadhandler.InMemoryUploadedFile
-
-    import os
-    from datetime import datetime
-
-    print('handle_uploaded_file', type(f), f)
-    print('handle_uploaded_file', f)
-    print('handle_uploaded_file', f.file)
-    print('handle_uploaded_file', f.name)
-
-    # print('handle_uploaded_file', 'f.temporary_file_path()', f.temporary_file_path())
-
-    def make_filename(datetime_now):
-        dir_excel = os.path.join(os.path.join(os.path.abspath(settings.MEDIA_ROOT), 'excel'),
-                                 datetime_now.strftime("%Y-%m-%d"))
-        if not os.path.exists(dir_excel):
-            os.makedirs(dir_excel)
-
-        filename_excel = os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.xlsx')
-        filename_log = filename_excel + '.log'
-
-        return filename_excel, filename_log
-
-    datetime_start = datetime.now()
-
-    from django.conf import settings
-    filename_excel, filename_log = make_filename(datetime_start)
-
-    filename = filename_excel
-
-    with open(filename, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-    def parse(filename_excel, filename_log):
-        excel_log = ExcelLog()
-        excel_log.status = ExcelLog.STATUS_START
-        excel_log.datetime_start = datetime_start
-
-        try:
-            parser = ExcelParser(filename_excel, filename_log)
-
-            excel_log.file_excel.name = os.path.relpath(parser.filename_excel, os.path.abspath(settings.MEDIA_ROOT))
-            excel_log.file_log.name = os.path.relpath(parser.filename_log, os.path.abspath(settings.MEDIA_ROOT))
-
-            parser.parse()
-        except Exception as e:
-            print(e)
-            excel_log.status = ExcelLog.STATUS_ERROR
-        finally:
-            # os.remove(filename)
-            excel_log.status = ExcelLog.STATUS_SUCCESS
-            excel_log.datetime_end = datetime.now()
-            excel_log.save()
-            pass
-
-    import threading
-    thread = threading.Thread(target=(lambda: parse(filename_excel, filename_log)))
-    thread.daemon = True
-    thread.start()
-
-
-# class FileFieldView(LoginRequiredMixin, FormView, ListView):
-class ExcelLogView(LoginRequiredMixin, FormView, ListView):
-    login_url = '/admin/login/'
-    redirect_field_name = 'next'
-
-    form_class = ExcelForms
-    template_name = 'portal/excel.html'  # Replace with your template.
-    success_url = '/portal/excel/'  # Replace with your URL or reverse().
-
-    # success_url = reverse('portal:excel', args=())  # Replace with your URL or reverse().
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        # files = request.FILES.getlist('file')
-        file = request.FILES['file']
-        print('file', file)
-        if form.is_valid():
-            # for f in files:
-            #     # Do something with each file.
-            handle_uploaded_file(request.FILES['file'])
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    paginate_by = 10
-
-    def get_queryset(self):
-        queryset = ExcelLog.objects.all()
-
-        print('FileFieldView', 'queryset', queryset)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ExcelLogView, self).get_context_data(**kwargs)
-
-        # context['status'] = ExcelLog.STATUS_CHOICES
-
-        return context
 
 
 class RecordListView(ListView):
@@ -454,5 +344,175 @@ class CompanyRecordListView(ListView):
         context['now'] = timezone.now()
 
         context['object'] = self.company
+
+        return context
+
+
+#
+
+def handle_uploaded_file_import_records(f):
+    # import django.core.files.uploadhandler.InMemoryUploadedFile
+
+    import os
+    from datetime import datetime
+
+    print('handle_uploaded_file', type(f), f)
+    print('handle_uploaded_file', f)
+    print('handle_uploaded_file', f.file)
+    print('handle_uploaded_file', f.name)
+
+    # print('handle_uploaded_file', 'f.temporary_file_path()', f.temporary_file_path())
+
+    def make_filename(datetime_now):
+        dir_excel = os.path.join(os.path.join(os.path.abspath(settings.MEDIA_ROOT), 'import/record'),
+                                 datetime_now.strftime("%Y-%m-%d"))
+        if not os.path.exists(dir_excel):
+            os.makedirs(dir_excel)
+
+        return os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.csv')
+
+    datetime_start = datetime.now()
+
+    from django.conf import settings
+    filename = make_filename(datetime_start)
+
+    with open(filename, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+    from portal.parser.record import RecordParser
+    parser = RecordParser(filename)
+
+    import threading
+    thread = threading.Thread(target=(lambda: parser.parse_with_db()))
+    thread.daemon = True
+    thread.start()
+
+
+def handle_uploaded_file_import_artists(f):
+    # import django.core.files.uploadhandler.InMemoryUploadedFile
+
+    import os
+    from datetime import datetime
+
+    print('handle_uploaded_file', type(f), f)
+    print('handle_uploaded_file', f)
+    print('handle_uploaded_file', f.file)
+    print('handle_uploaded_file', f.name)
+
+    # print('handle_uploaded_file', 'f.temporary_file_path()', f.temporary_file_path())
+
+    def make_filename(datetime_now):
+        dir_excel = os.path.join(os.path.join(os.path.abspath(settings.MEDIA_ROOT), 'import/artist'),
+                                 datetime_now.strftime("%Y-%m-%d"))
+        if not os.path.exists(dir_excel):
+            os.makedirs(dir_excel)
+
+        return os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.csv')
+
+    datetime_start = datetime.now()
+
+    from django.conf import settings
+    filename = make_filename(datetime_start)
+
+    with open(filename, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+    from portal.parser.artist import ArtistParser
+    parser = ArtistParser(filename)
+
+    import threading
+    thread = threading.Thread(target=(lambda: parser.parse_with_db()))
+    thread.daemon = True
+    thread.start()
+
+
+# class FileFieldView(LoginRequiredMixin, FormView, ListView):
+class LogImportRecordsView(LoginRequiredMixin, FormView, ListView):
+    from portal.forms import ExcelForms
+
+    login_url = '/admin/login/'
+    redirect_field_name = 'next'
+
+    form_class = ExcelForms
+    template_name = 'portal/import-records.html'  # Replace with your template.
+    success_url = '/portal/import/records/'  # Replace with your URL or reverse().
+
+    # success_url = reverse('portal:excel', args=())  # Replace with your URL or reverse().
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        # files = request.FILES.getlist('file')
+        file = request.FILES['file']
+        print('file', file)
+        if form.is_valid():
+            # for f in files:
+            #     # Do something with each file.
+            handle_uploaded_file_import_records(request.FILES['file'])
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    paginate_by = 10
+
+    def get_queryset(self):
+        from portal.models import LogImportRecord
+        queryset = LogImportRecord.objects.all()
+
+        print('FileFieldView', 'queryset', queryset)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(LogImportRecordsView, self).get_context_data(**kwargs)
+
+        # context['status'] = ExcelLog.STATUS_CHOICES
+
+        return context
+
+
+# class FileFieldView(LoginRequiredMixin, FormView, ListView):
+class LogImportArtistsView(LoginRequiredMixin, FormView, ListView):
+    from portal.forms import ExcelForms
+
+    login_url = '/admin/login/'
+    redirect_field_name = 'next'
+
+    form_class = ExcelForms
+    template_name = 'portal/import-artists.html'  # Replace with your template.
+    success_url = '/portal/import/artists/'  # Replace with your URL or reverse().
+
+    # success_url = reverse('portal:excel', args=())  # Replace with your URL or reverse().
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        # files = request.FILES.getlist('file')
+        file = request.FILES['file']
+        print('file', file)
+        if form.is_valid():
+            # for f in files:
+            #     # Do something with each file.
+            handle_uploaded_file_import_records(request.FILES['file'])
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    paginate_by = 10
+
+    def get_queryset(self):
+        from portal.models import LogImportArtist
+        queryset = LogImportArtist.objects.all()
+
+        print('FileFieldView', 'queryset', queryset)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(LogImportArtistsView, self).get_context_data(**kwargs)
+
+        # context['status'] = ExcelLog.STATUS_CHOICES
 
         return context

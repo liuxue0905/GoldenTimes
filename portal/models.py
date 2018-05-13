@@ -444,7 +444,33 @@ class ArtistImages(models.Model):
                      update_fields)
 
 
-class ExcelLog(models.Model):
+class LogImportRecord(models.Model):
+    STATUS_START = 0
+    STATUS_SUCCESS = 1
+    STATUS_ERROR = -1
+
+    STATUS_CHOICES = (
+        (0, '开始'),
+        (1, '成功'),
+        (-1, '失败')
+    )
+
+    datetime_start = models.DateTimeField(null=True)
+    datetime_end = models.DateTimeField(null=True)
+
+    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, null=True)
+
+    file_excel = models.FileField(null=True)
+    file_log = models.FileField(null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-datetime_start']
+
+
+class LogImportArtist(models.Model):
     STATUS_START = 0
     STATUS_SUCCESS = 1
     STATUS_ERROR = -1

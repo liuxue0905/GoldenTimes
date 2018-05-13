@@ -64,6 +64,31 @@ class ArtistParser:
 
         logger.info('[Artist]处理结束')
 
+    def parse_with_db(self):
+        import os
+        from datetime import datetime
+
+        from django.conf import settings
+        from portal.models import LogImportArtist
+
+        excel_log = LogImportArtist()
+        excel_log.status = LogImportArtist.STATUS_START
+        excel_log.datetime_start = datetime.now()
+
+        try:
+            excel_log.file_excel.name = os.path.relpath(self.file, os.path.abspath(settings.MEDIA_ROOT))
+            excel_log.file_log.name = os.path.relpath(self.file_log, os.path.abspath(settings.MEDIA_ROOT))
+
+            self.parse()
+        except Exception as e:
+            print(e)
+            excel_log.status = LogImportArtist.STATUS_ERROR
+        finally:
+            # os.remove(filename)
+            excel_log.status = LogImportArtist.STATUS_SUCCESS
+            excel_log.datetime_end = datetime.now()
+            excel_log.save()
+
 
 def main():
     parser = ArtistParser(file='/Users/liuxue/Documents/歌手.csv')

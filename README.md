@@ -27,6 +27,7 @@ $ pip install django
 $ pip install sorl-thumbnail
 $ pip install django-watermark(deprecated)
 $ pip install openpyxl
+$ pip install django-imagekit
 ```
 ### django-watermark
 ```

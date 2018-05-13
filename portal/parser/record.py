@@ -258,6 +258,31 @@ class RecordParser:
 
         logger.info('[Record]处理结束')
 
+    def parse_with_db(self):
+        import os
+        from datetime import datetime
+
+        from django.conf import settings
+        from portal.models import LogImportRecord
+
+        excel_log = LogImportRecord()
+        excel_log.status = LogImportRecord.STATUS_START
+        excel_log.datetime_start = datetime.now()
+
+        try:
+            excel_log.file_excel.name = os.path.relpath(self.file, os.path.abspath(settings.MEDIA_ROOT))
+            excel_log.file_log.name = os.path.relpath(self.file_log, os.path.abspath(settings.MEDIA_ROOT))
+
+            self.parse()
+        except Exception as e:
+            print(e)
+            excel_log.status = LogImportRecord.STATUS_ERROR
+        finally:
+            # os.remove(filename)
+            excel_log.status = LogImportRecord.STATUS_SUCCESS
+            excel_log.datetime_end = datetime.now()
+            excel_log.save()
+
 
 def main():
     parser = RecordParser(file='/Users/liuxue/Documents/唱片.csv')

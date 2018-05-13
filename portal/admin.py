@@ -5,7 +5,8 @@ from django.contrib import admin
 # Register your models here.
 
 
-from .models import Record, Song, Artist, Company, RecordCover, RecordImages, ArtistAvatar, ArtistImages, ExcelLog
+from .models import Record, Song, Artist, Company, RecordCover, RecordImages, ArtistAvatar, ArtistImages
+from .models import LogImportRecord, LogImportArtist
 
 
 # admin.StackedInline
@@ -112,8 +113,27 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class ExcelLogAdmin(admin.ModelAdmin):
-    module = ExcelLog
+class LogImportRecordAdmin(admin.ModelAdmin):
+    module = LogImportRecord
+
+    list_display = ('datetime_start', 'file_excel_filename', 'file_log_filename', 'status', 'created_at')
+    # list_display_links = ('file_excel_filename', 'file_log_filename',)
+    # list_filter = ('name',)
+    list_per_page = 100
+
+    # search_fields = ('name',)
+
+    def file_excel_filename(self, object):
+        import os
+        return os.path.basename(object.file_excel.name)
+
+    def file_log_filename(self, object):
+        import os
+        return os.path.basename(object.file_log.name)
+
+
+class LogImportArtistAdmin(admin.ModelAdmin):
+    module = LogImportArtist
 
     list_display = ('datetime_start', 'file_excel_filename', 'file_log_filename', 'status', 'created_at')
     # list_display_links = ('file_excel_filename', 'file_log_filename',)
@@ -134,4 +154,5 @@ class ExcelLogAdmin(admin.ModelAdmin):
 admin.site.register(Record, RecordAdmin)
 admin.site.register(Artist, ArtistAdmin)
 admin.site.register(Company, CompanyAdmin)
-admin.site.register(ExcelLog, ExcelLogAdmin)
+admin.site.register(LogImportRecord, LogImportRecordAdmin)
+admin.site.register(LogImportArtist, LogImportArtistAdmin)

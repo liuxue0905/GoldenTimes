@@ -98,7 +98,8 @@
                     <a class="mdl-navigation__link" href="{% url 'admin:login' %}?next=/portal/dashboard/">登录</a>
                 {% else %}
                     <a class="mdl-navigation__link" href="{% url 'admin:index' %}">后台</a>
-                    <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'excel' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:excel' %}">导入</a>
+                    <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-records' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:import-records' %}">导入唱片</a>
+                    <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-artists' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:import-artists' %}">导入歌手</a>
                     <a class="mdl-navigation__link" href="{% url 'admin:logout' %}?next=/portal/dashboard/">退出</a>
                 {% endif %}
             </nav>

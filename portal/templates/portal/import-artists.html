@@ -43,14 +43,14 @@
 {% block body %}
 
 
-    <form action="/portal/excel/" enctype="multipart/form-data" method="post" style="width: 100%">
+    <form action="/portal/import/artists/" enctype="multipart/form-data" method="post" style="width: 100%">
 
         {% csrf_token %}
 
         <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card lx-form">
 
             <div class="mdl-card__title">
-                导入
+                导入歌手
             </div>
 
             <div class="mdl-card__actions mdl-card--border mdl-grid">
@@ -82,30 +82,30 @@
             </tr>
             </thead>
             <tbody>
-            {% for excel_log in object_list %}
+            {% for log in object_list %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        {{ excel_log.datetime_start|date:"Y-m-d H:i:s" }}
+                        {{ log.datetime_start|date:"Y-m-d H:i:s" }}
                     </td>
                     <td>
-                        {{ excel_log.datetime_end|date:"Y-m-d H:i:s" }}
+                        {{ log.datetime_end|date:"Y-m-d H:i:s" }}
                     </td>
                     {#                    <td>{{ excel_log.created_at|date:"Y-m-d H:i:s" }}</td>#}
                     <td>
                         {# {{ excel_log.status }} #}
-                        {% ifequal excel_log.status 0 %}开始{% endifequal %}
-                        {% ifequal excel_log.status 1 %}完成{% endifequal %}
-                        {% ifequal excel_log.status -1 %}失败{% endifequal %}
+                        {% ifequal log.status 0 %}开始{% endifequal %}
+                        {% ifequal log.status 1 %}完成{% endifequal %}
+                        {% ifequal log.status -1 %}失败{% endifequal %}
                     </td>
                     <td>
-                        <a href="{{ excel_log.file_excel.url }}">查看文件</a>
-                        <a href="{{ excel_log.file_log.url }}">查看日志</a>
+                        <a href="{{ log.file_excel.url }}">查看文件</a>
+                        <a href="{{ log.file_log.url }}">查看日志</a>
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="4">No excel log yet.</td>
+                    <td colspan="5">暂无记录</td>
                 </tr>
             {% endfor %}
             </tbody>

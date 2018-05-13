@@ -4,8 +4,6 @@ from django.conf import settings
 
 import os
 from datetime import datetime
-from portal.models import ExcelLog
-from portal.excel.excel import ExcelParser
 
 
 class Command(BaseCommand):
@@ -45,42 +43,18 @@ class Command(BaseCommand):
             if not os.path.exists(dir_excel):
                 os.makedirs(dir_excel)
 
-            filename_excel = os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.xlsx')
-            filename_log = filename_excel + '.log'
-
-            return filename_excel, filename_log
+            return os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.xlsx')
 
         datetime_start = datetime.now()
-
-        filename_excel, filename_log = make_filename(datetime_start)
+        filename = make_filename(datetime_start)
 
         with open(path, 'rb') as f:
-            with open(filename_excel, 'wb+') as destination:
+            with open(filename, 'wb+') as destination:
                 destination.write(f.read())
                 destination.truncate()
                 # for chunk in f.chunks():
                 #     destination.write(chunk)
 
-        def parse(filename_excel, filename_log):
-            excel_log = ExcelLog()
-            excel_log.status = ExcelLog.STATUS_START
-            excel_log.datetime_start = datetime_start
-
-            try:
-                parser = ExcelParser(filename_excel, filename_log)
-
-                excel_log.file_excel.name = os.path.relpath(parser.filename_excel, os.path.abspath(settings.MEDIA_ROOT))
-                excel_log.file_log.name = os.path.relpath(parser.filename_log, os.path.abspath(settings.MEDIA_ROOT))
-
-                parser.parse()
-            except Exception as e:
-                print(e)
-                excel_log.status = ExcelLog.STATUS_ERROR
-            finally:
-                # os.remove(filename)
-                excel_log.status = ExcelLog.STATUS_SUCCESS
-                excel_log.datetime_end = datetime.now()
-                excel_log.save()
-                pass
-
-        parse(filename_excel, filename_log)
+        from portal.parser.record import RecordParser
+        parser = RecordParser(filename)
+        parser.parse_with_db()

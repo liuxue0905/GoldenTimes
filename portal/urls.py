@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^companies/(?P<pk>[0-9]+)/$', CompanyDetailView.as_view(), name='company-detail'),
     url(r'^companies/(?P<pk>[0-9]+)/records/$', CompanyRecordListView.as_view(), name='company-record-list'),
 
-    url(r'^excel/$', views.ExcelLogView.as_view(), name='excel'),
+    url(r'^import/records/$', views.LogImportRecordsView.as_view(), name='import-records'),
+    url(r'^import/artists/$', views.LogImportArtistsView.as_view(), name='import-artists'),
 ]
