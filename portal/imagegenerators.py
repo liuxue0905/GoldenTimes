@@ -57,8 +57,3 @@ class ThumbnailSpec(ImageSpec):
 
 register.generator('myapp:thumbnail-dashboard', ThumbnailDashboardSpec)
 register.generator('myapp:thumbnail', ThumbnailSpec)
-
-from imagekit.utils import get_cache
-
-cache = get_cache()
-cache.clear()

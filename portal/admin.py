@@ -1,7 +1,29 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib import admin
+
 from imagekit.admin import AdminThumbnail
+from imagekit import ImageSpec
+from imagekit.processors import ResizeToFill, ResizeToCover
+from imagekit.cachefiles import ImageCacheFile
+
+
+class AdminThumbnailSpec(ImageSpec):
+    processors = [ResizeToFill(17, 17)]
+    format = 'JPEG'
+    options = {'quality': 60}
+
+
+def cached_admin_thumb_record_recordcover(instance):
+    try:
+        # `image` is the name of the image field on the model
+        cached = ImageCacheFile(AdminThumbnailSpec(instance.recordcover.image))
+        # only generates the first time, subsequent calls use cache
+        cached.generate()
+        return cached
+    except Exception as e:
+        print(e)
+    return None
 
 
 # Register your models here.
@@ -30,6 +52,7 @@ class RecordCoverAdmin(admin.StackedInline):
 class RecordImagesAdmin(admin.TabularInline):
     model = RecordImages
     extra = 0
+
     fields = ('image',)
 
 
@@ -40,7 +63,7 @@ class RecordAdmin(admin.ModelAdmin):
     inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
     # list_display = ('cover', 'title', 'artist_list', 'release', 'number', 'format', 'company')
-    list_display = ('title', 'number', 'artist_list', 'release', 'format', 'company')
+    list_display = ('admin_thumbnail', 'title', 'number', 'artist_list', 'release', 'format', 'company',)
     list_display_links = ('title', 'number',)
     list_filter = ('format',)
     list_per_page = 100
@@ -49,6 +72,9 @@ class RecordAdmin(admin.ModelAdmin):
     search_fields = ('title', 'number',)
 
     # ordering = ('title', 'release')
+
+    admin_thumbnail = AdminThumbnail(image_field=cached_admin_thumb_record_recordcover)
+    admin_thumbnail.short_description = ''
 
     def artist_list(self, object):
         from django.utils.html import format_html_join

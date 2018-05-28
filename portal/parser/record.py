@@ -221,10 +221,10 @@ class RecordParser:
                 'vocalist': csv_row.song.vocalist,
                 'producer': csv_row.song.producer,
                 'description': csv_row.song.description,
-                'record': record
             }
 
-            obj, created = Song.objects.update_or_create(track=song_defaults['track'], title=song_defaults['title'],
+            obj, created = Song.objects.update_or_create(record=record, track=song_defaults['track'],
+                                                         title=song_defaults['title'],
                                                          defaults=song_defaults)
             # print('song.artists', 'start', obj.artists, obj.artists.all())
             obj.artists.set(artists)

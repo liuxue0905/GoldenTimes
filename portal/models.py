@@ -350,6 +350,13 @@ class RecordImages(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def image_checked(self):
+        try:
+            return self.image
+        except Exception as e:
+            print(e)
+        return None
+
     def image_exists(self):
         try:
             return fs.exists(self.image.name)
