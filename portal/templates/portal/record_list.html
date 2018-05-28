@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load thumbnail %}
-{% load watermark %}
+{% load imagekit %}
 {#{% load material_form %}#}
 
 {% block android_header %}
@@ -37,7 +36,8 @@
             <div class="mdl-card__actions mdl-card--border mdl-grid">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                    <input class="mdl-textfield__input" type="text" id="sample1" name="title" value="{{ request.GET.title }}">
+                    <input class="mdl-textfield__input" type="text" id="sample1" name="title"
+                           value="{{ request.GET.title }}">
                     <label class="mdl-textfield__label" for="sample1">唱片标题</label>
                 </div>
 
@@ -72,13 +72,12 @@
                                 <div class="lx-square-text">
                                     {% if record.recordcover and record.recordcover.image_exists %}
                                         <div class="lx-center">
-                                            {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}
-                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
-                                            {% endthumbnail %}
+                                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
                                         </div>
                                     {% else %}
                                         <div class="lx-center">
-                                            <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
+                                            <i class="material-icons lx-center-content"
+                                               style="color: gray; font-size: 160px;">album</i>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -117,7 +116,8 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">&laquo; 上一页</a>
+                        <a class="mdl-button"
+                           href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -127,7 +127,8 @@
                     </span>
 
                     {% if page_obj.has_next %}
-                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">下一页 &raquo;</a>
+                        <a class="mdl-button"
+                           href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}

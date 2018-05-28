@@ -146,6 +146,11 @@ class AbstractWatermark(object):
         layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
         coords = _process_coords(img.size, wm_size, self.position)
 
+        print('L&X', 'wm', wm)
+        print('L&X', 'wm.size', wm.size)
+        print('L&X', 'coords', coords)
+        coords = (int(coords[0]), int(coords[1]))
+
         if self.repeat:
             sx = coords[0] % wm_size[0] - wm_size[0]
             sy = coords[1] % wm_size[1] - wm_size[1]

@@ -2,8 +2,7 @@
 
 {% load static %}
 
-{% load thumbnail %}
-{% load watermark %}
+{% load imagekit %}
 
 {% block android_header %}
     {% with mdl_navigation__link__current='dashboard' %}
@@ -36,9 +35,9 @@
                                   <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
 {#                                    <i class="material-icons mdl-list__item-avatar">person</i>#}
                                       {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                          {% thumbnail artist.artistavatar.image "120x120" crop="noop" as im %}
-                                              <img class="material-icons mdl-list__item-avatar mdl-chip__contact" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.15" }}">
-                                          {% endthumbnail %}
+                                          {% generateimage 'myapp:thumbnail-dashboard' source=artist.artistavatar.image as th %}
+                                          <img class="material-icons mdl-list__item-avatar mdl-chip__contact"
+                                               src="{{ th.url }}">
                                       {% else %}
                                           <i class="material-icons mdl-list__item-avatar">person</i>
                                       {% endif %}

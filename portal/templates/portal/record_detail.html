@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load thumbnail %}
-{% load watermark %}
+{% load imagekit %}
 
 {% block android_header %}
     {% with mdl_navigation__link__current='record-list' %}
@@ -26,15 +25,14 @@
                     <div class="lx-square-text">
                         {% if record.recordcover and record.recordcover.image_exists %}
                             <div class="lx-center">
-                                {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}
-                                    <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
-                                    </a>
-                                {% endthumbnail %}
+                                {% with source_file=record.recordcover.image %}
+                                    {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}
+                                {% endwith %}
                             </div>
                         {% else %}
                             <div class="lx-center">
-                                <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
+                                <i class="material-icons lx-center-content"
+                                   style="color: gray; font-size: 160px;">album</i>
                             </div>
                         {% endif %}
                     </div>
@@ -123,11 +121,7 @@
                             <div class="android-auto android-screen">
                                 <div class="lx-square-container">
                                     <div class="lx-square-text">
-                                        {% thumbnail recordimage.image "240x240" crop="noop" as im %}
-                                            <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
-                                            </a>
-                                        {% endthumbnail %}
+                                        {% generateimage 'myapp:thumbnail' source=recordimage.image -- alt=record.title id=record.id %}
                                     </div>
                                 </div>
                             </div>

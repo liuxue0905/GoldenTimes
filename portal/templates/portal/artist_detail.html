@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load thumbnail %}
-{% load watermark %}
+{% load imagekit %}
 
 {% block android_header %}
     {% with mdl_navigation__link__current='artist-list' %}
@@ -26,11 +25,12 @@
                     <div class="lx-square-text">
                         {% if artist.artistavatar and artist.artistavatar.image_exists %}
                             <div class="lx-center">
-                                {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}
-                                    <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
-                                    </a>
-                                {% endthumbnail %}
+{#                                {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}#}
+{#                                    <a class="android-image-link" href="{{ im0.url }}" target="_blank">#}
+{#                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">#}
+{#                                    </a>#}
+{#                                {% endthumbnail %}#}
+                                {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
                             </div>
                         {% else %}
                             <div class="lx-center">
@@ -90,11 +90,12 @@
                             <div class="android-auto android-screen">
                                 <div class="lx-square-container">
                                     <div class="lx-square-text">
-                                        {% thumbnail artistimage.image "240x240" crop="noop" as im %}
-                                            <a class="android-image-link" href="{{ im0.url }}" target="_blank">
-                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">
-                                            </a>
-                                        {% endthumbnail %}
+{#                                        {% thumbnail artistimage.image "240x240" crop="noop" as im %}#}
+{#                                            <a class="android-image-link" href="{{ im0.url }}" target="_blank">#}
+{#                                                <img class="android-screen-image" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">#}
+{#                                            </a>#}
+{#                                        {% endthumbnail %}#}
+                                        {% generateimage 'myapp:thumbnail' source=artistimage.image -- alt=artist.name id=artist.id %}
                                     </div>
                                 </div>
                             </div>
