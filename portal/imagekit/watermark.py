@@ -9,7 +9,8 @@ from imagekit.lib import Image
 # from imagekit.lib import ImageDraw, ImageFont, ImageColor, ImageEnhance
 from imagekit.lib import ImageDraw, ImageColor, ImageEnhance
 import warnings
-import weakref
+# L&X
+# import weakref
 
 try:
     from PIL import ImageFont
@@ -105,7 +106,9 @@ class AbstractWatermark(object):
 
             if wm is None:
                 wm = self.get_watermark()
-                self.cache_get_wm = weakref.ref(wm)
+                # L&X
+                # self.cache_get_wm = weakref.ref(wm)
+                self.cache_get_wm = wm
                 return wm
 
     def _fill_options(self, opacity=1.0, position=('center', 'center'),
