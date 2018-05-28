@@ -137,10 +137,18 @@ class AbstractWatermark(object):
         wm = self._get_watermark()
         wm_size = wm.size
 
+        # print('wm', wm)
+        # print('wm.mode', wm.mode)
+
+        # from PIL.PngImagePlugin import PngImageFile
+        # from PIL.JpegImagePlugin import JpegImageFile
+
         if self.scale:
             if isinstance(self.scale, (int, float)) and self.scale != 1:
-                wm_size[0] *= self.scale
-                wm_size[1] *= self.scale
+                # L&X
+                # wm_size[0] *= self.scale
+                # wm_size[1] *= self.scale
+                wm_size = (wm_size[0] * self.scale, wm_size[1] * self.scale)
                 wm = wm.scale(wm_size)
             elif self.scale == True:
                 # from .resize import ResizeToFit
