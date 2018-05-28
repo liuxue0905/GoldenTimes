@@ -102,7 +102,15 @@ class AbstractWatermark(object):
             if self.cache_get_wm is None:
                 wm = None
             else:
-                wm = self.cache_get_wm()
+                # L&X
+                print('L&X', 'self.cache_get_wm', self.cache_get_wm)
+                # wm = self.cache_get_wm()
+                wm = None
+                try:
+                    wm = self.cache_get_wm()
+                except Exception as e:
+                    print(e)
+                print('L&X', 'wm', wm)
 
             if wm is None:
                 wm = self.get_watermark()
