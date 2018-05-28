@@ -112,6 +112,22 @@ class Record(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def recordcover_exists(self):
+        try:
+            if self.recordcover:
+                return self.recordcover.image_exists()
+        except Exception as e:
+            print(e)
+        return False
+
+    def recordimages_set_exists(self):
+        try:
+            if self.recordimages_set:
+                return True
+        except Exception as e:
+            print(e)
+        return False
+
     def format_value(self):
         for choice in Record.FORMATE_CHOICES:
             if self.format == choice[0]:
@@ -193,6 +209,14 @@ class Artist(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def artistavatar_exist(self):
+        try:
+            if self.artistavatar:
+                return True
+        except Exception as e:
+            print(e)
+        return False
+
     def type_value(self):
         for choice in Artist.TYPE_CHOICES:
             if self.type == choice[0]:
@@ -272,7 +296,13 @@ class RecordCover(models.Model):
     # image_thumbnail
 
     def image_exists(self):
-        return fs.exists(self.image.name)
+        try:
+            return fs.exists(self.image.name)
+        except FileNotFoundError as e:
+            print(e)
+        except Exception as e:
+            print(e)
+        return False
 
     def delete(self, using=None, keep_parents=False):
         print('RecordCover', 'delete')
@@ -321,7 +351,11 @@ class RecordImages(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def image_exists(self):
-        return fs.exists(self.image.name)
+        try:
+            return fs.exists(self.image.name)
+        except FileNotFoundError as e:
+            print(e)
+        return False
 
     def delete(self, using=None, keep_parents=False):
         print('RecordImages', 'delete')
@@ -371,7 +405,11 @@ class ArtistAvatar(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def image_exists(self):
-        return fs.exists(self.image.name)
+        try:
+            return fs.exists(self.image.name)
+        except FileNotFoundError as e:
+            print(e)
+        return False
 
     def delete(self, using=None, keep_parents=False):
         print('ArtistAvatar', 'delete')
@@ -423,7 +461,11 @@ class ArtistImages(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def image_exists(self):
-        return fs.exists(self.image.name)
+        try:
+            return fs.exists(self.image.name)
+        except FileNotFoundError as e:
+            print(e)
+        return False
 
     def delete(self, using=None, keep_parents=False):
         print('ArtistImages', 'delete')
