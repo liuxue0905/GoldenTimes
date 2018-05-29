@@ -28,8 +28,8 @@ class Command(BaseCommand):
 
         for model in options['models']:
             try:
-                if model == 'recrod':
-                    Command.handle_clean_recrod(delete)
+                if model == 'record':
+                    Command.handle_clean_record(delete)
                 elif model == 'artist':
                     Command.handle_clean_artist(delete)
             except Exception as e:
@@ -38,12 +38,17 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS('Successfully clean model "%s"' % model))
 
     @staticmethod
-    def handle_clean_recrod(delete):
+    def handle_clean_record(delete):
+        print('handle_clean_record')
         dirname_root = 'record'
 
         for file in os.listdir(os.path.join(settings.MEDIA_ROOT, dirname_root)):
+
             path_rel_record = os.path.join(dirname_root, file)
             path_abs_record = os.path.join(settings.MEDIA_ROOT, path_rel_record)
+
+            # print('path_rel_record', path_rel_record)
+            # print('path_abs_record', path_abs_record)
 
             for file in os.listdir(path_abs_record):
                 path_rel_file = os.path.join(path_rel_record, file)
@@ -82,6 +87,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def handle_clean_artist(delete):
+        print('handle_clean_artist')
         dirname_root = 'artist'
 
         for file in os.listdir(os.path.join(settings.MEDIA_ROOT, dirname_root)):
