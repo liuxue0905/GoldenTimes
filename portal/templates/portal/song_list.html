@@ -42,7 +42,8 @@
             <div class="mdl-card__actions mdl-card--border mdl-grid">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--11-col-desktop mdl-cell--7-col-tablet mdl-cell--4-col-phone">
-                    <input class="mdl-textfield__input" type="text" id="sample1" name="title" value="{{ request.GET.title }}">
+                    <input class="mdl-textfield__input" type="text" id="sample1" name="title"
+                           value="{{ request.GET.title }}">
                     <label class="mdl-textfield__label" for="sample1">歌曲标题</label>
                 </div>
 
@@ -99,7 +100,8 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}">&laquo; 上一页</a>
+                        <a class="mdl-button"
+                           href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -109,7 +111,8 @@
                     </span>
 
                     {% if page_obj.has_next %}
-                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}">下一页 &raquo;</a>
+                        <a class="mdl-button"
+                           href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}

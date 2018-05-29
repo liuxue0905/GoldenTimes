@@ -169,7 +169,7 @@ class ArtistDetailView(DetailView):
 class SongListView(ListView):
     model = Song
     # context_object_name = 'my_favorite_publishers'
-    paginate_by = 10
+    paginate_by = 100
 
     def get_queryset(self):
         title = self.request.GET.get('title')
