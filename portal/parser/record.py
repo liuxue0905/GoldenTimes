@@ -52,6 +52,12 @@ class CSVRow:
 
             return record
 
+        def __str__(self):
+            return '[{title}][{number}]'.format(title=self.title, number=self.number)
+
+        def __repr__(self):
+            return '[{title}][{number}]'.format(title=self.title, number=self.number)
+
     class Song:
         track: str = None
         title: str = None
@@ -84,6 +90,12 @@ class CSVRow:
             song.artists_part = row[19]
 
             return song
+
+        def __str__(self):
+            return '[{track}][{title}]'.format(track=self.track, title=self.title)
+
+        def __repr__(self):
+            return '[{track}][{title}]'.format(track=self.track, title=self.title)
 
     record: Record = None
     song: Song = None
@@ -189,12 +201,12 @@ class RecordParser:
 
             return obj
 
-        def _save_record_song(record, csv_row):
+        def _save_record_song(record, raw_song):
             logger.info(
                 '[{record_title}][{record_number}] [{song_track}][{song_title}]'.format(record_title=record.title,
                                                                                         record_number=record.number,
-                                                                                        song_track=csv_row.song.track,
-                                                                                        song_title=csv_row.song.title))
+                                                                                        song_track=raw_song.track,
+                                                                                        song_title=raw_song.title))
 
             # Song Artists
 
@@ -206,21 +218,21 @@ class RecordParser:
                     artist_name_list += cell_artists_part.split('/')
                 return artist_name_list
 
-            artist_name_list = xlsx_song_artist_name_list(csv_row.song.artists, csv_row.song.artists_part)
+            artist_name_list = xlsx_song_artist_name_list(raw_song.artists, raw_song.artists_part)
             # print('song artist_name_list', artist_name_list)
 
             artists = _get_or_create_artists(artist_name_list)
 
             song_defaults = {
-                'track': csv_row.song.track,
-                'title': csv_row.song.title,
-                'composer': csv_row.song.composer,
-                'lyricist': csv_row.song.lyricist,
-                'arranger': csv_row.song.arranger,
-                'bandsman': csv_row.song.bandsman,
-                'vocalist': csv_row.song.vocalist,
-                'producer': csv_row.song.producer,
-                'description': csv_row.song.description,
+                'track': raw_song.track,
+                'title': raw_song.title,
+                'composer': raw_song.composer,
+                'lyricist': raw_song.lyricist,
+                'arranger': raw_song.arranger,
+                'bandsman': raw_song.bandsman,
+                'vocalist': raw_song.vocalist,
+                'producer': raw_song.producer,
+                'description': raw_song.description,
             }
 
             obj, created = Song.objects.update_or_create(record=record, track=song_defaults['track'],
@@ -232,42 +244,76 @@ class RecordParser:
 
             return obj
 
-        import csv
+        def _save_record_songs(record: Record, raw_songs: [CSVRow.Song]):
+            # print('_save_record_songs', 'record', record)
+            # print('_save_record_songs', 'raw_songs', raw_songs)
+
+            song_set = record.song_set.all()
+            # print('_save_record_songs', 'song_set', song_set)
+            for song in song_set:
+                def exists():
+                    for raw_song in raw_songs:
+                        if raw_song.track == song.track and raw_song.title == song.title:
+                            return True
+                    return False
+
+                # print('_save_record_songs', 'exists', exists())
+                if not exists():
+                    song.delete()
+
+            for raw_song in raw_songs:
+                song = _save_record_song(record, raw_song)
+                # print('_save_record_songs', 'song', song)
+
         with open(self.file, mode='r', newline='', encoding='utf-8-sig') as f:
+            import csv
             f_csv = csv.reader(f)
             headers = next(f_csv)
             if check_headers(headers):
 
                 record = None
+                raw_songs = None
+
                 record_size = 0
 
                 for row in f_csv:
                     # Process row
                     # print('row', row)
                     csv_row = CSVRow.read_from_row(row)
-                    print('csv_row', csv_row)
+                    # print('csv_row', csv_row)
 
-                    if should_new_record(csv_row, record):
+                    is_new_record = should_new_record(csv_row, record)
+
+                    if is_new_record:
+                        # 1.先保存上一条Record和Songs
+                        if record and raw_songs:
+                            _save_record_songs(record, raw_songs)
+                        # 2.再重制Record和Songs，记录下一批
                         record_size += 1
                         logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
                                                                                          record_title=csv_row.record.title,
                                                                                          record_number=csv_row.record.number))
                         record = _save_record(csv_row)
+                        raw_songs = []
 
-                    _save_record_song(record, csv_row)
+                    raw_songs.append(csv_row.song)
+
+                if record and raw_songs:
+                    _save_record_songs(record, raw_songs)
 
         logger.info('[Record]处理结束')
 
     def parse_with_db(self):
         import os
         from datetime import datetime
+        from django.utils import timezone
 
         from django.conf import settings
         from portal.models import LogImportRecord
 
         excel_log = LogImportRecord()
         excel_log.status = LogImportRecord.STATUS_START
-        excel_log.datetime_start = datetime.now()
+        excel_log.datetime_start = timezone.now()
 
         try:
             excel_log.file_excel.name = os.path.relpath(self.file, os.path.abspath(settings.MEDIA_ROOT))
@@ -280,7 +326,7 @@ class RecordParser:
         finally:
             # os.remove(filename)
             excel_log.status = LogImportRecord.STATUS_SUCCESS
-            excel_log.datetime_end = datetime.now()
+            excel_log.datetime_end = timezone.now()
             excel_log.save()
 
 
