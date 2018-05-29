@@ -174,7 +174,7 @@ class SongListView(ListView):
     def get_queryset(self):
         title = self.request.GET.get('title')
 
-        queryset = Song.objects.all()
+        queryset = Song.objects.order_by('title').all()
 
         if title:
             queryset = queryset.filter(title__contains=title)

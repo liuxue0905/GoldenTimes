@@ -159,6 +159,7 @@ class Record(models.Model):
 
     class Meta:
         ordering = ['release', 'release_order', 'title']
+        # unique_together = ('title', 'number')
 
 
 # class PersonTable(tables.Table):
@@ -190,8 +191,9 @@ class Song(models.Model):
         return '#{track} - {title}'.format(track=self.track, title=self.title)
 
     class Meta:
-        order_with_respect_to = 'record'
-        # ordering = ['title']
+        # order_with_respect_to = 'record'
+        ordering = ['track']
+        # unique_together = ('record', 'track', 'title')
 
 
 class Artist(models.Model):
