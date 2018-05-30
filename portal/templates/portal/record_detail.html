@@ -104,8 +104,8 @@
                                 <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
                             {% endfor %}
                         </td>
-                        <td>{{ song.composer }}</td>
-                        <td>{{ song.lyricist }}</td>
+                        <td>{{ song.composer|default_if_none:'' }}</td>
+                        <td>{{ song.lyricist|default_if_none:'' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
