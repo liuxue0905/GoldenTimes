@@ -81,6 +81,12 @@ class RecordListView(ListView):
         if format:
             queryset = queryset.filter(format=format)
 
+        # from django.db.models import Prefetch
+        # queryset = Record.objects.prefetch_related(Prefetch('song_set', queryset=Song.objects.order_by('track').all()))
+        #
+        # print(queryset[0].title)
+        # print(queryset[0].song_set.all())
+
         return queryset
 
 
@@ -89,11 +95,43 @@ class RecordDetailView(DetailView):
 
     # context_object_name = 'my_favorite_publishers'
 
+    def get_object(self, queryset=None):
+        from django.db.models import Prefetch
+        from django.db.models.functions import Cast
+        from django.db.models import PositiveIntegerField
+
+        obj: Record = super().get_object(queryset)
+
+        # print('obj', obj)
+        # print('obj.objects', obj.__class__.objects)
+        # print('obj.song_set', obj.song_set)
+
+        # print(obj.song_set.annotate(track_integer=Cast('track', PositiveIntegerField())).order_by('-track_integer'))
+        # print(obj.song_set.annotate(track_integer=Cast('track', PositiveIntegerField())).order_by('-track_integer').count())
+
+        # from django.db.models import OuterRef
+        # print(Song.objects.filter(record=OuterRef('pk')).annotate(track_integer=Cast('track', PositiveIntegerField())).order_by('-track_integer'))
+
+        # print(Song.objects.filter(record=obj).annotate(track_integer=Cast('track', PositiveIntegerField())).order_by('-track_integer'))
+
+        prefetch = Prefetch('song_set', queryset=Song.objects.annotate(
+            track_integer=Cast('track', PositiveIntegerField())).order_by('track_integer'))
+        obj = Record.objects.filter(pk=obj.pk).prefetch_related(prefetch).get()
+
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super(RecordDetailView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
-        record = Record.objects.get(pk=context['object'].id)
+        # record = Record.objects.get(pk=context['object'].id)
         # record.recordcover
+
+        # from django.db.models.functions import Cast
+        # from django.db.models import PositiveIntegerField
+        # abc = record.song_set.annotate(track_integer=Cast('track', PositiveIntegerField())).order_by('-track_integer')
+        #
+        # print(abc)
+
         return context
 
 
