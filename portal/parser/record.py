@@ -265,43 +265,46 @@ class RecordParser:
                 song = _save_record_song(record, raw_song)
                 # print('_save_record_songs', 'song', song)
 
-        with open(self.file, mode='r', newline='', encoding='utf-8-sig') as f:
-            import csv
-            f_csv = csv.reader(f)
-            headers = next(f_csv)
-            is_headers_valide = check_headers(headers)
-            logger.info('标题合法: {b}'.format(b=is_headers_valide))
-            if is_headers_valide:
+        try:
+            with open(self.file, mode='r', newline='', encoding='utf-8-sig') as f:
+                import csv
+                f_csv = csv.reader(f)
+                headers = next(f_csv)
+                is_headers_valide = check_headers(headers)
+                logger.info('[Record]标题合法: {b}'.format(b=is_headers_valide))
+                if is_headers_valide:
 
-                record = None
-                raw_songs = None
+                    record = None
+                    raw_songs = None
 
-                record_size = 0
+                    record_size = 0
 
-                for row in f_csv:
-                    # Process row
-                    # print('row', row)
-                    csv_row = CSVRow.read_from_row(row)
-                    # print('csv_row', csv_row)
+                    for row in f_csv:
+                        # Process row
+                        # print('row', row)
+                        csv_row = CSVRow.read_from_row(row)
+                        # print('csv_row', csv_row)
 
-                    is_new_record = should_new_record(csv_row, record)
+                        is_new_record = should_new_record(csv_row, record)
 
-                    if is_new_record:
-                        # 1.先保存上一条Record和Songs
-                        if record and raw_songs:
-                            _save_record_songs(record, raw_songs)
-                        # 2.再重制Record和Songs，记录下一批
-                        record_size += 1
-                        logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
-                                                                                         record_title=csv_row.record.title,
-                                                                                         record_number=csv_row.record.number))
-                        record = _save_record(csv_row)
-                        raw_songs = []
+                        if is_new_record:
+                            # 1.先保存上一条Record和Songs
+                            if record and raw_songs:
+                                _save_record_songs(record, raw_songs)
+                            # 2.再重制Record和Songs，记录下一批
+                            record_size += 1
+                            logger.info('[{record_title}][{record_number}] ({count})'.format(count=record_size,
+                                                                                             record_title=csv_row.record.title,
+                                                                                             record_number=csv_row.record.number))
+                            record = _save_record(csv_row)
+                            raw_songs = []
 
-                    raw_songs.append(csv_row.song)
+                        raw_songs.append(csv_row.song)
 
-                if record and raw_songs:
-                    _save_record_songs(record, raw_songs)
+                    if record and raw_songs:
+                        _save_record_songs(record, raw_songs)
+        except Exception as e:
+            logger.info('[Record]Excption: {e}'.format(e=e))
 
         logger.info('[Record]处理结束')
 
