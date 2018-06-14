@@ -269,7 +269,9 @@ class RecordParser:
             import csv
             f_csv = csv.reader(f)
             headers = next(f_csv)
-            if check_headers(headers):
+            is_headers_valide = check_headers(headers)
+            logger.info('标题合法: {b}'.format(b=is_headers_valide))
+            if is_headers_valide:
 
                 record = None
                 raw_songs = None

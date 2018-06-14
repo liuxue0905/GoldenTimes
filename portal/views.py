@@ -499,7 +499,7 @@ class LogImportRecordsView(LoginRequiredMixin, FormView, ListView):
         from portal.models import LogImportRecord
         queryset = LogImportRecord.objects.all()
 
-        print('FileFieldView', 'queryset', queryset)
+        # print('FileFieldView', 'queryset', queryset)
 
         return queryset
 
@@ -544,7 +544,7 @@ class LogImportArtistsView(LoginRequiredMixin, FormView, ListView):
         from portal.models import LogImportArtist
         queryset = LogImportArtist.objects.all()
 
-        print('FileFieldView', 'queryset', queryset)
+        # print('FileFieldView', 'queryset', queryset)
 
         return queryset
 
