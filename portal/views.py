@@ -407,7 +407,7 @@ def handle_uploaded_file_import_records(f):
         if not os.path.exists(dir_excel):
             os.makedirs(dir_excel)
 
-        return os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.csv')
+        return os.path.join(dir_excel, datetime_now.strftime("%Y%m%d.%H%M%S.%f") + '.csv')
 
     datetime_start = datetime.now()
 
@@ -446,7 +446,7 @@ def handle_uploaded_file_import_artists(f):
         if not os.path.exists(dir_excel):
             os.makedirs(dir_excel)
 
-        return os.path.join(dir_excel, datetime_now.strftime("%Y-%m-%d %H:%M:%S.%f") + '.csv')
+        return os.path.join(dir_excel, datetime_now.strftime("%Y%m%d.%H%M%S.%f") + '.csv')
 
     datetime_start = datetime.now()
 
