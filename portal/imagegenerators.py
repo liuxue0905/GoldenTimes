@@ -36,7 +36,7 @@ class ThumbnailDashboardSpec(ImageSpec):
                        position=('bottom', 'right'),
                        scale=True,
                        repeat=False,
-                       opacity=0.333)
+                       opacity=0.8)
     ]
     format = 'JPEG'
     options = {'quality': 60}
@@ -49,7 +49,7 @@ class ThumbnailSpec(ImageSpec):
                        position=('bottom', 'right'),
                        scale=True,
                        repeat=False,
-                       opacity=0.333)
+                       opacity=0.8)
     ]
     format = 'JPEG'
     options = {'quality': 60}

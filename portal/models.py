@@ -97,7 +97,7 @@ class Record(models.Model):
     number = models.CharField(max_length=128, blank=True, null=True, verbose_name='编号')
 
     format = models.IntegerField(choices=FORMATE_CHOICES, blank=True, null=True, verbose_name='介质')
-    release = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='yyyy')
+    release = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='yyyy|yyyymm|yyyymmdd')
 
     producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
     release_order = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间排序', help_text='yyyy0000')
