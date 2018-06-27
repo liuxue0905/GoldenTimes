@@ -13,42 +13,83 @@ from portal.models import Record, Song, Artist, Company
 
 logger = logging.getLogger('parser')
 
+# row_headers = ['唱片标题', '唱片监制', '唱片编号', '介质', '发布时间', '发布时间排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
+#                '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
+
+
+row_headers = ['唱片标题', '唱片监制', '唱片编号', '介质', '年代', '发布时间', '排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
+               '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
+
+
+def column_index(column):
+    return row_headers.index(column)
+
+
+COLUMN_INDEX_RECORD_TITLE = column_index('唱片标题')  # 0
+COLUMN_INDEX_RECORD_PRODUCER = column_index('唱片监制')  # 1
+COLUMN_INDEX_RECORD_NUMBER = column_index('唱片编号')  # 2
+COLUMN_INDEX_RECORD_FORMAT = column_index('介质')  # 3
+COLUMN_INDEX_RECORD_YEAR = column_index('年代')  # 4
+COLUMN_INDEX_RECORD_RELEASE_DETAIL = column_index('发布时间')  # 5
+COLUMN_INDEX_RECORD_RELEASE_ORDER = column_index('排序')  # 6
+COLUMN_INDEX_RECORD_COMPANY = column_index('唱片公司')  # 7
+COLUMN_INDEX_RECORD_ALBUM_ARTIST = column_index('唱片歌手')  # 8
+COLUMN_INDEX_RECORD_RECORDER = column_index('唱片录音')  # 9
+COLUMN_INDEX_RECORD_MIXER = column_index('唱片混音')  # 10
+COLUMN_INDEX_RECORD_DESCRIPTION = column_index('唱片说明')  # 11
+COLUMN_INDEX_RECORD_BANDSMAN = column_index('唱片乐手信息')  # 12
+
+COLUMN_INDEX_SONG_TRACK = column_index('序号')  # 13
+COLUMN_INDEX_SONG_ARTIST = column_index('歌手')  # 14
+COLUMN_INDEX_SONG_TITLE = column_index('歌名')  # 15
+COLUMN_INDEX_SONG_COMPOSER = column_index('作曲')  # 16
+COLUMN_INDEX_SONG_LYRICIST = column_index('作词')  # 17
+COLUMN_INDEX_SONG_ARRANGER = column_index('编曲')  # 18
+COLUMN_INDEX_SONG_BANDSMAN = column_index('歌曲乐手信息')  # 19
+COLUMN_INDEX_SONG_ARTIST_PART = column_index('歌曲合唱')  # 14
+COLUMN_INDEX_SONG_VOCALIST = column_index('歌曲和唱')  # 21
+COLUMN_INDEX_SONG_PRODUCER = column_index('歌曲监制')  # 22
+COLUMN_INDEX_SONG_DESCRIPTION = column_index('歌曲说明')  # 23
+
 
 class CSVRow:
     class Record:
-        title: str = None
-        producer: str = None
-        number: str = None
-        format: str = None
-        release: str = None
-        release_order: str = None
-        recorder: str = None
-        mixer: str = None
-        bandsman: str = None
-        description: str = None
+        def __init__(self):
+            self.title: str = None
+            self.producer: str = None
+            self.number: str = None
+            self.format: str = None
+            self.year: str = None
+            self.release_detail: str = None
+            self.release_order: str = None
+            self.recorder: str = None
+            self.mixer: str = None
+            self.bandsman: str = None
+            self.description: str = None
 
-        company_name: str = None
+            self.company_name: str = None
 
-        artists: str = None
+            self.artists: str = None
 
         @staticmethod
         def read_from_row(row):
             record = CSVRow.Record()
 
-            record.title = util.str_strip(row[0])
-            record.producer = row[1]
-            record.number = util.str_strip(row[2])
-            record.format = row[3]
-            record.release = row[4]
-            record.release_order = row[5]
-            record.recorder = row[8]
-            record.mixer = row[9]
-            record.bandsman = row[11]
-            record.description = row[10]
+            record.title = util.str_strip(row[COLUMN_INDEX_RECORD_TITLE])
+            record.producer = row[COLUMN_INDEX_RECORD_PRODUCER]
+            record.number = util.str_strip(row[COLUMN_INDEX_RECORD_NUMBER])
+            record.format = row[COLUMN_INDEX_RECORD_FORMAT]
+            record.year = row[COLUMN_INDEX_RECORD_YEAR]
+            record.release_detail = row[COLUMN_INDEX_RECORD_RELEASE_DETAIL]
+            record.release_order = row[COLUMN_INDEX_RECORD_RELEASE_ORDER]
+            record.recorder = row[COLUMN_INDEX_RECORD_RECORDER]
+            record.mixer = row[COLUMN_INDEX_RECORD_MIXER]
+            record.bandsman = row[COLUMN_INDEX_RECORD_BANDSMAN]
+            record.description = row[COLUMN_INDEX_RECORD_DESCRIPTION]
 
-            record.company_name = row[6]
+            record.company_name = row[COLUMN_INDEX_RECORD_COMPANY]
 
-            record.artists = row[7]
+            record.artists = row[COLUMN_INDEX_RECORD_ALBUM_ARTIST]
 
             return record
 
@@ -59,35 +100,36 @@ class CSVRow:
             return '[{title}][{number}]'.format(title=self.title, number=self.number)
 
     class Song:
-        track: str = None
-        title: str = None
-        composer: str = None
-        lyricist: str = None
-        arranger: str = None
-        bandsman: str = None
-        vocalist: str = None
-        producer: str = None
-        description: str = None
+        def __init__(self):
+            self.track: str = None
+            self.title: str = None
+            self.composer: str = None
+            self.lyricist: str = None
+            self.arranger: str = None
+            self.bandsman: str = None
+            self.vocalist: str = None
+            self.producer: str = None
+            self.description: str = None
 
-        artists: str = None
-        artists_part: str = None
+            self.artists: str = None
+            self.artists_part: str = None
 
         @staticmethod
         def read_from_row(row):
             song = CSVRow.Song()
 
-            song.track = util.str_strip(row[12])
-            song.title = util.str_strip(row[14])
-            song.composer = row[15]
-            song.lyricist = row[16]
-            song.arranger = row[17]
-            song.bandsman = row[18]
-            song.vocalist = row[20]
-            song.producer = row[21]
-            song.description = row[22]
+            song.track = util.str_strip(row[COLUMN_INDEX_SONG_TRACK])
+            song.title = util.str_strip(row[COLUMN_INDEX_SONG_TITLE])
+            song.composer = row[COLUMN_INDEX_SONG_COMPOSER]
+            song.lyricist = row[COLUMN_INDEX_SONG_LYRICIST]
+            song.arranger = row[COLUMN_INDEX_SONG_ARRANGER]
+            song.bandsman = row[COLUMN_INDEX_SONG_BANDSMAN]
+            song.vocalist = row[COLUMN_INDEX_SONG_VOCALIST]
+            song.producer = row[COLUMN_INDEX_SONG_PRODUCER]
+            song.description = row[COLUMN_INDEX_SONG_DESCRIPTION]
 
-            song.artists = row[13]
-            song.artists_part = row[19]
+            song.artists = row[COLUMN_INDEX_SONG_ARTIST]
+            song.artists_part = row[COLUMN_INDEX_SONG_ARTIST_PART]
 
             return song
 
@@ -124,8 +166,6 @@ class RecordParser:
         logger.info('[Record]处理开始')
 
         def check_headers(headers):
-            row_headers = ['唱片标题', '唱片监制', '唱片编号', '介质', '发布时间', '发布时间排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
-                           '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
             return set(headers) == set(row_headers)
 
         def should_new_record(csv_row, record):
@@ -182,7 +222,8 @@ class RecordParser:
                 'producer': csv_row.record.producer,
                 'number': csv_row.record.number,
                 'format': Record.format_value_to_key(csv_row.record.format),
-                'release': csv_row.record.release,
+                'year': csv_row.record.year,
+                'release_detail': csv_row.record.release_detail,
                 'release_order': csv_row.record.release_order,
                 'recorder': csv_row.record.recorder,
                 'mixer': csv_row.record.mixer,
@@ -281,7 +322,9 @@ class RecordParser:
 
                     for row in f_csv:
                         # Process row
-                        # print('row', row)
+                        print('row', row)
+                        print('row[0]', row[0])
+                        print('row[\'唱片标题\']', row['唱片标题'])
                         csv_row = CSVRow.read_from_row(row)
                         # print('csv_row', csv_row)
 
