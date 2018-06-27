@@ -86,6 +86,13 @@ fs = FileStorage()
 
 
 class Record(models.Model):
+    # year
+    # comment
+    # composer
+    # discnumber
+    # Album Artist
+    # Directory
+
     FORMATE_CHOICES = (
         (1, 'CD'),
         (2, 'LP'),
@@ -97,10 +104,13 @@ class Record(models.Model):
     number = models.CharField(max_length=128, blank=True, null=True, verbose_name='编号')
 
     format = models.IntegerField(choices=FORMATE_CHOICES, blank=True, null=True, verbose_name='介质')
-    release = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='yyyy|yyyymm|yyyymmdd')
+    release = models.CharField(max_length=4, blank=True, null=True, verbose_name='年代', help_text='yyyy')
+
+    release_detail = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='空|yyyy|yyyymm|yyyymmdd')
+
+    release_order = models.CharField(max_length=128, blank=True, null=True, verbose_name='发布时间排序', help_text='yyyy0000')
 
     producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
-    release_order = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间排序', help_text='yyyy0000')
     recorder = models.CharField(max_length=128, blank=True, null=True, verbose_name='录音')
     mixer = models.CharField(max_length=128, blank=True, null=True, verbose_name='混音')
     bandsman = models.TextField(blank=True, null=True, verbose_name='乐手')
@@ -158,6 +168,7 @@ class Record(models.Model):
         super(Record, self).delete(using, keep_parents)
 
     class Meta:
+        # ordering = ['release', 'release_order', 'title']
         ordering = ['release', 'release_order', 'title']
         # unique_together = ('title', 'number')
 

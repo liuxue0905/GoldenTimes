@@ -310,7 +310,6 @@ class RecordParser:
 
     def parse_with_db(self):
         import os
-        from datetime import datetime
         from django.utils import timezone
 
         from django.conf import settings

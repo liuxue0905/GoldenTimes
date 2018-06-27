@@ -62,8 +62,7 @@ class RecordAdmin(admin.ModelAdmin):
     filter_horizontal = ('artists',)
     inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
-    # list_display = ('cover', 'title', 'artist_list', 'release', 'number', 'format', 'company')
-    list_display = ('admin_thumbnail', 'title', 'number', 'artist_list', 'release', 'format', 'company',)
+    list_display = ('cover', 'title', 'number', 'artist_list', 'release', 'format', 'company',)
     list_display_links = ('title', 'number',)
     list_filter = ('format',)
     list_per_page = 100
@@ -73,8 +72,8 @@ class RecordAdmin(admin.ModelAdmin):
 
     # ordering = ('title', 'release')
 
-    admin_thumbnail = AdminThumbnail(image_field=cached_admin_thumb_record_recordcover)
-    admin_thumbnail.short_description = ''
+    cover = AdminThumbnail(image_field=cached_admin_thumb_record_recordcover)
+    cover.short_description = ''
 
     def artist_list(self, object):
         from django.utils.html import format_html_join
