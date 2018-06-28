@@ -17,7 +17,7 @@ logger = logging.getLogger('parser')
 #                '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
 
 
-row_headers = ['唱片标题', '唱片监制', '唱片编号', '介质', '年代', '发布时间', '排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
+row_headers = ['唱片标题', '唱片监制', '唱片编号', '介质', '年代', '发布时间', '发布时间排序', '唱片公司', '唱片歌手', '唱片录音', '唱片混音', '唱片说明',
                '唱片乐手信息', '序号', '歌手', '歌名', '作曲', '作词', '编曲', '歌曲乐手信息', '歌曲合唱', '歌曲和唱', '歌曲监制', '歌曲说明']
 
 
@@ -31,7 +31,7 @@ COLUMN_INDEX_RECORD_NUMBER = column_index('唱片编号')  # 2
 COLUMN_INDEX_RECORD_FORMAT = column_index('介质')  # 3
 COLUMN_INDEX_RECORD_YEAR = column_index('年代')  # 4
 COLUMN_INDEX_RECORD_RELEASE_DETAIL = column_index('发布时间')  # 5
-COLUMN_INDEX_RECORD_RELEASE_ORDER = column_index('排序')  # 6
+COLUMN_INDEX_RECORD_RELEASE_ORDER = column_index('发布时间排序')  # 6
 COLUMN_INDEX_RECORD_COMPANY = column_index('唱片公司')  # 7
 COLUMN_INDEX_RECORD_ALBUM_ARTIST = column_index('唱片歌手')  # 8
 COLUMN_INDEX_RECORD_RECORDER = column_index('唱片录音')  # 9
@@ -322,9 +322,9 @@ class RecordParser:
 
                     for row in f_csv:
                         # Process row
-                        print('row', row)
-                        print('row[0]', row[0])
-                        print('row[\'唱片标题\']', row['唱片标题'])
+                        # print('row', row)
+                        # print('row[0]', row[0])
+                        # print('row[column_index(\'唱片标题\')]', row[column_index('唱片标题')])
                         csv_row = CSVRow.read_from_row(row)
                         # print('csv_row', csv_row)
 
