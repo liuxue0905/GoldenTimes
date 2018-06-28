@@ -104,10 +104,9 @@ class Record(models.Model):
     number = models.CharField(max_length=128, blank=True, null=True, verbose_name='编号')
 
     format = models.IntegerField(choices=FORMATE_CHOICES, blank=True, null=True, verbose_name='介质')
-    release = models.CharField(max_length=4, blank=True, null=True, verbose_name='年代', help_text='yyyy')
+    year = models.CharField(max_length=4, blank=True, null=True, verbose_name='年代', help_text='yyyy')
 
     release_detail = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='空|yyyy|yyyymm|yyyymmdd')
-
     release_order = models.CharField(max_length=128, blank=True, null=True, verbose_name='发布时间排序', help_text='yyyy0000')
 
     producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
@@ -169,7 +168,7 @@ class Record(models.Model):
 
     class Meta:
         # ordering = ['release', 'release_order', 'title']
-        ordering = ['release', 'release_order', 'title']
+        ordering = ['year', 'release_order', 'title']
         # unique_together = ('title', 'number')
 
 

@@ -62,7 +62,9 @@ class RecordAdmin(admin.ModelAdmin):
     filter_horizontal = ('artists',)
     inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
-    list_display = ('cover', 'title', 'number', 'artist_list', 'release', 'format', 'company',)
+    list_display = (
+        'cover', 'title', 'number', 'artist_list', 'year', 'release_detail', 'release_detail', 'format', 'company',
+    )
     list_display_links = ('title', 'number',)
     list_filter = ('format',)
     list_per_page = 100

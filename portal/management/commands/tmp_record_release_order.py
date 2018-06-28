@@ -39,8 +39,28 @@ class Command(BaseCommand):
         from portal.models import Record
         records = Record.objects.all()
 
+        print('==========')
         for record in records:
             release_order = record.release_order
             if release_order:
                 if len(release_order) != 8:
-                    print(record.title, record.release, record.release_order)
+                    print('[%s][%s][%s][%s]' % (record.title, record.number, record.year, record.release_order))
+        print('==========')
+
+        print('==========')
+        for record in records:
+            release_order = record.release_order
+            if release_order:
+                if len(release_order) == 8:
+                    if release_order[4:] != '0000':
+                        print('[%s][%s][%s][%s]' % (record.title, record.number, record.year, record.release_order))
+        print('==========')
+
+        print('==========')
+        for record in records:
+            release_order = record.release_order
+            if release_order:
+                if len(release_order) == 8:
+                    if release_order[4:6] != '00':
+                        print('[%s][%s][%s][%s]' % (record.title, record.number, record.year, record.release_order))
+        print('==========')

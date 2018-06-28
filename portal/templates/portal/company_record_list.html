@@ -28,7 +28,7 @@
                 <td>{{ forloop.counter }}</td>
                 <td><img src="{{ record.recordcover.image.url }}" style="width: 15px; height: 15px"></td>
                 <td><a href="{% url 'portal:record-detail' record.id %}">{{ record.title }}</a></td>
-                <td>{{ record.release }}</td>
+                <td>{{ record.year }}</td>
                 <td>{{ record.format_value }}</td>
                 <td>
                     {% for artist in record.artists.all %}
