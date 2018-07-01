@@ -47,12 +47,12 @@
                 <!-- Add spacer, to align navigation to the right in desktop -->
                 <div class="android-header-spacer mdl-layout-spacer"></div>
                 <div class="android-search-box mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right mdl-textfield--full-width">
-                    <label class="mdl-button mdl-js-button mdl-button--icon" for="search-field">
-                        <i class="material-icons">search</i>
-                    </label>
-                    <div class="mdl-textfield__expandable-holder">
-                        <input class="mdl-textfield__input" type="text" id="search-field">
-                    </div>
+                    {#                    <label class="mdl-button mdl-js-button mdl-button--icon" for="search-field">#}
+                    {#                        <i class="material-icons">search</i>#}
+                    {#                    </label>#}
+                    {#                    <div class="mdl-textfield__expandable-holder">#}
+                    {#                        <input class="mdl-textfield__input" type="text" id="search-field">#}
+                    {#                    </div>#}
                 </div>
                 <!-- Navigation -->
                 <div class="android-navigation-container">
@@ -75,8 +75,12 @@
                     {#                            导入 Excel#}
                     {#                        </a>#}
                     {#                    </li>#}
-                    <li class="mdl-menu__item">流金唱片库</li>
-                    <li disabled class="mdl-menu__item">&copy; 2017 L&X</li>
+                    <li class="mdl-menu__item mdl-navigation">
+                        <a class="mdl-navigation__link" href="{% url 'portal:about' %}">关于</a>
+                    </li>
+                    <li disabled class="mdl-menu__item mdl-navigation">
+                        <a class="mdl-navigation__link" href="#">&copy; 2017</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -93,6 +97,8 @@
                 <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'artist-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:artist-list' %}">歌手</a>
                 <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'song-list' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:song-list' %}">歌曲</a>
                 <div class="android-drawer-separator"></div>
+                <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'about' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:about' %}">关于</a>
+                <div class="android-drawer-separator"></div>
                 <span class="mdl-navigation__link" href="">管理员</span>
                 {% if not user.is_authenticated %}
                     <a class="mdl-navigation__link" href="{% url 'admin:login' %}?next=/portal/dashboard/">登录</a>
@@ -108,10 +114,10 @@
 
     <main class="mdl-layout__content">
         <div style="min-height: 1080px;">
-        <div class="mdl-grid portfolio-max-width">
-            {% block body %}
-            {% endblock %}
-        </div>
+            <div class="mdl-grid portfolio-max-width">
+                {% block body %}
+                {% endblock %}
+            </div>
         </div>
         <footer class="mdl-mini-footer">
             <div class="mdl-mini-footer__left-section">
@@ -119,8 +125,7 @@
             </div>
             <div class="mdl-mini-footer__right-section">
                 <ul class="mdl-mini-footer__link-list">
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Privacy & Terms</a></li>
+                    <li><a href="{% url 'portal:about' %}">关于</a></li>
                     <li><a href="#">&copy; 2017</a></li>
                 </ul>
             </div>

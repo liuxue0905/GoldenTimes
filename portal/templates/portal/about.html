@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load imagekit %}
+
+{% block android_header %}
+    {% with mdl_navigation__link__current='about' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block android_drawer %}
+    {% with mdl_navigation__link__current='about' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+        
+    </div>
+
+{% endblock %}
+

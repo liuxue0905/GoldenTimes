@@ -51,11 +51,11 @@
                     <p>
                         介质：{{ record.format_value }}
                         <br>
+                        编号: {{ record.number }}
+                        <br>
                         年代: {{ record.year }}
                         <br>
-                        发行时间: {{ record.release_detail }}
-                        <br>
-                        编号: {{ record.number }}
+                        发行时间: {{ record.release_detail|default_if_none:'' }}
                         <br>
                         {% if record.company %}
                             唱片公司: {{ record.company.name }}

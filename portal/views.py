@@ -64,6 +64,9 @@ def dashboard(request):
     return render(request, 'portal/dashboard.html', context)
 
 
+def about(request):
+    return render(request, 'portal/about.html')
+
 class RecordListView(ListView):
     model = Record
     # context_object_name = 'my_favorite_publishers'

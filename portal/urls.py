@@ -14,6 +14,8 @@ urlpatterns = [
 
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
 
+    url(r'^about/$', views.about, name='about'),
+
     url(r'^records/$', RecordListView.as_view(), name='record-list'),
     url(r'^records/(?P<pk>[0-9]+)/$', RecordDetailView.as_view(), name='record-detail'),
 
