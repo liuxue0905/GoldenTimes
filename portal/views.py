@@ -67,6 +67,7 @@ def dashboard(request):
 def about(request):
     return render(request, 'portal/about.html')
 
+
 class RecordListView(ListView):
     model = Record
     # context_object_name = 'my_favorite_publishers'
@@ -266,6 +267,11 @@ class CompanyDetailView(DetailView):
         return context
 
 
+def get_participated_album(artist):
+    records = Record.objects.filter(~Q(artists__exact=artist), song__artists__exact=artist).distinct()
+    return records
+
+
 class ArtistRecordList(ListView):
     model = Record
     template_name = 'portal/artist_detail_record_list.html'
@@ -291,8 +297,10 @@ class ArtistRecordList(ListView):
         context['object'] = self.artist
 
         # Record Involved
-        record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
-        setattr(self.artist, 'record_involved_set', record_involved_set)
+        # record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        # setattr(self.artist, 'record_involved_set', record_involved_set)
+
+        setattr(self.artist, 'record_involved_set', get_participated_album(self.artist))
 
         return context
 
@@ -322,8 +330,10 @@ class ArtistSongList(ListView):
         context['object'] = self.artist
 
         # Record Involved
-        record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
-        setattr(self.artist, 'record_involved_set', record_involved_set)
+        # record_involved_set = Record.objects.filter(~Q(artists__exact=self.artist), song__artists__exact=self.artist)
+        # setattr(self.artist, 'record_involved_set', record_involved_set)
+
+        setattr(self.artist, 'record_involved_set', get_participated_album(self.artist))
 
         return context
 
