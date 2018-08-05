@@ -16,13 +16,25 @@
     {% endwith %}
 {% endblock %}
 
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">-->
+    <link rel="stylesheet" href="https://fonts.proxy.ustclug.org/css?family=Roboto:300,400,500,700">
+    <!--<link rel="stylesheet" href="bundle.css">-->
+    <link rel="stylesheet" href="{% static 'bundle.css' %}">
+{% endblock %}
+
 {% block body %}
 
     <div class="mdl-cell mdl-cell--12-col mdl-grid">
         <p>当我想起你</p>
         <p>ronoal@163.com</p>
         <p><a href="mailto:ronoal@163.com">给我写邮件</a></p>
+        <a href="{% static 'assets/Solid Lavender.png' %}">abc</a>
     </div>
 
+    <!--<script src="bundle.js" async></script>-->
+    <script src="{% static 'bundle.js' %}" async></script>
 {% endblock %}
 
