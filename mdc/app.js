@@ -1,3 +1,5 @@
+import * as mdc from 'material-components-web';
+
 import {MDCRipple} from '@material/ripple';
 import {MDCSelect} from '@material/select';
 import {MDCTextField} from '@material/textfield';
@@ -15,3 +17,9 @@ const textFieldElements = [].slice.call(document.querySelectorAll('.mdc-text-fie
 textFieldElements.forEach((textFieldEl) => {
   new MDCTextField(textFieldEl);
 });
+
+const iconButtonRipple = new MDCRipple(document.querySelector('.mdc-icon-button'));
+iconButtonRipple.unbounded = true;
+
+// const surface = document.querySelector('.abc');
+// const ripple = new MDCRipple(surface);

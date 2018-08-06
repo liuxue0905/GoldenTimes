@@ -19,7 +19,7 @@
 
 {% block style %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">-->
+    {#    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">-->#}
     <link rel="stylesheet" href="https://fonts.proxy.ustclug.org/css?family=Roboto:300,400,500,700">
     <!--<link rel="stylesheet" href="bundle.css">-->
     <link rel="stylesheet" href="{% static 'bundle.css' %}">
@@ -27,14 +27,40 @@
 
 {% block body %}
 
-    <div class="mdl-cell mdl-cell--12-col mdl-grid">
-        <p>当我想起你</p>
-        <p>ronoal@163.com</p>
-        <p><a href="mailto:ronoal@163.com">给我写邮件</a></p>
-        <a href="{% static 'assets/Solid Lavender.png' %}">abc</a>
+    <div class="mdc-card demo-card">
+        <div class="mdc-card__media mdc-card__media--square">
+            <div class="mdc-card__media-content">Title</div>
+        </div>
+        <!-- ... content ... -->
+        <div class="mdc-card__primary-action">
+            <div class="demo-card__primary">
+                <div class="demo-card__title mdc-typography--headline6">当我想起你</div>
+                <div class="demo-card__subtitle mdc-typography--subtitle2">ronoal@163.com</div>
+            </div>
+            <div class="demo-card__secondary mdc-typography--body2">
+                ronoal@163.com
+            </div>
+        </div>
+        <!-- ... content ... -->
+        <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+                <button class="mdc-button mdc-card__action mdc-card__action--button">Action 1</button>
+                <button class="mdc-button mdc-card__action mdc-card__action--button">Action 2</button>
+            </div>
+            <div class="mdc-card__action-icons">
+                <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Share">
+                    share
+                </button>
+                <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="More options">
+                    more_vert
+                </button>
+            </div>
+        </div>
     </div>
 
     <!--<script src="bundle.js" async></script>-->
     <script src="{% static 'bundle.js' %}" async></script>
+
 {% endblock %}
 
+<script>mdc.autoInit()</script>
