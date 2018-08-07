@@ -27,6 +27,12 @@
 
     <link rel="stylesheet" href="{% static 'css/lx.css' %}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    {#    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">-->#}
+    <link rel="stylesheet" href="https://fonts.proxy.ustclug.org/css?family=Roboto:300,400,500,700">
+    <!--<link rel="stylesheet" href="bundle.css">-->
+    <link rel="stylesheet" href="{% static 'bundle.css' %}">
+
     {% block style %}
     {% endblock %}
 
@@ -134,7 +140,11 @@
 </div>
 
 <script src="{% static 'node_modules/material-components-web/dist/material-components-web.js' %}"></script>
-<script>mdc.autoInit()</script>
+
+    <!--<script src="bundle.js" async></script>-->
+    <script src="{% static 'bundle.js' %}" async></script>
+    <script>mdc.autoInit()</script>
 
 </body>
 </html>
+
