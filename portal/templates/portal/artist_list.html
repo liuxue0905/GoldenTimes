@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="demo-card__secondary mdc-typography--body2">
-                                    <span>类型：{{ artist.type_value|default_if_none:'-' }}</span>
+                                    <span>类型:{{ artist.type_value|default:'-' }}</span>
                                 </div>
                             </div>
                         </div>

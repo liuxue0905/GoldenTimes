@@ -55,9 +55,9 @@
                                     </div>
                                 </div>
                                 <div class="demo-card__secondary mdc-typography--body2">
-                                    <span>年代:{{ record.year }}</span>
+                                    <span>年代:{{ record.year|default:'-' }}</span>
                                     <br>
-                                    <span>介质:{{ record.format_value }}</span>
+                                    <span>介质:{{ record.format_value|default:'-' }}</span>
                                 </div>
                             </div>
                         </div>

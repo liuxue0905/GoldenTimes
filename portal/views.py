@@ -142,7 +142,7 @@ class RecordDetailView(DetailView):
 class ArtistListView(ListView):
     model = Artist
     # context_object_name = 'my_favorite_publishers'
-    paginate_by = 20
+    paginate_by = 30
 
     def get_queryset(self):
 
