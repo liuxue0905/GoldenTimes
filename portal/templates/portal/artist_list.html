@@ -78,50 +78,64 @@
     </div>
 
 
-    <div class="mdl-cell mdl-cell--12-col mdl-grid">
-        {% for artist in object_list %}
-            <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                <div class="lx-card mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__media">
+    <div class="mdl-cell mdl-cell--12-col">
 
-                        {#                        <a href="{% url 'portal:artist-detail' artist.id %}">#}
-                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                            <div class="lx-square-container">
-                                <div class="lx-square-text">
-                                    {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                        <div class="lx-center">
-                                            {#                                            {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}#}
-                                            {#                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">#}
-                                            {#                                            {% endthumbnail %}#}
-                                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
-                                        </div>
-                                    {% else %}
-                                        <div class="lx-center">
-                                            <i class="material-icons lx-center-content"
-                                               style="color: gray; font-size: 160px;">account_circle</i>
-                                        </div>
-                                    {% endif %}
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+
+                {% for artist in object_list %}
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-phone">
+
+                        <div class="mdc-card">
+                            <div class="mdc-card__primary-action">
+                                <div class="mdc-card__media mdc-card__media--square">
+                                    <!--<div class="mdc-card__media-content">Title</div>-->
+                                    <div class="lx-mdc-card__media--inner">
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                            {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                                <div class="lx-center" style="background: black">
+                                                    {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
+                                                </div>
+                                            {% else %}
+                                                <div class="lx-center" style="background: lightgray">
+                                                    <i class="material-icons lx-center-content"
+                                                       style="color: gray; font-size: 80px;">
+                                                        account_circle
+                                                    </i>
+                                                </div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="demo-card__primary">
+                                    <div class="demo-card__title mdc-typography--subtitle1">
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                            {{ artist.name }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="demo-card__secondary mdc-typography--body2">
+                                    <span>类型：{{ artist.type_value|default_if_none:'-' }}</span>
                                 </div>
                             </div>
-                        </a>
+                        </div>
 
                     </div>
-                    <div class="mdl-card__title mdl-card--border">
-                        <h6 class="mdl-card__title-text">
-                            {#                            <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>#}
-                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                        </h6>
+
+                {% empty %}
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+                        <div class="mdc-card">
+                            暂无歌手
+                        </div>
                     </div>
-                    <div class="mdl-card__supporting-text mdl-card--border">
-                        类型：{{ artist.type_value|default_if_none:'-' }}
-                    </div>
-                </div>
+
+                {% endfor %}
+
             </div>
-        {% empty %}
-            <div>
-                <div>暂无歌手</div>
-            </div>
-        {% endfor %}
+        </div>
+
     </div>
 
     <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
