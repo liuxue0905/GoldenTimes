@@ -88,32 +88,37 @@
     </div>
 
     <div class="mdl-cell mdl-cell--12-col">
-        <div class="lx-aaa mdc-layout-grid">
+
+        <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
+
                 {% for record in object_list %}
+
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-2-phone">
+
                         <div class="mdc-card">
-                            <div class="mdc-card__media mdc-card__media--square">
-                                <!--<div class="mdc-card__media-content">Title</div>-->
-                                <div class="lx-mdc-card__media--square__inner">
-                                    <a href="{% url 'portal:record-detail' record.id %}">
-                                        {% if record.recordcover and record.recordcover.image_exists %}
-                                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
-                                        {% else %}
-                                            <div class="lx-center">
-                                                <i class="material-icons lx-center-content"
-                                                   style="color: gray; font-size: 160px;">
-                                                    album
-                                                </i>
-                                            </div>
-                                        {% endif %}
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- ... content ... -->
                             <div class="mdc-card__primary-action">
+                                <div class="mdc-card__media mdc-card__media--square">
+                                    <!--<div class="mdc-card__media-content">Title</div>-->
+                                    <div class="lx-mdc-card__media--inner">
+                                        <a href="{% url 'portal:record-detail' record.id %}">
+                                            {% if record.recordcover and record.recordcover.image_exists %}
+                                                <div class="lx-center" style="background: black">
+                                                    {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
+                                                </div>
+                                            {% else %}
+                                                <div class="lx-center" style="background: lightgray">
+                                                    <i class="material-icons lx-center-content"
+                                                       style="color: gray; font-size: 160px;">
+                                                        album
+                                                    </i>
+                                                </div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="demo-card__primary">
-                                    <div class="demo-card__title mdc-typography--headline6">
+                                    <div class="demo-card__title mdc-typography--subtitle1">
                                         <a href="{% url 'portal:record-detail' record.id %}">
                                             {{ record.title }}
                                         </a>
@@ -131,16 +136,22 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 {% empty %}
+
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
                         <div class="mdc-card">
                             暂无唱片
                         </div>
                     </div>
+
                 {% endfor %}
+
             </div>
         </div>
+
     </div>
 
     <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">

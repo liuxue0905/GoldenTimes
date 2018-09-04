@@ -12,54 +12,71 @@
 
 {% block tabs %}
 
-    <div class="mdl-cell mdl-cell--12-col mdl-grid">
-        {% for record in object_list %}
-            <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                <div class="lx-card mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__media">
+    <div class="mdl-cell mdl-cell--12-col">
 
-                        <a href="{% url 'portal:record-detail' record.id %}">
-                            <div class="lx-square-container">
-                                <div class="lx-square-text">
-                                    {% if record.recordcover and record.recordcover.image_exists %}
-                                        <div class="lx-center">
-{#                                            {% thumbnail record.recordcover.image "240x240" crop="noop" as im %}#}
-{#                                                <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">#}
-{#                                            {% endthumbnail %}#}
-                                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
-                                        </div>
-                                    {% else %}
-                                        <div class="lx-center">
-                                            <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">album</i>
-                                        </div>
-                                    {% endif %}
+        <div class=" mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+
+                {% for record in object_list %}
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-2-phone">
+
+                        <div class="mdc-card">
+                            <div class="mdc-card__primary-action">
+                                <div class="mdc-card__media mdc-card__media--square">
+                                    <!--<div class="mdc-card__media-content">Title</div>-->
+                                    <div class="lx-mdc-card__media--inner">
+                                        <a href="{% url 'portal:record-detail' record.id %}">
+                                            {% if record.recordcover and record.recordcover.image_exists %}
+                                                <div class="lx-center" style="background: black">
+                                                    {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
+                                                </div>
+                                            {% else %}
+                                                <div class="lx-center" style="background: lightgray">
+                                                    <i class="material-icons lx-center-content"
+                                                       style="color: gray; font-size: 160px;">
+                                                        album
+                                                    </i>
+                                                </div>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="demo-card__primary">
+                                    <div class="demo-card__title mdc-typography--subtitle1">
+                                        <a href="{% url 'portal:record-detail' record.id %}">
+                                            {{ record.title }}
+                                        </a>
+                                    </div>
+                                    <div class="demo-card__subtitle mdc-typography--subtitle2">
+                                        {% for artist in record.artists.all %}
+                                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="demo-card__secondary mdc-typography--body2">
+                                    <span>年代:{{ record.year }}</span>
+                                    <br>
+                                    <span>介质:{{ record.format_value }}</span>
                                 </div>
                             </div>
-                        </a>
+                        </div>
 
                     </div>
-                    <div class="mdl-card__title mdl-card--border">
-                        <h6 class="mdl-card__title-text">
-                            <a href="{% url 'portal:record-detail' record.id %}">{{ record.title }}</a>
-                        </h6>
+
+                {% empty %}
+
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+                        <div class="mdc-card">
+                            暂无唱片
+                        </div>
                     </div>
-                    <div class="mdl-card__supporting-text mdl-card--border">
-                        <span>年代：{{ record.year }}</span>
-                        <br>
-                        <span>介质：{{ record.format_value }}</span>
-                    </div>
-                    <div class="mdl-card__supporting-text mdl-card--border">
-                        {% for artist in record.artists.all %}
-                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
+
+                {% endfor %}
+
             </div>
-        {% empty %}
-            <div>
-                <div>暂无唱片</div>
-            </div>
-        {% endfor %}
+        </div>
+
     </div>
 
     <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">

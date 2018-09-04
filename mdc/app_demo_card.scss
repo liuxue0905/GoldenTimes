@@ -1,0 +1,29 @@
+.demo-card {
+    width: 350px;
+    margin: 48px 0
+}
+
+.demo-card--hero {
+    margin: 0
+}
+
+.demo-card__primary {
+    padding: 1rem
+}
+
+.demo-card__title {
+    margin: 0
+}
+
+.demo-card__subtitle {
+    margin: 0
+}
+
+.demo-card__secondary,.demo-card__subtitle {
+    color: rgba(0,0,0,.54);
+    color: var(--mdc-theme-text-secondary-on-background,rgba(0,0,0,.54))
+}
+
+.demo-card__secondary {
+    padding: 0 1rem 8px
+}
