@@ -18,10 +18,40 @@ from django.contrib import admin
 
 from django.conf.urls import include
 
+from rest_framework import routers
+from api import views
+
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+
+router.register(r'artists', views.ArtistViewSet)
+router.register(r'records', views.RecordViewSet)
+router.register(r'songs', views.SongViewSet)
+router.register(r'companies', views.CompanyViewSet)
+# router.register(r'artist-records', views.ArtistRecordViewSet)
+# router.urls += url(r'^api/artists/(?P<pk>[^/.]+)/records/$', views.ArtistRecordViewSet.as_view({'get': 'list'})),
+
+# print(router.urls)
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^portal/', include('portal.urls')),
+
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
+    ,
+    url(r'^api/artists/(?P<pk>[^/.]+)/records/$', views.ArtistRecordViewSet.as_view({'get': 'list'})),
+    url(r'^api/artists/(?P<pk>[^/.]+)/songs/$', views.ArtistSongViewSet.as_view({'get': 'list'})),
+    url(r'^api/artists/(?P<pk>[^/.]+)/comps/$', views.ArtistRecord2ViewSet.as_view({'get': 'list'})),
+
 ]
+
+# url(r'^api/artists/(?P<pk>[^/.]+)/compilation-records/$', views.ArtistRecord2ViewSet.as_view({'get': 'list'})),
+
+# urlpatterns += url(r'^artists/{pk}/records/$', views.ArtistRecordViewSet.as_view())
 
 from django.conf import settings
 from django.conf.urls.static import static
