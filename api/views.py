@@ -15,11 +15,11 @@ from .serializers import CompanySerializer
 
 from django.db.models import Q
 
-from rest_framework import generics
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework.pagination import PageNumberPagination
-from rest_framework import mixins
+# from rest_framework import generics
+# from django_filters.rest_framework import DjangoFilterBackend
+# from rest_framework import filters
+# from rest_framework.pagination import PageNumberPagination
+# from rest_framework import mixins
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,7 +61,7 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class RecordViewSet(viewsets.ModelViewSet):
+class RecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Record.objects.all()
     serializer_class = RecordSerializer
 
@@ -99,7 +99,8 @@ class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
-        queryset = Company.objects.all()
+        queryset = self.queryset
+        # queryset = Company.objects.all()
         title = self.request.query_params.get('title', None)
         if title is not None:
             queryset = queryset.filter(title__contains=title)
@@ -161,7 +162,7 @@ class ArtistSongViewSet(viewsets.ReadOnlyModelViewSet):
         return Song.objects.none()
 
 
-class ArtistRecord2ViewSet(viewsets.ReadOnlyModelViewSet):
+class ArtistCompsViewSet(viewsets.ReadOnlyModelViewSet):
     # queryset = Record.objects.all()
     serializer_class = RecordSerializer
 

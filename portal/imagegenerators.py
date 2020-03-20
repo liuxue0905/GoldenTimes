@@ -39,7 +39,7 @@ class ThumbnailDashboardSpec(ImageSpec):
                        opacity=0.8)
     ]
     format = 'JPEG'
-    options = {'quality': 60}
+    options = {'quality': 80}
 
 
 class ThumbnailSpec(ImageSpec):
@@ -52,7 +52,7 @@ class ThumbnailSpec(ImageSpec):
                        opacity=0.8)
     ]
     format = 'JPEG'
-    options = {'quality': 60}
+    options = {'quality': 80}
 
 
 register.generator('myapp:thumbnail-dashboard', ThumbnailDashboardSpec)
