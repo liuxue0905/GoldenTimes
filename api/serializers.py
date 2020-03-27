@@ -87,7 +87,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
         model = Record
         fields = ['url', 'id',
                   'title', 'number',
-                  'format', 'year', 'release_detail', 'producer', 'recorder', 'mixer', 'bandsman', 'description',
+                  'format', 'year', 'release_detail', 'release_order', 'producer', 'recorder', 'mixer', 'bandsman', 'description',
                   'artists', 'company',
                   'songs']
 
