@@ -44,9 +44,12 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Artist.objects.all()
+
         name = self.request.query_params.get('name', None)
+        print('name', name)
         if name is not None:
             queryset = queryset.filter(name__contains=name)
+
         type = self.request.query_params.get('type', None)
         if type is not None:
             queryset = queryset.filter(type=type)
