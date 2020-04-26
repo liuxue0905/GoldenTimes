@@ -146,13 +146,10 @@ THUMBNAIL_DEBUG = True
 # WATERMARK_PERCENTAGE = 40
 
 
-
-
 # FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler",
 #                         "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
 # DEFAULT_FILE_STORAGE = portal.models.FileStorage
-
 
 
 REST_FRAMEWORK = {
@@ -162,6 +159,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
 
+    # Generic view settings
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+
+    # Content type controls
+    'URL_FORMAT_OVERRIDE': '_format',
+    'FORMAT_SUFFIX_KWARG': '_format',
+
+    # Encodings
+    'UNICODE_JSON': True,
+    'COMPACT_JSON': True,
 }
