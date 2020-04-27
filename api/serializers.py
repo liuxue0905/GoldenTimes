@@ -82,6 +82,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
     # song_set = SongSerializer(many=True, read_only=True)
     # songs = serializers.RelatedField(source='song_set', many=True, read_only=True)
     songs = SongSerializer(source='song_set', many=True, read_only=True)
+    songs_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Record
@@ -89,7 +90,10 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
                   'title', 'number',
                   'format', 'year', 'release_detail', 'release_order', 'producer', 'recorder', 'mixer', 'bandsman', 'description',
                   'artists', 'company',
-                  'songs']
+                  'songs', 'songs_count']
+
+    def get_songs_count(self, obj):
+        return obj.song_set.count()
 
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
