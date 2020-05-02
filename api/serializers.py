@@ -21,16 +21,20 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     records_count = serializers.SerializerMethodField()
     songs_count = serializers.SerializerMethodField()
+    # comps_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Artist
-        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count']
+        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count', ]
 
     def get_records_count(self, obj):
         return obj.record_set.count()
 
     def get_songs_count(self, obj):
         return obj.song_set.count()
+
+    # def get_comps_count(self, obj):
+    #     return obj.comp_set.count()
 
 
 class SongSerializer(serializers.HyperlinkedModelSerializer):

@@ -63,6 +63,29 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
+    # def get_object(self):
+    #     object: Artist = super().get_object()
+    #
+    #     object.__setattr__('comp_set', self.get_comps_queryset())
+    #
+    #     return object
+    #
+    # def get_comps_queryset(self):
+    #     pk = self.kwargs.get('pk')
+    #
+    #     try:
+    #         artist = Artist.objects.get(pk=pk)
+    #     except Exception as e:
+    #         print(e)
+    #     else:
+    #         # artist.record_set
+    #         queryset = Record.objects.all()
+    #         queryset = queryset.filter(~Q(artists__exact=artist), song__artists__exact=artist).distinct()
+    #         return queryset
+    #
+    #     # return self.queryset.none()
+    #     return Record.objects.none()
+
 
 class RecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Record.objects.all()

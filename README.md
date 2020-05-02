@@ -29,3 +29,7 @@ $ pip install --no-cache-dir -r requirements.txt
 ```shell script
 $ pip install --upgrade django -i https://pypi.douban.com/simple
 ```
+
+```shell script
+$ sudo apt-get install libjpeg-dev libxml2-dev
+```
