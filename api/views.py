@@ -21,6 +21,8 @@ from django.db.models import Q
 # from rest_framework.pagination import PageNumberPagination
 # from rest_framework import mixins
 
+from rest_framework.decorators import action
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -213,3 +215,127 @@ class ArtistCompsViewSet(viewsets.ReadOnlyModelViewSet):
 
         # return self.queryset.none()
         return Record.objects.none()
+
+
+from rest_framework.views import APIView
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import HttpResponse
+from django.http import HttpResponseNotFound
+from django.http import FileResponse
+from django.http import Http404
+
+from mimetypes import MimeTypes
+mime_types = MimeTypes()
+
+
+@api_view(['GET'])
+def artist_cover(request, artist_id):
+    print('artist_cover', artist_id)
+    try:
+        artist = Artist.objects.get(pk=artist_id)
+        print('artist', artist)
+        print('artist.artistavatar', artist.artistavatar)
+
+        image = artist.artistavatar.image
+
+        (type, encoding) = mime_types.guess_type(image.name)
+        print('type', type)
+        print('encoding', encoding)
+
+        return FileResponse(image.open(), content_type=type)
+
+    except Exception as e:
+        print('artist_cover', 'except', e)
+        pass
+        # return Http404()
+        return HttpResponseNotFound()
+
+
+@api_view(['GET'])
+def record_cover(request, record_id):
+    print('record_cover', record_id)
+    try:
+        record = Record.objects.get(pk=record_id)
+        print('record', record)
+        print('record.recordcover', record.recordcover)
+
+        image = record.recordcover.image
+
+        (type, encoding) = mime_types.guess_type(image.name)
+        print('type', type)
+        print('encoding', encoding)
+
+        return FileResponse(image.open(), content_type=type)
+    except Exception as e:
+        print('record_cover', 'except', e)
+        pass
+        # return Http404()
+        return HttpResponseNotFound()
+
+
+@api_view(['GET'])
+def artist_image_list(request, artist_id):
+    print('artist_image_list', artist_id)
+
+    try:
+        artist = Artist.objects.get(pk=artist_id)
+        print('artist', artist)
+        print('artist.artistavatar', artist.artistavatar)
+        print('artist.artistimages_set', artist.artistimages_set)
+        print('artist.artistimages_set.count()', artist.artistimages_set.count())
+    except Exception as e:
+        print('except', e)
+        pass
+    return Response({'key1': 'value1'})
+
+
+@api_view(['GET'])
+def artist_image_detail(request, artist_id, image_id):
+    print('artist_image_list', artist_id, image_id)
+    return Response({'key1': 'value1'})
+
+
+@api_view(['GET'])
+def record_image_list(request, record_id):
+    print('record_image_list', record_id)
+
+    try:
+        record = Record.objects.get(pk=record_id)
+        print('record', record)
+        print('record.recordcover', record.recordcover)
+        print('record.recordimages_set', record.recordimages_set)
+        print('record.recordimages_set.count()', record.recordimages_set.count())
+        print('record.recordimages_set.all()', record.recordimages_set.all())
+
+        # record.recordimages_set.all()
+        # from django.db.models import QuerySet
+        # qs : QuerySet
+
+        for image in record.recordimages_set.all():
+            print('image', image)
+            print('image', image.id, image.image, image.width, image.height)
+            print('image.image', image.image.name, image.image.path, image.image.width, image.image.height)
+
+            from mimetypes import MimeTypes
+            mime_types = MimeTypes()
+
+            (type, encoding) = mime_types.guess_type(image.image.name)
+            print('type', type)
+            print('encoding', encoding)
+
+    except Exception as e:
+        print('except', e)
+        pass
+
+    return Response({'key1': 'value1'})
+
+
+@api_view(['GET'])
+def record_image_detail(request, record_id, image_id):
+    print('record_image_detail', record_id, image_id)
+    print('record_image_detail', 'request.path', request.path)
+    print('record_image_detail', 'request.query_params', request.query_params)
+
+    return Response({'key1': 'value1'})
