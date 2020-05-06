@@ -1,9 +1,14 @@
+from django.core.files import File
+from django.db.models.fields.files import ImageFieldFile
 from django.shortcuts import render
 
 # Create your views here.
 
 
 from django.contrib.auth.models import User, Group
+from imagekit.files import BaseIKFile
+from pilkit.processors import Anchor
+from pilkit.utils import FileWrapper
 from rest_framework import viewsets
 from .serializers import UserSerializer, GroupSerializer
 
@@ -222,56 +227,113 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.http import HttpResponseNotFound
 from django.http import FileResponse
 from django.http import Http404
 
 from mimetypes import MimeTypes
+
 mime_types = MimeTypes()
+
+from imagekit import ImageSpec
+from imagekit.processors import ResizeToCover, ResizeToFit, Adjust, SmartResize, ResizeToFill, ResizeCanvas, Resize
+from portal.imagekit.watermark import ImageWatermark
+from imagekit.cachefiles import ImageCacheFile
+
+from django.conf import settings
+import os
+
+
+class ThumbnailDashboardSpec(ImageSpec):
+    processors = [
+        # Resize(240, 240),
+
+        # ResizeToFill(240, 240),
+
+        # ResizeToCover(240, 240),
+
+        ResizeToFit(240, 240),
+        ResizeCanvas(240, 240, color='#000000', anchor=Anchor.CENTER),
+
+        ImageWatermark(os.path.join(settings.MEDIA_ROOT, 'watermarks/watermark.png'),
+                       position=('bottom', 'right'),
+                       scale=True,
+                       repeat=False,
+                       opacity=0.8),
+    ]
+    format = 'JPEG'
+    options = {'quality': 100}
+
+
+# size width height resize=[None|cover|fill|fit] format=[JPEG] quality=[0-100]
+
+def cover(request, image: ImageFieldFile):
+    try:
+        print('cover', 'request.query_params', request.query_params)
+
+        size = request.query_params.get('size')
+        width = request.query_params.get('width')
+        height = request.query_params.get('height')
+        resize = request.query_params.get('resize')
+        format = request.query_params.get('format')
+        quality = request.query_params.get('quality')
+        print('cover', size)
+        print('width', width)
+        print('height', height)
+        print('resize', resize)
+        print('format', format)
+        print('quality', quality)
+
+        cached = ImageCacheFile(ThumbnailDashboardSpec(source=image))
+        cached.generate()
+
+        print('cached', type(cached), type(cached.file), cached, cached.file)
+
+        base_ik_file: BaseIKFile = cached
+        file: File = base_ik_file.file
+
+        return FileResponse(file.open(), content_type='image/jpeg')
+    except Exception as e:
+        print('cover', 'except', e)
+        return HttpResponseNotFound()
 
 
 @api_view(['GET'])
 def artist_cover(request, artist_id):
     print('artist_cover', artist_id)
+    print('artist_cover', 'request.query_params', request.query_params)
+
     try:
         artist = Artist.objects.get(pk=artist_id)
         print('artist', artist)
         print('artist.artistavatar', artist.artistavatar)
 
         image = artist.artistavatar.image
+        # return FileResponse(image.open(), content_type='image/jpeg')
 
-        (type, encoding) = mime_types.guess_type(image.name)
-        print('type', type)
-        print('encoding', encoding)
-
-        return FileResponse(image.open(), content_type=type)
-
+        return cover(request, image)
     except Exception as e:
         print('artist_cover', 'except', e)
-        pass
-        # return Http404()
         return HttpResponseNotFound()
 
 
 @api_view(['GET'])
 def record_cover(request, record_id):
     print('record_cover', record_id)
+    print('artist_cover', 'request.query_params', request.query_params)
+
     try:
         record = Record.objects.get(pk=record_id)
         print('record', record)
         print('record.recordcover', record.recordcover)
 
         image = record.recordcover.image
+        # return FileResponse(image.open(), content_type='image/jpeg')
 
-        (type, encoding) = mime_types.guess_type(image.name)
-        print('type', type)
-        print('encoding', encoding)
-
-        return FileResponse(image.open(), content_type=type)
+        return cover(request, image)
     except Exception as e:
         print('record_cover', 'except', e)
-        pass
-        # return Http404()
         return HttpResponseNotFound()
 
 

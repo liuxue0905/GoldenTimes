@@ -38,7 +38,8 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     #     return obj.comp_set.count()
 
     def get_cover(self, obj):
-        return None
+        request = self.context.get('request')
+        return request.build_absolute_uri('cover')
 
 
 class SongSerializer(serializers.HyperlinkedModelSerializer):
@@ -107,15 +108,8 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
         return obj.song_set.count()
 
     def get_cover(self, obj):
-        # try:
-        #     record: Record = obj
-        #     cover = record.recordcover
-        #     print('cover', cover)
-        #     print('cover', cover.id, cover.image, cover.width, cover.height)
-        # except Exception as e:
-        #     print('except', e)
-        #     pass
-        return None
+        request = self.context.get('request')
+        return request.build_absolute_uri('cover')
 
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
