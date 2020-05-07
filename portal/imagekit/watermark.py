@@ -103,14 +103,14 @@ class AbstractWatermark(object):
                 wm = None
             else:
                 # L&X
-                print('L&X', 'self.cache_get_wm', self.cache_get_wm)
+                # print('L&X', 'self.cache_get_wm', self.cache_get_wm)
                 # wm = self.cache_get_wm()
                 wm = None
                 try:
                     wm = self.cache_get_wm()
                 except Exception as e:
                     print(e)
-                print('L&X', 'wm', wm)
+                # print('L&X', 'wm', wm)
 
             if wm is None:
                 wm = self.get_watermark()
@@ -165,9 +165,9 @@ class AbstractWatermark(object):
         layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
         coords = _process_coords(img.size, wm_size, self.position)
 
-        print('L&X', 'wm', wm)
-        print('L&X', 'wm.size', wm.size)
-        print('L&X', 'coords', coords)
+        # print('L&X', 'wm', wm)
+        # print('L&X', 'wm.size', wm.size)
+        # print('L&X', 'coords', coords)
         coords = (int(coords[0]), int(coords[1]))
 
         if self.repeat:

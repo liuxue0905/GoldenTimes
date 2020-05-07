@@ -245,16 +245,16 @@ from django.conf import settings
 import os
 
 
-class ThumbnailDashboardSpec(ImageSpec):
+class GTImageSpec(ImageSpec):
     processors = [
-        # Resize(240, 240),
+        Resize(240, 240),
 
         # ResizeToFill(240, 240),
 
         # ResizeToCover(240, 240),
 
-        ResizeToFit(240, 240),
-        ResizeCanvas(240, 240, color='#000000', anchor=Anchor.CENTER),
+        # ResizeToFit(240, 240),
+        # ResizeCanvas(240, 240, color='#000000', anchor=Anchor.CENTER),
 
         ImageWatermark(os.path.join(settings.MEDIA_ROOT, 'watermarks/watermark.png'),
                        position=('bottom', 'right'),
@@ -265,54 +265,90 @@ class ThumbnailDashboardSpec(ImageSpec):
     format = 'JPEG'
     options = {'quality': 100}
 
+    def __init__(self, source):
+        super(GTImageSpec, self).__init__(source)
+        self.source = source
+        pass
+
+    def config(self, resize, width, height):
+
+        # print('config', 'resize', resize)
+        # print('config', 'width', width)
+        # print('config', 'height', height)
+
+        self.processors = []
+
+        if (width is not None) and (height is not None):
+            if resize is None:
+                self.processors.append(Resize(width, height))
+            elif resize == 'cover':
+                self.processors.append(ResizeToCover(width, height))
+            elif resize == 'fill':
+                self.processors.append(ResizeToFill(width, height))
+            elif resize == 'fit':
+                self.processors.append(ResizeToFit(width, height))
+                self.processors.append(ResizeCanvas(width, height, color='#000000', anchor=Anchor.CENTER))
+
+        self.processors.append(ImageWatermark(os.path.join(settings.MEDIA_ROOT, 'watermarks/watermark.png'),
+                                              position=('bottom', 'right'),
+                                              scale=True,
+                                              repeat=False,
+                                              opacity=0.8))
+
+        self.format = 'JPEG'
+        self.options = {'quality': 100}
+        pass
+
 
 # size width height resize=[None|cover|fill|fit] format=[JPEG] quality=[0-100]
 
-def cover(request, image: ImageFieldFile):
+def image_generate(request, image: ImageFieldFile):
     try:
-        print('cover', 'request.query_params', request.query_params)
+        # print('cover', 'request.query_params', request.query_params)
 
-        size = request.query_params.get('size')
-        width = request.query_params.get('width')
-        height = request.query_params.get('height')
-        resize = request.query_params.get('resize')
-        format = request.query_params.get('format')
-        quality = request.query_params.get('quality')
-        print('cover', size)
-        print('width', width)
-        print('height', height)
-        print('resize', resize)
-        print('format', format)
-        print('quality', quality)
+        size = request.query_params.get('size', None)
+        width = request.query_params.get('width', size)
+        height = request.query_params.get('height', size)
+        resize = request.query_params.get('resize', None)
 
-        cached = ImageCacheFile(ThumbnailDashboardSpec(source=image))
-        cached.generate()
+        if size:
+            size = int(size)
+        if width:
+            width = int(width)
+        if height:
+            height = int(height)
 
-        print('cached', type(cached), type(cached.file), cached, cached.file)
+        # print('cover', type(size), size)
+        # print('width', type(width), width)
+        # print('height', type(height), height)
+        # print('resize', resize)
 
-        base_ik_file: BaseIKFile = cached
-        file: File = base_ik_file.file
+        image_spec = GTImageSpec(source=image)
+        image_spec.config(resize, width, height)
+        return FileResponse(image_spec.generate(), content_type='image/jpeg')
 
-        return FileResponse(file.open(), content_type='image/jpeg')
+        # cached = ImageCacheFile(image_spec)
+        # cached.generate()
+        # print('cached', type(cached), type(cached.file), cached, cached.file)
+        # base_ik_file: BaseIKFile = cached
+        # file: File = base_ik_file.file
+        # return FileResponse(file.open(), content_type='image/jpeg')
     except Exception as e:
-        print('cover', 'except', e)
+        print('cover', 'except', type(e), e, repr(e), e.__cause__)
         return HttpResponseNotFound()
 
 
 @api_view(['GET'])
 def artist_cover(request, artist_id):
-    print('artist_cover', artist_id)
-    print('artist_cover', 'request.query_params', request.query_params)
-
     try:
         artist = Artist.objects.get(pk=artist_id)
-        print('artist', artist)
-        print('artist.artistavatar', artist.artistavatar)
+        # print('artist', artist)
+        # print('artist.artistavatar', artist.artistavatar)
 
         image = artist.artistavatar.image
         # return FileResponse(image.open(), content_type='image/jpeg')
 
-        return cover(request, image)
+        return image_generate(request, image)
     except Exception as e:
         print('artist_cover', 'except', e)
         return HttpResponseNotFound()
@@ -320,18 +356,15 @@ def artist_cover(request, artist_id):
 
 @api_view(['GET'])
 def record_cover(request, record_id):
-    print('record_cover', record_id)
-    print('artist_cover', 'request.query_params', request.query_params)
-
     try:
         record = Record.objects.get(pk=record_id)
-        print('record', record)
-        print('record.recordcover', record.recordcover)
+        # print('record', record)
+        # print('record.recordcover', record.recordcover)
 
         image = record.recordcover.image
         # return FileResponse(image.open(), content_type='image/jpeg')
 
-        return cover(request, image)
+        return image_generate(request, image)
     except Exception as e:
         print('record_cover', 'except', e)
         return HttpResponseNotFound()
@@ -344,9 +377,15 @@ def artist_image_list(request, artist_id):
     try:
         artist = Artist.objects.get(pk=artist_id)
         print('artist', artist)
-        print('artist.artistavatar', artist.artistavatar)
         print('artist.artistimages_set', artist.artistimages_set)
         print('artist.artistimages_set.count()', artist.artistimages_set.count())
+
+        for image_model in artist.artistimages_set.all():
+            print('image_model', image_model, image_model.id, image_model.image, image_model.width, image_model.height)
+            image: ImageFieldFile = image_model.image
+            print('image', type(image), image, image.name, image.path)
+            print('image', image.width, image.height)
+
     except Exception as e:
         print('except', e)
         pass
@@ -363,10 +402,12 @@ def artist_image_detail(request, artist_id, image_id):
 def record_image_list(request, record_id):
     print('record_image_list', record_id)
 
+    record = Record.objects.get(pk=record_id)
+    print('record.recordimages_set.all()', record.recordimages_set.all())
+
     try:
         record = Record.objects.get(pk=record_id)
         print('record', record)
-        print('record.recordcover', record.recordcover)
         print('record.recordimages_set', record.recordimages_set)
         print('record.recordimages_set.count()', record.recordimages_set.count())
         print('record.recordimages_set.all()', record.recordimages_set.all())
@@ -375,17 +416,20 @@ def record_image_list(request, record_id):
         # from django.db.models import QuerySet
         # qs : QuerySet
 
-        for image in record.recordimages_set.all():
-            print('image', image)
-            print('image', image.id, image.image, image.width, image.height)
-            print('image.image', image.image.name, image.image.path, image.image.width, image.image.height)
+        ret_images = []
 
-            from mimetypes import MimeTypes
-            mime_types = MimeTypes()
+        for image_model in record.recordimages_set.all():
+            try:
+                print('image_model', image_model, image_model.id, image_model.image, image_model.width, image_model.height)
+                image: ImageFieldFile = image_model.image
 
-            (type, encoding) = mime_types.guess_type(image.image.name)
-            print('type', type)
-            print('encoding', encoding)
+
+
+                print('image', type(image), image, image.name, image.path)
+                print('image', image.width, image.height)
+            except Exception as e:
+                print('except for in', e)
+                pass
 
     except Exception as e:
         print('except', e)
@@ -401,3 +445,6 @@ def record_image_detail(request, record_id, image_id):
     print('record_image_detail', 'request.query_params', request.query_params)
 
     return Response({'key1': 'value1'})
+
+
+from imagekit.admin import AdminThumbnail

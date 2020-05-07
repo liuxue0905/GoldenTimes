@@ -37,6 +37,6 @@ urlpatterns = [
     url(r'^records/(?P<record_id>[^/.]+)/images/(?P<image_id>[^/.]+)/$', views.record_image_detail),
 ]
 
-print('urlpatterns', urlpatterns)
+# print('urlpatterns', urlpatterns)
 
 # urlpatterns = format_suffix_patterns(urlpatterns)
