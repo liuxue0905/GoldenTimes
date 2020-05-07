@@ -402,9 +402,6 @@ def artist_image_detail(request, artist_id, image_id):
 def record_image_list(request, record_id):
     print('record_image_list', record_id)
 
-    record = Record.objects.get(pk=record_id)
-    print('record.recordimages_set.all()', record.recordimages_set.all())
-
     try:
         record = Record.objects.get(pk=record_id)
         print('record', record)
@@ -423,7 +420,9 @@ def record_image_list(request, record_id):
                 print('image_model', image_model, image_model.id, image_model.image, image_model.width, image_model.height)
                 image: ImageFieldFile = image_model.image
 
-
+                ret_images.append({
+                    'id': image_model.id,
+                })
 
                 print('image', type(image), image, image.name, image.path)
                 print('image', image.width, image.height)
@@ -444,7 +443,10 @@ def record_image_detail(request, record_id, image_id):
     print('record_image_detail', 'request.path', request.path)
     print('record_image_detail', 'request.query_params', request.query_params)
 
+    try:
+        record = Record.objects.get(pk=record_id)
+        image_model = record.recordimages_set.filter(pk = image_id)
+    except:
+        pass
+
     return Response({'key1': 'value1'})
-
-
-from imagekit.admin import AdminThumbnail
