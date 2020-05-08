@@ -23,10 +23,11 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     songs_count = serializers.SerializerMethodField()
     # comps_count = serializers.SerializerMethodField()
     cover = serializers.SerializerMethodField()
+    image_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Artist
-        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count', 'cover',]
+        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count', 'cover', 'image_list']
 
     def get_records_count(self, obj):
         return obj.record_set.count()
@@ -40,6 +41,31 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     def get_cover(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri('cover')
+
+    def get_image_list(self, obj):
+        from django.db.models.fields.files import ImageFieldFile
+        request = self.context.get('request')
+        try:
+            queryset = obj.artistimages_set.all()
+
+            results = []
+
+            for image_model in queryset:
+                try:
+                    print('image_model', image_model, image_model.id, image_model.image, image_model.width,
+                          image_model.height)
+                    image: ImageFieldFile = image_model.image
+
+                    results.append(request.build_absolute_uri('images/' + str(image_model.id)))
+
+                    print('image', type(image), image, image.name, image.path)
+                    print('image', image.width, image.height)
+                except:
+                    pass
+
+            return results
+        except:
+            return None
 
 
 class SongSerializer(serializers.HyperlinkedModelSerializer):
@@ -93,7 +119,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
     songs = SongSerializer(source='song_set', many=True, read_only=True)
     songs_count = serializers.SerializerMethodField()
     cover = serializers.SerializerMethodField()
-    # cover = serializers.Hyperlink()
+    image_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Record
@@ -102,7 +128,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
                   'format', 'year', 'release_detail', 'release_order', 'producer', 'recorder', 'mixer', 'bandsman', 'description',
                   'artists', 'company',
                   'songs', 'songs_count',
-                  'cover']
+                  'cover', 'image_list']
 
     def get_songs_count(self, obj):
         return obj.song_set.count()
@@ -110,6 +136,31 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
     def get_cover(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri('cover')
+
+    def get_image_list(self, obj):
+        from django.db.models.fields.files import ImageFieldFile
+        request = self.context.get('request')
+        try:
+            queryset = obj.recordimages_set.all()
+
+            results = []
+
+            for image_model in queryset:
+                try:
+                    print('image_model', image_model, image_model.id, image_model.image, image_model.width,
+                          image_model.height)
+                    image: ImageFieldFile = image_model.image
+
+                    results.append(request.build_absolute_uri('images/' + str(image_model.id)))
+
+                    print('image', type(image), image, image.name, image.path)
+                    print('image', image.width, image.height)
+                except:
+                    pass
+
+            return results
+        except:
+            return None
 
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):

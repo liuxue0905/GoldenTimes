@@ -222,20 +222,9 @@ class ArtistCompsViewSet(viewsets.ReadOnlyModelViewSet):
         return Record.objects.none()
 
 
-from rest_framework.views import APIView
-
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.http import HttpResponse
-from django.http import StreamingHttpResponse
 from django.http import HttpResponseNotFound
 from django.http import FileResponse
-from django.http import Http404
-
-from mimetypes import MimeTypes
-
-mime_types = MimeTypes()
-
 from imagekit import ImageSpec
 from imagekit.processors import ResizeToCover, ResizeToFit, Adjust, SmartResize, ResizeToFill, ResizeCanvas, Resize
 from portal.imagekit.watermark import ImageWatermark
@@ -243,6 +232,10 @@ from imagekit.cachefiles import ImageCacheFile
 
 from django.conf import settings
 import os
+
+from mimetypes import MimeTypes
+
+mime_types = MimeTypes()
 
 
 class GTImageSpec(ImageSpec):
@@ -371,82 +364,30 @@ def record_cover(request, record_id):
 
 
 @api_view(['GET'])
-def artist_image_list(request, artist_id):
-    print('artist_image_list', artist_id)
+def artist_image_detail(request, artist_id, image_id):
+    print('artist_image_detail', artist_id, image_id)
 
     try:
         artist = Artist.objects.get(pk=artist_id)
-        print('artist', artist)
-        print('artist.artistimages_set', artist.artistimages_set)
-        print('artist.artistimages_set.count()', artist.artistimages_set.count())
+        image_model = artist.artistimages_set.get(pk=image_id)
+        image = image_model.image
 
-        for image_model in artist.artistimages_set.all():
-            print('image_model', image_model, image_model.id, image_model.image, image_model.width, image_model.height)
-            image: ImageFieldFile = image_model.image
-            print('image', type(image), image, image.name, image.path)
-            print('image', image.width, image.height)
-
+        return image_generate(request, image)
     except Exception as e:
-        print('except', e)
-        pass
-    return Response({'key1': 'value1'})
-
-
-@api_view(['GET'])
-def artist_image_detail(request, artist_id, image_id):
-    print('artist_image_list', artist_id, image_id)
-    return Response({'key1': 'value1'})
-
-
-@api_view(['GET'])
-def record_image_list(request, record_id):
-    print('record_image_list', record_id)
-
-    try:
-        record = Record.objects.get(pk=record_id)
-        print('record', record)
-        print('record.recordimages_set', record.recordimages_set)
-        print('record.recordimages_set.count()', record.recordimages_set.count())
-        print('record.recordimages_set.all()', record.recordimages_set.all())
-
-        # record.recordimages_set.all()
-        # from django.db.models import QuerySet
-        # qs : QuerySet
-
-        ret_images = []
-
-        for image_model in record.recordimages_set.all():
-            try:
-                print('image_model', image_model, image_model.id, image_model.image, image_model.width, image_model.height)
-                image: ImageFieldFile = image_model.image
-
-                ret_images.append({
-                    'id': image_model.id,
-                })
-
-                print('image', type(image), image, image.name, image.path)
-                print('image', image.width, image.height)
-            except Exception as e:
-                print('except for in', e)
-                pass
-
-    except Exception as e:
-        print('except', e)
-        pass
-
-    return Response({'key1': 'value1'})
+        print('artist_image_detail', 'except', e)
+        return HttpResponseNotFound()
 
 
 @api_view(['GET'])
 def record_image_detail(request, record_id, image_id):
     print('record_image_detail', record_id, image_id)
-    print('record_image_detail', 'request.path', request.path)
-    print('record_image_detail', 'request.query_params', request.query_params)
 
     try:
         record = Record.objects.get(pk=record_id)
-        image_model = record.recordimages_set.filter(pk = image_id)
-    except:
-        pass
+        image_model = record.recordimages_set.get(pk=image_id)
+        image = image_model.image
 
-    return Response({'key1': 'value1'})
+        return image_generate(request, image)
+    except Exception as e:
+        print('record_image_detail', 'except', e)
+        return HttpResponseNotFound()

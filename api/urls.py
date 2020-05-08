@@ -29,11 +29,11 @@ urlpatterns = [
     url(r'^artists/(?P<pk>[^/.]+)/comps/$', views.ArtistCompsViewSet.as_view({'get': 'list'})),
 
     url(r'^artists/(?P<artist_id>[^/.]+)/cover/$', views.artist_cover),
-    url(r'^artists/(?P<artist_id>[^/.]+)/images/$', views.artist_image_list),
+    # url(r'^artists/(?P<artist_id>[^/.]+)/images/$', views.artist_image_list),
     url(r'^artists/(?P<artist_id>[^/.]+)/images/(?P<image_id>[^/.]+)/$', views.artist_image_detail),
 
     url(r'^records/(?P<record_id>[^/.]+)/cover/$', views.record_cover),
-    url(r'^records/(?P<record_id>[^/.]+)/images/$', views.record_image_list),
+    # url(r'^records/(?P<record_id>[^/.]+)/images/$', views.record_image_list),
     url(r'^records/(?P<record_id>[^/.]+)/images/(?P<image_id>[^/.]+)/$', views.record_image_detail),
 ]
 
