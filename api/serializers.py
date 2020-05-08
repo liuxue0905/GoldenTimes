@@ -56,7 +56,8 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
                           image_model.height)
                     image: ImageFieldFile = image_model.image
 
-                    results.append(request.build_absolute_uri('images/' + str(image_model.id)))
+                    results.append(request.build_absolute_uri(
+                        '/api/artists/{artist_id}/images/{image_id}'.format(artist_id=obj.id, image_id=image_model.id)))
 
                     print('image', type(image), image, image.name, image.path)
                     print('image', image.width, image.height)
@@ -125,7 +126,8 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
         model = Record
         fields = ['url', 'id',
                   'title', 'number',
-                  'format', 'year', 'release_detail', 'release_order', 'producer', 'recorder', 'mixer', 'bandsman', 'description',
+                  'format', 'year', 'release_detail', 'release_order', 'producer', 'recorder', 'mixer', 'bandsman',
+                  'description',
                   'artists', 'company',
                   'songs', 'songs_count',
                   'cover', 'image_list']
@@ -151,7 +153,8 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
                           image_model.height)
                     image: ImageFieldFile = image_model.image
 
-                    results.append(request.build_absolute_uri('images/' + str(image_model.id)))
+                    results.append(request.build_absolute_uri(
+                        '/api/records/{record_id}/images/{image_id}'.format(record_id=obj.id, image_id=image_model.id)))
 
                     print('image', type(image), image, image.name, image.path)
                     print('image', image.width, image.height)
