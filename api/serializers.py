@@ -40,7 +40,7 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_cover(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri('cover')
+        return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
 
     def get_image_list(self, obj):
         from django.db.models.fields.files import ImageFieldFile
@@ -137,7 +137,7 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_cover(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri('cover')
+        return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
 
     def get_image_list(self, obj):
         from django.db.models.fields.files import ImageFieldFile
