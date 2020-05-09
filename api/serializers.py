@@ -72,17 +72,27 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
 class SongSerializer(serializers.HyperlinkedModelSerializer):
     class ArtistSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
+        cover = serializers.SerializerMethodField()
 
         class Meta:
             model = Artist
-            fields = ['url', 'id', 'name']
+            fields = ['url', 'id', 'name', 'cover']
+
+        def get_cover(self, obj):
+            request = self.context.get('request')
+            return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
 
     class RecordSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
+        cover = serializers.SerializerMethodField()
 
         class Meta:
             model = Record
-            fields = ['url', 'id', 'title']
+            fields = ['url', 'id', 'title', 'cover']
+
+        def get_cover(self, obj):
+            request = self.context.get('request')
+            return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
 
     artists = ArtistSerializer(many=True, read_only=True)
     record = RecordSerializer(read_only=True)
@@ -97,10 +107,15 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
 class RecordSerializer(serializers.HyperlinkedModelSerializer):
     class ArtistSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
+        cover = serializers.SerializerMethodField()
 
         class Meta:
             model = Artist
-            fields = ['url', 'id', 'name']
+            fields = ['url', 'id', 'name', 'cover']
+
+        def get_cover(self, obj):
+            request = self.context.get('request')
+            return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
 
     class CompanySerializer(serializers.HyperlinkedModelSerializer):
         id = serializers.ReadOnlyField()
