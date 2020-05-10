@@ -40,7 +40,12 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_cover(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+        try:
+            if obj.artistavatar and obj.artistavatar.image:
+                return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+        except:
+            pass
+        return None
 
     def get_image_list(self, obj):
         from django.db.models.fields.files import ImageFieldFile
@@ -80,7 +85,12 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
 
         def get_cover(self, obj):
             request = self.context.get('request')
-            return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+            try:
+                if obj.artistavatar and obj.artistavatar.image:
+                    return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+            except:
+                pass
+            return None
 
     class RecordSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
@@ -90,9 +100,14 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
             model = Record
             fields = ['url', 'id', 'title', 'cover']
 
-        def get_cover(self, obj):
+        def get_cover(self, obj: Record):
             request = self.context.get('request')
-            return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
+            try:
+                if obj.recordcover and obj.recordcover.image:
+                    return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
+            except:
+                pass
+            return None
 
     artists = ArtistSerializer(many=True, read_only=True)
     record = RecordSerializer(read_only=True)
@@ -113,9 +128,14 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
             model = Artist
             fields = ['url', 'id', 'name', 'cover']
 
-        def get_cover(self, obj):
+        def get_cover(self, obj: Artist):
             request = self.context.get('request')
-            return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+            try:
+                if obj.artistavatar and obj.artistavatar.image:
+                    return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+            except:
+                pass
+            return None
 
     class CompanySerializer(serializers.HyperlinkedModelSerializer):
         id = serializers.ReadOnlyField()
@@ -150,9 +170,14 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
     def get_songs_count(self, obj):
         return obj.song_set.count()
 
-    def get_cover(self, obj):
+    def get_cover(self, obj: Record):
         request = self.context.get('request')
-        return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
+        try:
+            if obj.recordcover and obj.recordcover.image:
+                return request.build_absolute_uri('/api/records/{record_id}/cover'.format(record_id=obj.id))
+        except:
+            pass
+        return None
 
     def get_image_list(self, obj):
         from django.db.models.fields.files import ImageFieldFile

@@ -57,16 +57,25 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
         if name is not None:
             queryset = queryset.filter(name__contains=name)
 
-        type = self.request.query_params.get('type', None)
-        if type is not None:
-            queryset = queryset.filter(type=type)
+        _type = self.request.query_params.get('type', None)
+        if _type is not None:
+            queryset = queryset.filter(type=_type)
 
-        record_isnull = self.request.query_params.get('record_isnull', None)
-        print('record_isnull', record_isnull)
-        if record_isnull is not None:
-            record__isnull = record_isnull in ['true', '1']
-            print('record__isnull', record__isnull)
-            queryset = queryset.filter(record__isnull=record__isnull).distinct()
+        type__isnull = self.request.query_params.get('type__isnull', None)
+        print('type__isnull', type__isnull)
+        if type__isnull is not None:
+            type__isnull_value = type__isnull in ['true', '1']
+            print('type__isnull_value', type__isnull_value)
+            queryset = queryset.filter(type__isnull=type__isnull_value)
+
+        record__isnull = self.request.query_params.get('record__isnull', None)
+        if record__isnull is None:
+            record__isnull = self.request.query_params.get('record_isnull', None)
+        print('record__isnull', record__isnull)
+        if record__isnull is not None:
+            record__isnull_value = record__isnull in ['true', '1']
+            print('record__isnull_value', record__isnull_value)
+            queryset = queryset.filter(record__isnull=record__isnull_value).distinct()
 
         return queryset
 

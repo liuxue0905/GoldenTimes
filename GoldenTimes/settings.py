@@ -176,29 +176,14 @@ REST_FRAMEWORK = {
     'COMPACT_JSON': True,
 }
 
-CORS_ORIGIN_WHITELIST = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
-    
-    "http://localhost:8000",
-    "http://localhost:8888",
+CORS_ORIGIN_ALLOW_ALL = True
 
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:8080",
-    "http://127.0.0.1:8888",
-
-    "http://localhost:53619",
-    "http://127.0.0.1:53619",
-
-    "http://localhost:61400",
-    "http://127.0.0.1:61400",
-
-    "http://liujin.jios.org:8000",
-    "http://liujin.jios.org:8080",
-    "http://liujin.jios.org:8888",
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "https://example.com",
+#     "https://sub.example.com",
+#     "http://localhost:8080",
+#     "http://127.0.0.1:9000",
+# ]
 
 # CORS_ORIGIN_REGEX_WHITELIST = [
 #     # r"^https://\w+\.example\.com$",
