@@ -10,13 +10,6 @@ echo $PROG_PATH
 echo $PROG_NAME
 echo $PROG_DIR
 
-
-
-
-#pwd=$(pwd)
-#echo "pwd       : $pwd"
-#
-#
 #echo "$BASH_SOURCE"
 #echo "$(dirname "$BASH_SOURCE")"
 #
