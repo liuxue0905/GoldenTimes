@@ -1,34 +1,49 @@
 #!/bin/bash
 
-dir_home="$(eval echo $HOME)"
-echo "dir_home	: $dir_home"
-#echo "\${dir_home%/*}: " ${dir_home%/*}
-#echo "\$(dirname \${dir_home}): " $(dirname ${dir_home})
 
-gt_parent="/media/flash"
+PROG_PATH=${BASH_SOURCE[0]}      # this script's name
+PROG_NAME=${PROG_PATH##*/}       # basename of script (strip path)
+PROG_DIR="$(cd "$(dirname "${PROG_PATH:-$PWD}")" 2>/dev/null 1>&2 && pwd)"
 
-echo "gt_parent	: $gt_parent"
 
-dir_project=${gt_parent}/GoldenTimes
-dir_log=${gt_parent}/log
+echo $PROG_PATH
+echo $PROG_NAME
+echo $PROG_DIR
 
-echo "dir_project	: $dir_project"
-echo "dir_log		: $dir_log"
 
-cd ${dir_project}
+
+
+#pwd=$(pwd)
+#echo "pwd       : $pwd"
+#
+#
+#echo "$BASH_SOURCE"
+#echo "$(dirname "$BASH_SOURCE")"
+#
+#echo "$0"
+#echo "$(dirname "$0")"
+
+LOG_DIR=${PROG_DIR}/log
+
+echo "PROG_DIR	: ${PROG_DIR}"
+echo "LOG_DIR		: ${LOG_DIR}"
+
+cd ${PROG_DIR}
 
 echo "pwd		: $(pwd)"
 
-test -d ${dir_log} || mkdir -p ${dir_log}
+test -d ${LOG_DIR} || mkdir -p ${LOG_DIR}
 
-file_log=${dir_log}/nohup.out
+LOG_FILE_NAME=`date +"%Y%m%d_%H%M%S"`
 
-echo "file_log	: $file_log"
+LOG_FILE=${LOG_DIR}/nohup_${LOG_FILE_NAME}.out
+
+echo "LOG_FILE	: ${LOG_FILE}"
 
 command_runserver="python manage.py runserver 0:8000"
-command="nohup "$command_runserver" > "$file_log" 2>&1 &"
+command="nohup "$command_runserver" > "${LOG_FILE}" 2>&1 &"
 
 echo "command		: $command"
 
-output=$(eval $command)
-echo "$output"
+#output=$(eval $command)
+#echo "$output"
