@@ -33,10 +33,10 @@ LOG_FILE=${LOG_DIR}/nohup_${LOG_FILE_NAME}.out
 
 echo "LOG_FILE	: ${LOG_FILE}"
 
-command_runserver="python manage.py runserver 0:8000"
-command="nohup "$command_runserver" > "${LOG_FILE}" 2>&1 &"
+COMMAND_RUNSERVER="python manage.py runserver 0:8000"
+COMMAND="nohup "${COMMAND_RUNSERVER}" > "${LOG_FILE}" 2>&1 &"
 
-echo "command		: $command"
+echo "COMMAND		: ${COMMAND}"
 
-#output=$(eval $command)
-#echo "$output"
+output=$(eval ${COMMAND})
+echo "$output"
