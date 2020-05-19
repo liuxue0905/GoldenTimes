@@ -53,7 +53,7 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = Artist.objects.all()
 
         name = self.request.query_params.get('name', None)
-        print('name', name)
+        # print('name', name)
         if name is not None:
             queryset = queryset.filter(name__contains=name)
 
@@ -62,19 +62,19 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(type=_type)
 
         type__isnull = self.request.query_params.get('type__isnull', None)
-        print('type__isnull', type__isnull)
+        # print('type__isnull', type__isnull)
         if type__isnull is not None:
             type__isnull_value = type__isnull in ['true', '1']
-            print('type__isnull_value', type__isnull_value)
+            # print('type__isnull_value', type__isnull_value)
             queryset = queryset.filter(type__isnull=type__isnull_value)
 
         record__isnull = self.request.query_params.get('record__isnull', None)
         if record__isnull is None:
             record__isnull = self.request.query_params.get('record_isnull', None)
-        print('record__isnull', record__isnull)
+        # print('record__isnull', record__isnull)
         if record__isnull is not None:
             record__isnull_value = record__isnull in ['true', '1']
-            print('record__isnull_value', record__isnull_value)
+            # print('record__isnull_value', record__isnull_value)
             queryset = queryset.filter(record__isnull=record__isnull_value).distinct()
 
         return queryset
@@ -374,7 +374,7 @@ def record_cover(request, record_id):
 
 @api_view(['GET'])
 def artist_image_detail(request, artist_id, image_id):
-    print('artist_image_detail', artist_id, image_id)
+    # print('artist_image_detail', artist_id, image_id)
 
     try:
         artist = Artist.objects.get(pk=artist_id)
@@ -389,7 +389,7 @@ def artist_image_detail(request, artist_id, image_id):
 
 @api_view(['GET'])
 def record_image_detail(request, record_id, image_id):
-    print('record_image_detail', record_id, image_id)
+    # print('record_image_detail', record_id, image_id)
 
     try:
         record = Record.objects.get(pk=record_id)

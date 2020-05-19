@@ -57,15 +57,15 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
 
             for image_model in queryset:
                 try:
-                    print('image_model', image_model, image_model.id, image_model.image, image_model.width,
-                          image_model.height)
+                    # print('image_model', image_model, image_model.id, image_model.image, image_model.width,
+                    #       image_model.height)
                     image: ImageFieldFile = image_model.image
 
                     results.append(request.build_absolute_uri(
                         '/api/artists/{artist_id}/images/{image_id}'.format(artist_id=obj.id, image_id=image_model.id)))
 
-                    print('image', type(image), image, image.name, image.path)
-                    print('image', image.width, image.height)
+                    # print('image', type(image), image, image.name, image.path)
+                    # print('image', image.width, image.height)
                 except:
                     pass
 
@@ -189,15 +189,15 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
 
             for image_model in queryset:
                 try:
-                    print('image_model', image_model, image_model.id, image_model.image, image_model.width,
-                          image_model.height)
+                    # print('image_model', image_model, image_model.id, image_model.image, image_model.width,
+                    #       image_model.height)
                     image: ImageFieldFile = image_model.image
 
                     results.append(request.build_absolute_uri(
                         '/api/records/{record_id}/images/{image_id}'.format(record_id=obj.id, image_id=image_model.id)))
 
-                    print('image', type(image), image, image.name, image.path)
-                    print('image', image.width, image.height)
+                    # print('image', type(image), image, image.name, image.path)
+                    # print('image', image.width, image.height)
                 except:
                     pass
 
