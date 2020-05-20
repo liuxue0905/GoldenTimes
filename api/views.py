@@ -1,32 +1,23 @@
-from django.core.files import File
-from django.db.models.fields.files import ImageFieldFile
-from django.shortcuts import render
-
-# Create your views here.
-
-
 from django.contrib.auth.models import User, Group
-from imagekit.files import BaseIKFile
+from django.db.models import Q
+from django.db.models.fields.files import ImageFieldFile
 from pilkit.processors import Anchor
-from pilkit.utils import FileWrapper
 from rest_framework import viewsets
-from .serializers import UserSerializer, GroupSerializer
 
 from portal.models import Artist, Record, Song
-from .serializers import ArtistSerializer, RecordSerializer, SongSerializer
-
 from portal.models import Company
+from .serializers import ArtistSerializer, RecordSerializer, SongSerializer
 from .serializers import CompanySerializer
+from .serializers import UserSerializer, GroupSerializer
 
-from django.db.models import Q
+
+# Create your views here.
 
 # from rest_framework import generics
 # from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework import filters
 # from rest_framework.pagination import PageNumberPagination
 # from rest_framework import mixins
-
-from rest_framework.decorators import action
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -79,29 +70,6 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
         return queryset
 
-    # def get_object(self):
-    #     object: Artist = super().get_object()
-    #
-    #     object.__setattr__('comp_set', self.get_comps_queryset())
-    #
-    #     return object
-    #
-    # def get_comps_queryset(self):
-    #     pk = self.kwargs.get('pk')
-    #
-    #     try:
-    #         artist = Artist.objects.get(pk=pk)
-    #     except Exception as e:
-    #         print(e)
-    #     else:
-    #         # artist.record_set
-    #         queryset = Record.objects.all()
-    #         queryset = queryset.filter(~Q(artists__exact=artist), song__artists__exact=artist).distinct()
-    #         return queryset
-    #
-    #     # return self.queryset.none()
-    #     return Record.objects.none()
-
 
 class RecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Record.objects.all()
@@ -122,6 +90,19 @@ class RecordViewSet(viewsets.ReadOnlyModelViewSet):
         if company_id is not None:
             queryset = queryset.filter(company_id=company_id)
         return queryset
+
+    def get_object(self):
+        from django.db.models import Prefetch
+        from django.db.models.functions import Cast
+        from django.db.models import PositiveIntegerField
+
+        object: Record = super().get_object()
+
+        prefetch = Prefetch('song_set', queryset=Song.objects.annotate(
+            track_integer=Cast('track', PositiveIntegerField())).order_by('track_integer'))
+        object = Record.objects.filter(pk=object.pk).prefetch_related(prefetch).get()
+
+        return object
 
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
@@ -232,12 +213,10 @@ class ArtistCompsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 from rest_framework.decorators import api_view
-from django.http import HttpResponseNotFound
-from django.http import FileResponse
+from django.http import HttpResponseNotFound, FileResponse
 from imagekit import ImageSpec
-from imagekit.processors import ResizeToCover, ResizeToFit, Adjust, SmartResize, ResizeToFill, ResizeCanvas, Resize
+from imagekit.processors import ResizeToCover, ResizeToFit, ResizeToFill, ResizeCanvas, Resize
 from portal.imagekit.watermark import ImageWatermark
-from imagekit.cachefiles import ImageCacheFile
 
 from django.conf import settings
 import os

@@ -4,6 +4,8 @@ from rest_framework import serializers
 from portal.models import Artist, Record, Song
 from portal.models import Company
 
+from django.db.models import Q
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -21,13 +23,13 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     records_count = serializers.SerializerMethodField()
     songs_count = serializers.SerializerMethodField()
-    # comps_count = serializers.SerializerMethodField()
+    comps_count = serializers.SerializerMethodField()
     cover = serializers.SerializerMethodField()
     image_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Artist
-        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count', 'cover', 'image_list']
+        fields = ['url', 'id', 'name', 'type', 'records_count', 'songs_count', 'comps_count', 'cover', 'image_list']
 
     def get_records_count(self, obj):
         return obj.record_set.count()
@@ -35,8 +37,9 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     def get_songs_count(self, obj):
         return obj.song_set.count()
 
-    # def get_comps_count(self, obj):
-    #     return obj.comp_set.count()
+    def get_comps_count(self, obj):
+        queryset = Record.objects.filter(~Q(artists__exact=obj), song__artists__exact=obj).distinct()
+        return queryset.count()
 
     def get_cover(self, obj):
         request = self.context.get('request')
@@ -144,14 +147,34 @@ class RecordSerializer(serializers.HyperlinkedModelSerializer):
             model = Company
             fields = ['url', 'id', 'name']
 
-    # class SongSerializer(serializers.HyperlinkedModelSerializer):
-    #     class Meta:
-    #         model = Song
+    class SongSerializer(serializers.HyperlinkedModelSerializer):
+        class ArtistSerializer(serializers.ModelSerializer):
+            id = serializers.ReadOnlyField()
+            cover = serializers.SerializerMethodField()
+
+            class Meta:
+                model = Artist
+                fields = ['url', 'id', 'name', 'cover']
+
+            def get_cover(self, obj):
+                request = self.context.get('request')
+                try:
+                    if obj.artistavatar and obj.artistavatar.image:
+                        return request.build_absolute_uri('/api/artists/{artist_id}/cover'.format(artist_id=obj.id))
+                except:
+                    pass
+                return None
+
+        artists = ArtistSerializer(many=True, read_only=True)
+
+        class Meta:
+            model = Song
+            fields = ['url', 'id', 'track', 'title',
+                      'lyricist', 'composer', 'arranger', 'vocalist', 'producer', 'bandsman', 'description',
+                      'artists']
 
     artists = ArtistSerializer(many=True, read_only=True)
     company = CompanySerializer()
-    # song_set = SongSerializer(many=True, read_only=True)
-    # songs = serializers.RelatedField(source='song_set', many=True, read_only=True)
     songs = SongSerializer(source='song_set', many=True, read_only=True)
     songs_count = serializers.SerializerMethodField()
     cover = serializers.SerializerMethodField()
