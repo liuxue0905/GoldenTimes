@@ -10,8 +10,14 @@ $ pip install Pillow
 $ python manage.py makemigrations
 $ python manage.py migrate
 $ python manage.py createsuperuser
-$ python manage.py runserver 0:8888
-$ python manage.py runserver 0.0.0.0:8000
+```
+
+```shell script
+$ python manage.py runserver 0:8000
+```
+
+```shell script
+$ gunicorn -b 0:8000 GoldenTimes.wsgi
 ```
 
 

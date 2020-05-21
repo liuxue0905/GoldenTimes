@@ -45,7 +45,6 @@ def index(request):
 
     return HttpResponseRedirect(reverse('portal:dashboard', args=()))
 
-
 def dashboard(request):
     queryset = Artist.objects.filter(record__isnull=False).distinct()
 
