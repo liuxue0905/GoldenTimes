@@ -7,7 +7,8 @@
 
 echo "pwd		:$(pwd)"
 
-PROG_PATH=${BASH_SOURCE[0]} # this script's name
+#PROG_PATH=${BASH_SOURCE[0]} # this script's name
+PROG_PATH=$0 # this script's name
 PROG_NAME=${PROG_PATH##*/}  # basename of script (strip path)
 PROG_DIR="$(cd "$(dirname "${PROG_PATH:-$PWD}")" 2>/dev/null 1>&2 && pwd)"
 
@@ -32,7 +33,8 @@ LOG_FILE=${LOG_DIR}/nohup_${LOG_FILE_NAME}.out
 
 echo "LOG_FILE	: ${LOG_FILE}"
 
-COMMAND_RUNSERVER="python manage.py runserver 0:8000"
+#COMMAND_RUNSERVER="python manage.py runserver 0:8000"
+COMMAND_RUNSERVER="gunicorn -b 0:8000 GoldenTimes.wsgi"
 COMMAND="nohup ${COMMAND_RUNSERVER} > ${LOG_FILE} 2>&1 &"
 
 echo "COMMAND		: ${COMMAND}"
