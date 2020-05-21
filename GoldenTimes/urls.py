@@ -21,7 +21,7 @@ from django.conf.urls import include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='/index.html')),
+    # url(r'^$', RedirectView.as_view(url='/index.html')),
 
     url(r'^admin/', admin.site.urls),
     url(r'^portal/', include('portal.urls')),
