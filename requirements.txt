@@ -1,6 +1,6 @@
-Django==3.0.4
+Django==3.0.7
 djangorestframework==3.11.0
-lxml==4.5.0
-Pillow==7.1.1
+lxml==4.5.1
+Pillow==7.1.2
 django-imagekit==4.0.2
-django-cors-headers==3.2.1
+django-cors-headers==3.4.0
