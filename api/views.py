@@ -151,7 +151,7 @@ class ArtistRecordViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             # artist.record_set
             queryset = Record.objects.all()
-            queryset = queryset.filter(artists__exact=artist)
+            queryset = queryset.filter(artists__exact=artist).distinct()
             return queryset
 
             # return self.queryset.none()
@@ -178,7 +178,7 @@ class ArtistSongViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             # artist.song_set
             queryset = Song.objects.all()
-            queryset = queryset.filter(artists__exact=artist)
+            queryset = queryset.filter(artists__exact=artist).distinct()
             return queryset
 
         # return self.queryset.none()
