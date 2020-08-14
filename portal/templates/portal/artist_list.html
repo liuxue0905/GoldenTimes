@@ -21,121 +21,77 @@
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // alert('Document is ready!');
-            $('#id_has_records_checkbox').on('change', function () {
-                if ($(this).is(':checked')) {
-                    $(this).attr('value', 'true');
-                } else {
-                    $(this).attr('value', 'false');
-                }
-                $('input[type="hidden"][name="has_records"]').attr('value', $(this).attr('value'));
-            })
-        });
-    </script>
+    {#    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>#}
+    {#    <script type="text/javascript">#}
+    {#        $(document).ready(function () {#}
+    {#            // alert('Document is ready!');#}
+    {#            $('#id_has_records_checkbox').on('change', function () {#}
+    {#                if ($(this).is(':checked')) {#}
+    {#                    $(this).attr('value', 'true');#}
+    {#                } else {#}
+    {#                    $(this).attr('value', 'false');#}
+    {#                }#}
+    {#                $('input[type="hidden"][name="has_records"]').attr('value', $(this).attr('value'));#}
+    {#            })#}
+    {#        });#}
+    {#    </script>#}
 {% endblock %}
 
 {% block body %}
 
-    <div class="mdl-cell mdl-cell--12-col mdl-card lx-form" style="width: 100%">
+    <div>
         <form method="get" action="#">
 
             {% csrf_token %}
 
-            <div class="mdl-card__actions mdl-card--border mdl-grid">
+            <label for="name">歌手名</label><br>
+            <input type="text" id="name" name="name" value="{{ form.name.value|default_if_none:"" }}"><br>
 
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--8-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                    <input class="mdl-textfield__input" type="text" id="sample1" name="name"
-                           value="{{ form.name.value|default_if_none:"" }}">
-                    <label class="mdl-textfield__label" for="sample1">歌手名</label>
-                </div>
+            <label for="type">歌手类型</label><br>
+            <select id="type" name="type">
+                <option value="">全部</option>
+                <option value="1" {% ifequal form.type.value '1' %}selected{% endifequal %}>男</option>
+                <option value="0" {% ifequal form.type.value '0' %}selected{% endifequal %}>女</option>
+                <option value="2" {% ifequal form.type.value '2' %}selected{% endifequal %}>组合</option>
+            </select>
+            <br>
 
-                <select name="type" class="mdl-cell mdl-cell--1-col">
-                    <option value="">全部</option>
-                    <option value="1" {% ifequal form.type.value '1' %}selected{% endifequal %}>男</option>
-                    <option value="0" {% ifequal form.type.value '0' %}selected{% endifequal %}>女</option>
-                    <option value="2" {% ifequal form.type.value '2' %}selected{% endifequal %}>组合</option>
-                </select>
+            <input type="checkbox" id="has_records" value="true" {% if form.has_records.value %}checked{% endif %}>
+            <label for="has_records">歌手类型</label><br>
+            {#<input type="hidden" name="has_records" value="{{ form.has_records.value|lower }}">#}
 
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-cell mdl-cell--2-col-desktop mdl-cell--2-col-tablet mdl-cell--2-col-phone"
-                       for="id_has_records_checkbox">
-                    <input type="checkbox" id="id_has_records_checkbox" class="mdl-checkbox__input"
-                           {% if form.has_records.value %}checked{% endif %}>
-                    <span class="mdl-checkbox__label">有唱片</span>
-                </label>
-
-                <input type="hidden" name="has_records" value="{{ form.has_records.value|lower }}">
-
-                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-cell mdl-cell--1-col">
-                    搜索
-                </button>
-
-            </div>
-
+            <input type="submit" value="搜索">
         </form>
     </div>
 
 
-    <div class="mdl-cell mdl-cell--12-col">
-
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-
-                {% for artist in object_list %}
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-phone">
-
-                        <div class="mdc-card">
-                            <div class="mdc-card__primary-action">
-                                <div class="mdc-card__media mdc-card__media--square">
-                                    <!--<div class="mdc-card__media-content">Title</div>-->
-                                    <div class="lx-mdc-card__media--inner">
-                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                            {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                                <div class="lx-center" style="background: black">
-                                                    {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
-                                                </div>
-                                            {% else %}
-                                                <div class="lx-center" style="background: lightgray">
-                                                    <i class="material-icons lx-center-content"
-                                                       style="color: gray; font-size: 80px;">
-                                                        account_circle
-                                                    </i>
-                                                </div>
-                                            {% endif %}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="demo-card__primary">
-                                    <div class="demo-card__title mdc-typography--subtitle1">
-                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                            {{ artist.name }}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="demo-card__secondary mdc-typography--body2">
-                                    <span>类型:{{ artist.type_value|default:'-' }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                {% empty %}
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
-                        <div class="mdc-card">
-                            暂无歌手
-                        </div>
-                    </div>
-
-                {% endfor %}
-
-            </div>
-        </div>
-
+    <div>
+        <ol>
+            {% for artist in object_list %}
+                <li>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                    {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
+                                {% else %}
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                {{ artist.name }}
+                            </a>
+                        </li>
+                        <li>
+                            <span>类型:{{ artist.type_value|default:'-' }}</span>
+                        </li>
+                    </ul>
+                </li>
+            {% empty %}
+                empty
+            {% endfor %}
+        </ol>
     </div>
 
     <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
