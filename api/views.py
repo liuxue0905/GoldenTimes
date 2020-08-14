@@ -6,7 +6,7 @@ from rest_framework import viewsets
 
 from portal.models import Artist, Record, Song
 from portal.models import Company
-from .serializers import ArtistSerializer, RecordSerializer, SongSerializer
+from .serializers import ArtistSerializer, RecordSerializer, SongSerializer, ArtistListSerializer
 from .serializers import CompanySerializer
 from .serializers import UserSerializer, GroupSerializer
 
@@ -38,7 +38,16 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Artist.objects.all()
-    serializer_class = ArtistSerializer
+    # serializer_class = ArtistSerializer
+    default_serializer_class = ArtistSerializer
+
+    serializer_classes = {
+        "list": ArtistListSerializer,
+        "retrieve": ArtistSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def get_queryset(self):
         queryset = Artist.objects.all()
