@@ -21,20 +21,7 @@
 {% endblock %}
 
 {% block script %}
-    {#    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>#}
-    {#    <script type="text/javascript">#}
-    {#        $(document).ready(function () {#}
-    {#            // alert('Document is ready!');#}
-    {#            $('#id_has_records_checkbox').on('change', function () {#}
-    {#                if ($(this).is(':checked')) {#}
-    {#                    $(this).attr('value', 'true');#}
-    {#                } else {#}
-    {#                    $(this).attr('value', 'false');#}
-    {#                }#}
-    {#                $('input[type="hidden"][name="has_records"]').attr('value', $(this).attr('value'));#}
-    {#            })#}
-    {#        });#}
-    {#    </script>#}
+
 {% endblock %}
 
 {% block body %}
@@ -94,30 +81,40 @@
         </ol>
     </div>
 
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
-        <div class="mdl-card mdl-shadow--2dp">
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a class="mdl-button"
-                           href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}&name={{ request.GET.name }}">&laquo; 上一页</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
-                    {% endif %}
+    <div>
+        <ul>
+            <li>{{ page_obj }}</li>
+            <li>number: {{ page_obj.number }}</li>
+            <li>start_index: {{ page_obj.start_index }}</li>
+            <li>end_index: {{ page_obj.end_index }}</li>
+            <li>has_other_pages: {{ page_obj.has_other_pages }}</li>
+            <li>paginator: {{ page_obj.paginator }}</li>
+            <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>
+            <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>
+        </ul>
 
-                    <span class="current mdl-button" disabled>
-                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a class="mdl-button"
-                           href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}&name={{ request.GET.name }}">下一页 &raquo;</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>
+        <ul>
+            <li><a href="?has_records={{ form.has_records.value }}&page={{ 1 }}&name={{ request.GET.name }}">首页</a></li>
+            <li>
+                {% if page_obj.has_previous %}
+                    <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}&name={{ request.GET.name }}">
+                        上一页
+                    </a>
+                {% else %}
+                    上一页
+                {% endif %}
+            </li>
+            <li>
+                {% if page_obj.has_next %}
+                    <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}&name={{ request.GET.name }}">
+                        下一页
+                    </a>
+                {% else %}
+                    下一页
+                {% endif %}
+            </li>
+            <li><a href="?has_records={{ form.has_records.value }}&page={{ page_obj.paginator.num_pages }}&name={{ request.GET.name }}">尾页</a></li>
+        </ul>
     </div>
 
 {% endblock %}

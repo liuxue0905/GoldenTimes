@@ -28,131 +28,74 @@
 
 {% block body %}
 
-    <div class="mdl-cell mdl-cell--12-col" style="width: 100%">
-        <div class="mdc-card">
-            <form method="get" action="#">
-                {% csrf_token %}
-                <div class="mdc-layout-grid">
+    <div>
+        <form method="get" action="#">
+            <label for="title">标题</label><br>
+            <input type="text" id="title" name="title" value="{{ request.GET.title }}"><br>
 
-                    <div class="mdc-layout-grid__inner crane-row">
+            <label for="format">介质</label><br>
+            <select id="format" name="format">
+                <option value="" selected></option>
+                <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>
+                    CD
+                </option>
+                <option value="2" {% ifequal request.GET.format '2' %}selected{% endifequal %}>
+                    LP
+                </option>
+                <option value="3" {% ifequal request.GET.format '3' %}selected{% endifequal %}>
+                    MC
+                </option>
+                <option value="4" {% ifequal request.GET.format '4' %}selected{% endifequal %}>
+                    DATA
+                </option>
+            </select>
+            <br>
 
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop mdc-layout-grid__cell--span-6-tablet mdc-layout-grid__cell--span-4-phone">
-                            <div class="crane-field">
-                                <div class="crane-text-field mdc-text-field mdc-text-field--box">
-                                    <input class="crane-text-field__input mdc-text-field__input" id="crane-name-input" name="title" type="text" value="{{ request.GET.title }}">
-                                    <label class="crane-floating-label mdc-floating-label" for="crane-name-input">
-                                        唱片标题
-                                    </label>
-                                    <div class="mdc-line-ripple"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-phone">
-                            <div class="crane-field ">
-                                <div class="crane-select mdc-select mdc-select--box">
-                                    <select class="crane-select__native-control mdc-select__native-control" id="crane-state-input" name="format">
-                                        <option value="" selected></option>
-                                        <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>
-                                            CD
-                                        </option>
-                                        <option value="2" {% ifequal request.GET.format '2' %}selected{% endifequal %}>
-                                            LP
-                                        </option>
-                                        <option value="3" {% ifequal request.GET.format '3' %}selected{% endifequal %}>
-                                            MC
-                                        </option>
-                                        <option value="4" {% ifequal request.GET.format '4' %}selected{% endifequal %}>
-                                            DATA
-                                        </option>
-                                    </select>
-                                    <label class="crane-select__label mdc-floating-label" for="crane-state-input">
-                                        介质
-                                    </label>
-                                    <div class="mdc-line-ripple"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="crane-row crane-row--submit mdc-layout-grid">
-                    <button type="submit" class="crane-button mdc-button mdc-button--raised mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-                        搜索
-                    </button>
-                </div>
-            </form>
-        </div>
+            <input type="submit" value="搜索">
+        </form>
     </div>
 
-    <div class="mdl-cell mdl-cell--12-col">
-
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-
-                {% for record in object_list %}
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-2-phone">
-
-                        <div class="mdc-card">
-                            <div class="mdc-card__primary-action">
-                                <div class="mdc-card__media mdc-card__media--square">
-                                    <!--<div class="mdc-card__media-content">Title</div>-->
-                                    <div class="lx-mdc-card__media--inner">
-                                        <a href="{% url 'portal:record-detail' record.id %}">
-                                            {% if record.recordcover and record.recordcover.image_exists %}
-                                                <div class="lx-center" style="background: black">
-                                                    {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
-                                                </div>
-                                            {% else %}
-                                                <div class="lx-center" style="background: lightgray">
-                                                    <i class="material-icons lx-center-content"
-                                                       style="color: gray; font-size: 160px;">
-                                                        album
-                                                    </i>
-                                                </div>
-                                            {% endif %}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="demo-card__primary">
-                                    <div class="demo-card__title mdc-typography--subtitle1">
-                                        <a href="{% url 'portal:record-detail' record.id %}">
-                                            {{ record.title }}
-                                        </a>
-                                    </div>
-                                    <div class="demo-card__subtitle mdc-typography--subtitle2">
-                                        {% for artist in record.artists.all %}
-                                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="demo-card__secondary mdc-typography--body2">
-                                    <span>年代:{{ record.year|default:'-' }}</span>
-                                    <br>
-                                    <span>介质:{{ record.format_value|default:'-' }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                {% empty %}
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
-                        <div class="mdc-card">
-                            暂无唱片
-                        </div>
-                    </div>
-
-                {% endfor %}
-
-            </div>
-        </div>
-
+    <div>
+        <ol>
+            {% for record in object_list %}
+                <li>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portal:record-detail' record.id %}">
+                                {% if record.recordcover and record.recordcover.image_exists %}
+                                    {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}
+                                {% else %}
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'portal:record-detail' record.id %}">
+                                {{ record.title }}
+                            </a>
+                        </li>
+                        <li>
+                            <ol>
+                                {% for artist in record.artists.all %}
+                                    <li>
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </li>
+                        <li>
+                            年代:{{ record.year|default:'-' }}
+                        </li>
+                        <li>
+                            介质:{{ record.format_value|default:'-' }}
+                        </li>
+                    </ul>
+                </li>
+            {% empty %}
+                empty
+            {% endfor %}
+        </ol>
     </div>
+
 
     <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
         <div class="mdl-card mdl-shadow--2dp">
