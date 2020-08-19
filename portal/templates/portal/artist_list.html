@@ -31,20 +31,20 @@
 
             {% csrf_token %}
 
-            <label for="name">歌手名</label><br>
-            <input type="text" id="name" name="name" value="{{ form.name.value|default_if_none:"" }}"><br>
+            <label for="id_name">歌手名</label><br>
+            <input type="text" id="id_name" name="name" value="{{ form.name.value|default_if_none:"" }}"><br>
 
-            <label for="type">歌手类型</label><br>
-            <select id="type" name="type">
-                <option value="">全部</option>
+            <label for="id_type">歌手类型</label><br>
+            <select id="id_type" name="type">
+                <option value>全部</option>
                 <option value="1" {% ifequal form.type.value '1' %}selected{% endifequal %}>男</option>
                 <option value="0" {% ifequal form.type.value '0' %}selected{% endifequal %}>女</option>
                 <option value="2" {% ifequal form.type.value '2' %}selected{% endifequal %}>组合</option>
             </select>
             <br>
 
-            <input type="checkbox" id="has_records" value="true" {% if form.has_records.value %}checked{% endif %}>
-            <label for="has_records">歌手类型</label><br>
+            <input type="checkbox" id="id_has_records" name="has_records" value="true" {% if form.has_records.value %}checked{% endif %}>
+            <label for="id_has_records">有个人唱片</label><br>
             {#<input type="hidden" name="has_records" value="{{ form.has_records.value|lower }}">#}
 
             <input type="submit" value="搜索">
@@ -81,7 +81,7 @@
         </ol>
     </div>
 
-    <div>
+    <nav>
         <ul>
             <li>{{ page_obj }}</li>
             <li>number: {{ page_obj.number }}</li>
@@ -92,10 +92,12 @@
             <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>
             <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>
         </ul>
+    </nav>
 
-        <ul>
-            <li><a href="?has_records={{ form.has_records.value }}&page={{ 1 }}&name={{ request.GET.name }}">首页</a></li>
-            <li>
+    <nav>
+        <ul class="pagination">
+            <li class="page-item"><a href="?has_records={{ form.has_records.value }}&page={{ 1 }}&name={{ request.GET.name }}">首页</a></li>
+            <li class="page-item">
                 {% if page_obj.has_previous %}
                     <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}&name={{ request.GET.name }}">
                         上一页
@@ -104,17 +106,21 @@
                     上一页
                 {% endif %}
             </li>
-            <li>
+            <li class="page-item">
                 {% if page_obj.has_next %}
                     <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}&name={{ request.GET.name }}">
-                        下一页
+                        <span aria-hidden="true">&raquo;</span>
                     </a>
                 {% else %}
-                    下一页
+                    <span aria-hidden="true">&raquo;</span>
                 {% endif %}
             </li>
-            <li><a href="?has_records={{ form.has_records.value }}&page={{ page_obj.paginator.num_pages }}&name={{ request.GET.name }}">尾页</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?has_records={{ form.has_records.value }}&page={{ page_obj.paginator.num_pages }}&name={{ request.GET.name }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
         </ul>
-    </div>
+    </nav>
 
 {% endblock %}

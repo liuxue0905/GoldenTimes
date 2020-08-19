@@ -84,35 +84,42 @@
             </div>
         </div>
 
-        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet">
-            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%">
-                <thead>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">标题</th>
+                <th scope="col">歌手</th>
+                <th scope="col">唱片</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for song in record.song_set.all %}
                 <tr>
-                    <th style="width: 58px;">序号</th>
-                    <th>标题</th>
-                    <th>歌手</th>
-                    <th style="width: 58px;">作曲</th>
-                    <th style="width: 58px;">作词</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for song in record.song_set.all %}
-                    <tr>
-                        <td>{{ song.track }}</td>
-                        <td>
-                            <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></td>
-                        <td>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>
+                        <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
+                    </td>
+                    <td>
+                        <ol>
                             {% for artist in song.artists.all %}
-                                <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                                <li>
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                </li>
                             {% endfor %}
-                        </td>
-                        <td>{{ song.composer|default_if_none:'' }}</td>
-                        <td>{{ song.lyricist|default_if_none:'' }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                        </ol>
+                    </td>
+                    <td>
+                        <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
+                    </td>
+                    <td></td>
+                </tr>
+            {% empty %}
+                empty
+            {% endfor %}
+            </tbody>
+        </table>
 
         {% if record.recordimages_set.all %}
             <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
