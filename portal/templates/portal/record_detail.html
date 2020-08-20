@@ -9,15 +9,17 @@
     {% endwith %}
 {% endblock %}
 
-{% block android_drawer %}
-    {% with mdl_navigation__link__current='record-list' %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
 {% block body %}
 
     {% with record=object %}
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'portal:record-list' %}">唱片</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ record.title }}</li>
+            </ol>
+        </nav>
 
         <div class="mdl-card mdl-shadow--4dp mdl-grid mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet">
             <div class="mdl-card__media mdl-cell mdl-cell--12-col-tablet" style="background-color: transparent">

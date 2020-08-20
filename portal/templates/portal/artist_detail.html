@@ -9,15 +9,17 @@
     {% endwith %}
 {% endblock %}
 
-{% block android_drawer %}
-    {% with mdl_navigation__link__current='artist-list' %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
 {% block body %}
 
     {% with artist=object %}
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'portal:artist-list' %}">歌手</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ artist.name }}</li>
+            </ol>
+        </nav>
 
         <div class="mdl-grid mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
             <div class="mdl-card__media mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet"
@@ -58,32 +60,33 @@
             </div>
         </div>
 
-        <div class="mdl-cell mdl-cell--12-col">
-            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="card text-center">
+            <div class="card-header">
                 {% block tab_bar %}
-                    <div class="mdl-tabs__tab-bar mdl-card" style="width: 100%; min-height: 0;">
-                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}"
-                           class="mdl-tabs__tab {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list' %}is-active{% endifequal %}">专辑</a>
-                        <a href="{% url 'portal:artist-detail-song-list' artist.id %}"
-                           class="mdl-tabs__tab {% ifequal mdl_tabs_tab_is_active 'artist-detail-song-list' %}is-active{% endifequal %}">歌曲</a>
-                        <a href="{% url 'portal:artist-detail-record-list-involved' artist.id %}"
-                           class="mdl-tabs__tab {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list-involved' %}is-active{% endifequal %}">参与专辑</a>
-                    </div>
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list' %}active{% endifequal %}"
+                               href="{% url 'portal:artist-detail-record-list' artist.id %}">唱片</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-song-list' %}active{% endifequal %}"
+                               href="{% url 'portal:artist-detail-song-list' artist.id %}">歌曲</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list-involved' %}active{% endifequal %}"
+                               href="{% url 'portal:artist-detail-record-list-involved' artist.id %}">参与</a>
+                        </li>
+                    </ul>
                 {% endblock %}
-                {#            <div id="tab1">#}
-                {#                <p>First tab's content.</p>#}
-                {#            </div>#}
-                {#            <div id="tab2">#}
-                {#                <p>Second tab's content.</p>#}
-                {#            </div>#}
-                {#            <div id="tab3">#}
-                {#                <p>Third tab's content.</p>#}
-                {#            </div>#}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+                {% block tabs %}
+                {% endblock %}
             </div>
         </div>
-
-        {% block tabs %}
-        {% endblock %}
 
         {% if artist.artistimages_set.all %}
             <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
@@ -112,6 +115,9 @@
         {% endif %}
 
     {% endwith %}
+
+
+
 
 
 {% endblock %}

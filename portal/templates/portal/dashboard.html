@@ -10,13 +10,11 @@
     {% endwith %}
 {% endblock %}
 
-{% block android_drawer %}
-    {% with mdl_navigation__link__current='dashboard' %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
 {% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">首页</li>
+    </ol>
 
     <div class="mdl-cell mdl-cell--12-col mdl-grid">
         {% for object in object_list %}

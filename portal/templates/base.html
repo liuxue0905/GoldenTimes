@@ -1,34 +1,25 @@
 {% load static %}
 <!doctype html>
-
 <html lang="en">
 <head>
-
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Introducing Lollipop, a sweet new take on Android.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    {#    <title>Android</title>#}
-    {% block title %}
-    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css' %}">
+
+    <title>流金岁月</title>
 
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <link rel="stylesheet" href="{% static 'mdl/material.min.css' %}">
-    <script src="{% static 'mdl/material.min.js' %}"></script>
-    {#    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">#}
-    <link rel="stylesheet" href="https://fonts.conf.top/icon?family=Material+Icons">
 
 
-    <link rel="stylesheet" href="{% static 'mdl-template-android-dot-com/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'mdl-template-portfolio/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/abc.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/lx.css' %}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-    {#    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">-->#}
-    <link rel="stylesheet" href="https://fonts.proxy.ustclug.org/css?family=Roboto:300,400,500,700">
-    <!--<link rel="stylesheet" href="bundle.css">-->
-    <link rel="stylesheet" href="{% static 'bundle.css' %}">
+
+    {% block title %}
+    {% endblock %}
 
     {% block style %}
     {% endblock %}
@@ -39,7 +30,13 @@
 
 <body data-admin-utc-offset="{% now "Z" %}">
 
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'bootstrap-4.5.2-dist/js/bootstrap.min.js' %}"></script>
+
+<div>
 
     <ul>
         <li><a href="{% url 'portal:dashboard' %}">首页</a></li>
@@ -66,15 +63,12 @@
     </ul>
 
     {% block android_header %}
-
     {% endblock %}
 
-    {% block android_drawer %}
-    {% endblock %}
-
-    {% block body %}
-    {% endblock %}
 </div>
+
+{% block body %}
+{% endblock %}
 
 </body>
 </html>

@@ -8,12 +8,6 @@
     {% endwith %}
 {% endblock %}
 
-{% block android_drawer %}
-    {% with mdl_navigation__link__current='song-list' %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
-
 {% block title %}
     <title>流金岁月唱片库 - 歌曲</title>
 {% endblock %}
@@ -33,6 +27,11 @@
 {#{% endblock %}#}
 
 {% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">歌曲</li>
+    </ol>
 
     <div>
         <form method="get" action="#">
