@@ -12,4 +12,5 @@ class RecordSearchForm(forms.Form):
 class ArtistListForm(forms.Form):
     name = forms.CharField(required=False)
     type = forms.IntegerField(required=False)
-    has_records = forms.BooleanField(initial=True, required=False)
+    # has_records = forms.BooleanField(initial=True, required=False)
+    record__isnull = forms.CharField(required=False)

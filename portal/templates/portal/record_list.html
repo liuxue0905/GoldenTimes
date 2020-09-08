@@ -31,6 +31,9 @@
 
     <div class="jumbotron">
         <form method="get" action="#">
+
+            {#            {% csrf_token %}#}
+
             <div class="form-group">
                 <label for="title">标题</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ request.GET.title }}">
@@ -59,7 +62,7 @@
         </form>
     </div>
 
-    <div class="card-columns">
+    <div class="card-columns lx-record-list">
         {% for record in object_list %}
             <div class="card">
                 <div class="embed-responsive embed-responsive-1by1">
@@ -67,7 +70,10 @@
                         {#                    <img src="https://getbootstrap.com/docs/4.5/assets/img/bootstrap-icons.png"#}
                         {#                         class="card-img-top embed-responsive-item"#}
                         {#                         alt="{{ record.title }}">#}
-                        <img src="{{ record.recordcover.image.url }}"
+                        {#                        <img src="{{ record.recordcover.image.url }}"#}
+                        {#                             class="card-img-top embed-responsive-item"#}
+                        {#                             alt="{{ record.title }}">#}
+                        <img src="/api/records/{{ record.id }}/cover"
                              class="card-img-top embed-responsive-item"
                              alt="{{ record.title }}">
                     </a>
@@ -107,7 +113,8 @@
                 <span class="step-links">
                     {% if page_obj.has_previous %}
                         <a class="mdl-button"
-                           href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">&laquo; 上一页</a>
+                           href="?page=
+                                   {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -118,7 +125,8 @@
 
                     {% if page_obj.has_next %}
                         <a class="mdl-button"
-                           href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}&format={{ request.GET.format }}">下一页 &raquo;</a>
+                           href="?page=
+                                   {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}

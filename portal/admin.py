@@ -63,7 +63,7 @@ class RecordAdmin(admin.ModelAdmin):
     inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
     list_display = (
-        'cover', 'title', 'number', 'artist_list', 'year', 'release_detail', 'release_detail', 'format', 'company',
+        'cover', 'title', 'number', 'artist_list', 'year', 'release_detail', 'release_order', 'format', 'company',
     )
     list_display_links = ('title', 'number',)
     list_filter = ('format',)

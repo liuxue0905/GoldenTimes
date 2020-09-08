@@ -45,6 +45,7 @@ def index(request):
 
     return HttpResponseRedirect(reverse('portal:dashboard', args=()))
 
+
 def dashboard(request):
     queryset = Artist.objects.filter(record__isnull=False).distinct()
 
@@ -147,31 +148,57 @@ class ArtistListView(ListView):
 
         queryset = Artist.objects.all()
 
-        data = {
-            'name': self.request.GET.get('name'),
-            'type': self.request.GET.get('type'),
-            'has_records': self.request.GET.get('has_records', True)
-        }
-        self.form = forms.ArtistListForm(data)
-        # print('get_queryset', 'form', self.form, self.form.as_table())
-        # print('get_queryset', 'form.is_valid()', self.form.is_valid())
-        # print('get_queryset', 'form.errors', self.form.errors)
+        def querystring_int(q):
+            try:
+                return int(q)
+            except Exception as e:
+                print(e)
+            return None
 
-        if self.form.is_valid():
-            # print('get_queryset', 'form.data', self.form.data)
-            # print('get_queryset', 'form.cleaned_data', self.form.cleaned_data)
-            name = self.form.cleaned_data['name']
-            type = self.form.cleaned_data['type']
-            has_records = self.form.cleaned_data['has_records']
+        def querystring_bool(q):
+            if q in ['true', '1', 'True']:
+                return True
+            elif q in ['false', '0', 'False']:
+                return False
+            return None
 
-            if name is not None:
-                queryset = queryset.filter(name__contains=name)
+        form_name = self.request.GET.get('name')
+        form_type = querystring_int(self.request.GET.get('type'))
+        form_record__isnull = querystring_bool(self.request.GET.get('record__isnull'))
 
-            if type is not None:
-                queryset = queryset.filter(type=type)
+        print('form_record__isnull', form_record__isnull)
 
-            if has_records:
-                queryset = queryset.filter(record__isnull=False).distinct()
+        if form_name is not None:
+            queryset = queryset.filter(name__contains=form_name)
+
+        if form_type is not None:
+            queryset = queryset.filter(type=form_type)
+
+        if form_record__isnull is not None:
+            queryset = queryset.filter(record__isnull=form_record__isnull).distinct()
+
+        # data = {
+        #     'name': None,
+        #     'type': None,
+        #     'record__isnull': None
+        # }
+        # self.form = forms.ArtistListForm()
+
+        # if self.form.is_valid():
+        #     # print('get_queryset', 'form.data', self.form.data)
+        #     # print('get_queryset', 'form.cleaned_data', self.form.cleaned_data)
+        #     name = self.form.cleaned_data['name']
+        #     type = self.form.cleaned_data['type']
+        #     record__isnull = self.form.cleaned_data['record__isnull']
+        #
+        #     if name is not None:
+        #         queryset = queryset.filter(name__contains=name)
+        #
+        #     if type is not None:
+        #         queryset = queryset.filter(type=type)
+        #
+        #     if record__isnull is not None:
+        #         queryset = queryset.filter(record__isnull=record__isnull).distinct()
 
         return queryset
 
@@ -179,7 +206,7 @@ class ArtistListView(ListView):
         context = super(ArtistListView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
 
-        context['form'] = self.form
+        # context['form'] = self.form
         # print('get_context_data', 'self.form', self.form)
         # print('get_context_data', 'self.form.data', self.form.data)
         # print('get_context_data', 'self.form.cleaned_data', self.form.cleaned_data)
@@ -191,7 +218,6 @@ class ArtistDetailView(DetailView):
     model = Artist
 
     # context_object_name = 'my_favorite_publishers'
-
 
     def get_context_data(self, **kwargs):
         context = super(ArtistDetailView, self).get_context_data(**kwargs)

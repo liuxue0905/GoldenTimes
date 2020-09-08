@@ -27,60 +27,71 @@
         </ol>
     </nav>
 
-    <div>
+    <div class="jumbotron">
         <form method="get" action="#">
 
-            {% csrf_token %}
+            {#            {% csrf_token %}#}
 
-            <label for="id_name">歌手名</label><br>
-            <input type="text" id="id_name" name="name" value="{{ form.name.value|default_if_none:"" }}"><br>
+            <div class="form-group">
+                <label for="id_name">歌手名</label><br>
+                <input type="text" class="form-control" id="id_name" name="name"
+                       value="{{ request.GET.name|default_if_none:"" }}"><br>
+            </div>
 
-            <label for="id_type">歌手类型</label><br>
-            <select id="id_type" name="type">
-                <option value>全部</option>
-                <option value="1" {% ifequal form.type.value '1' %}selected{% endifequal %}>男</option>
-                <option value="0" {% ifequal form.type.value '0' %}selected{% endifequal %}>女</option>
-                <option value="2" {% ifequal form.type.value '2' %}selected{% endifequal %}>组合</option>
-            </select>
-            <br>
+            <div class="form-group">
+                <label for="id_type">歌手类型</label><br>
+                <select class="form-control" id="id_type" name="type">
+                    <option value>全部</option>
+                    <option value="1" {% ifequal request.GET.type '1' %}selected{% endifequal %}>男</option>
+                    <option value="0" {% ifequal request.GET.type '0' %}selected{% endifequal %}>女</option>
+                    <option value="2" {% ifequal request.GET.type '2' %}selected{% endifequal %}>组合</option>
+                </select>
+            </div>
 
-            <input type="checkbox" id="id_has_records" name="has_records" value="true"
-                   {% if form.has_records.value %}checked{% endif %}>
-            <label for="id_has_records">有个人唱片</label><br>
-            {#<input type="hidden" name="has_records" value="{{ form.has_records.value|lower }}">#}
+            <div class="form-check">
+                <label class="form-check-label" for="id_record__isnull">有无唱片</label>
+                <select class="form-control" id="id_record__isnull" name="record__isnull">
+                    <option value>全部</option>
+                    <option value="false" {% ifequal request.GET.record__isnull 'false' %}selected{% endifequal %}>有</option>
+                    <option value="true" {% ifequal request.GET.record__isnull 'true' %}selected{% endifequal %}>无</option>
+                </select>
+            </div>
 
-            <input type="submit" value="搜索">
+            <button type="submit" class="btn btn-primary">搜索</button>
         </form>
     </div>
 
 
-    <div>
-        <ol>
-            {% for artist in object_list %}
-                <li>
-                    <ul>
-                        <li>
-                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                    {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
-                                {% else %}
-                                {% endif %}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                {{ artist.name }}
-                            </a>
-                        </li>
-                        <li>
-                            <span>类型:{{ artist.type_value|default:'-' }}</span>
-                        </li>
-                    </ul>
-                </li>
-            {% empty %}
-                empty
-            {% endfor %}
-        </ol>
+    <div class="card-columns lx-artist-list">
+        {% for artist in object_list %}
+            <div class="card">
+                <div class="embed-responsive embed-responsive-1by1">
+                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                        {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
+                        {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
+                        {#                        {% else %}#}
+                        {#                        {% endif %}#}
+                        {#                        <img src="{{ artist.artistavatar.image.url }}"#}
+                        {#                             class="card-img-top embed-responsive-item"#}
+                        {#                             alt="{{ record.title }}">#}
+                        <img src="/api/artists/{{ artist.id }}/cover"
+                             class="card-img-top embed-responsive-item"
+                             alt="{{ artist.title }}">
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-title">
+                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                            {{ artist.name }}
+                        </a>
+                    </div>
+                    <p class="card-text">类型:{{ artist.type_value|default:'-' }}</p>
+                </div>
+            </div>
+        {% empty %}
+            empty
+        {% endfor %}
     </div>
 
     <nav>
@@ -91,19 +102,26 @@
             <li>end_index: {{ page_obj.end_index }}</li>
             <li>has_other_pages: {{ page_obj.has_other_pages }}</li>
             <li>paginator: {{ page_obj.paginator }}</li>
+            <li>paginator.count: {{ page_obj.paginator.count }}</li>
             <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>
             <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>
+            <li>paginator.page_range: {{ page_obj.paginator.page_range }}</li>
         </ul>
     </nav>
+
+    {#    {% for artist in page_obj %}#}
+    {# Each "contact" is a Contact model object. #}
+    {#    {{ artist.name }}<br>#}
+    {#{% endfor %}#}
 
     <nav>
         <ul class="pagination">
             <li class="page-item"><a
-                    href="?has_records={{ form.has_records.value }}&page={{ 1 }}&name={{ request.GET.name }}">首页</a>
+                    href="?{{ request.GET.urlencode }}">首页</a>
             </li>
             <li class="page-item">
                 {% if page_obj.has_previous %}
-                    <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.previous_page_number }}&name={{ request.GET.name }}">
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         上一页
                     </a>
                 {% else %}
@@ -112,7 +130,7 @@
             </li>
             <li class="page-item">
                 {% if page_obj.has_next %}
-                    <a href="?has_records={{ form.has_records.value }}&page={{ page_obj.next_page_number }}&name={{ request.GET.name }}">
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 {% else %}
@@ -121,7 +139,7 @@
             </li>
             <li class="page-item">
                 <a class="page-link"
-                   href="?has_records={{ form.has_records.value }}&page={{ page_obj.paginator.num_pages }}&name={{ request.GET.name }}"
+                   href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                    aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

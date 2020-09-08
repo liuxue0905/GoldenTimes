@@ -33,12 +33,15 @@
         <li class="breadcrumb-item active" aria-current="page">歌曲</li>
     </ol>
 
-    <div>
+    <div class="jumbotron">
         <form method="get" action="#">
-            <label for="title">歌曲标题</label><br>
-            <input type="text" id="title" name="title" value="{{ request.GET.title }}"><br>
 
-            <input type="submit" value="搜索">
+            <div class="form-group">
+                <label for="title">歌曲标题</label><br>
+                <input type="text" class="form-control" id="title" name="title" value="{{ request.GET.title }}"><br>
+            </div>
+
+            <button type="submit" class="btn btn-primary">搜索</button>
         </form>
     </div>
 
@@ -84,7 +87,8 @@
                 <span class="step-links">
                     {% if page_obj.has_previous %}
                         <a class="mdl-button"
-                           href="?page={{ page_obj.previous_page_number }}&title={{ request.GET.title }}">&laquo; 上一页</a>
+                           href="?page=
+                                   {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -95,7 +99,8 @@
 
                     {% if page_obj.has_next %}
                         <a class="mdl-button"
-                           href="?page={{ page_obj.next_page_number }}&title={{ request.GET.title }}">下一页 &raquo;</a>
+                           href="?page=
+                                   {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}
