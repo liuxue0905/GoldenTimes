@@ -21,46 +21,32 @@
             </ol>
         </nav>
 
-        <div class="mdl-grid mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
-            <div class="mdl-card__media mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet"
-                 style="background-color: transparent">
-                <div class="lx-square-container">
-                    <div class="lx-square-text">
-                        {% if artist.artistavatar_exist and artist.artistavatar.image_exists %}
-                            <div class="lx-center">
-                                {#                                {% thumbnail artist.artistavatar.image "240x240" crop="noop" as im %}#}
-                                {#                                    <a class="android-image-link" href="{{ im0.url }}" target="_blank">#}
-                                {#                                        <img class="lx-center-content" src="{{ im.url|watermark:"watermark,opacity=70,position=br,scale=0.30" }}">#}
-                                {#                                    </a>#}
-                                {#                                {% endthumbnail %}#}
-                                {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}
-                            </div>
-                        {% else %}
-                            <div class="lx-center">
-                                <i class="material-icons lx-center-content" style="color: gray; font-size: 160px;">account_circle</i>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
+        <div class="row no-gutters bg-light position-relative">
+            <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
+{#                {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}#}
+                <img src="{{ artist.artistavatar.image.url }}" class="w-100" alt="{{ artist.name }}">
             </div>
-            <div class="mdl-cell mdl-cell--9-col">
-                <h2 class="mdl-card__title-text">{{ artist.name }}</h2>
-                <div class="mdl-card__supporting-text no-left-padding">
-                    <p>
-                        <span>歌手类型: {{ artist.type_value|default_if_none:'-' }}</span>
-                        <br>
-                        <br>
-                        <span>专辑: {{ artist.record_set.count }}</span>
-                        <br>
-                        <span>歌曲: {{ artist.song_set.count }}</span>
-                        <br>
-                        <span>参与专辑: {{ artist.record_involved_set.count }}</span>
-                    </p>
-                </div>
+            <div class="col-md-6 position-static p-4 pl-md-0">
+                <h5 class="mt-0">{{ artist.name }}</h5>
+                <p>
+                    <span>歌手类型: {{ artist.type_value|default_if_none:'-' }}</span>
+                    <br>
+                    <br>
+                    <span>专辑: {{ artist.record_set.count }}</span>
+                    <br>
+                    <span>歌曲: {{ artist.song_set.count }}</span>
+                    <br>
+                    <span>参与专辑: {{ artist.record_involved_set.count }}</span>
+                </p>
+                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
+                    purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+                    vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                <a href="#" class="stretched-link">Go somewhere</a>
             </div>
         </div>
 
-        <div class="card text-center">
+        {#        <div class="card text-center">#}
+        <div class="card">
             <div class="card-header">
                 {% block tab_bar %}
                     <ul class="nav nav-tabs card-header-tabs">
@@ -83,10 +69,13 @@
                 <h5 class="card-title">Special title treatment</h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            <div class="card-body">
                 {% block tabs %}
                 {% endblock %}
             </div>
         </div>
+
 
         {% if artist.artistimages_set.all %}
             <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">

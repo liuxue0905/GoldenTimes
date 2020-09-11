@@ -52,8 +52,11 @@
                 <label class="form-check-label" for="id_record__isnull">有无唱片</label>
                 <select class="form-control" id="id_record__isnull" name="record__isnull">
                     <option value>全部</option>
-                    <option value="false" {% ifequal request.GET.record__isnull 'false' %}selected{% endifequal %}>有</option>
-                    <option value="true" {% ifequal request.GET.record__isnull 'true' %}selected{% endifequal %}>无</option>
+                    <option value="false" {% ifequal request.GET.record__isnull 'false' %}selected{% endifequal %}>
+                        有
+                    </option>
+                    <option value="true" {% ifequal request.GET.record__isnull 'true' %}selected{% endifequal %}>无
+                    </option>
                 </select>
             </div>
 
@@ -62,31 +65,33 @@
     </div>
 
 
-    <div class="card-columns lx-artist-list">
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
         {% for artist in object_list %}
-            <div class="card">
-                <div class="embed-responsive embed-responsive-1by1">
-                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                        {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
-                        {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
-                        {#                        {% else %}#}
-                        {#                        {% endif %}#}
-                        {#                        <img src="{{ artist.artistavatar.image.url }}"#}
-                        {#                             class="card-img-top embed-responsive-item"#}
-                        {#                             alt="{{ record.title }}">#}
-                        <img src="/api/artists/{{ artist.id }}/cover"
-                             class="card-img-top embed-responsive-item"
-                             alt="{{ artist.title }}">
-                    </a>
-                </div>
-
-                <div class="card-body">
-                    <div class="card-title">
+            <div class="col mb-4">
+                <div class="card">
+                    <div class="embed-responsive embed-responsive-1by1">
                         <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                            {{ artist.name }}
+                            {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
+                            {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
+                            {#                        {% else %}#}
+                            {#                        {% endif %}#}
+                            {#                        <img src="{{ artist.artistavatar.image.url }}"#}
+                            {#                             class="card-img-top embed-responsive-item"#}
+                            {#                             alt="{{ record.title }}">#}
+                            <img src="/api/artists/{{ artist.id }}/cover"
+                                 class="card-img-top embed-responsive-item"
+                                 alt="{{ artist.title }}">
                         </a>
                     </div>
-                    <p class="card-text">类型:{{ artist.type_value|default:'-' }}</p>
+
+                    <div class="card-body">
+                        <div class="card-title">
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                {{ artist.name }}
+                            </a>
+                        </div>
+                        <p class="card-text">类型:{{ artist.type_value|default:'-' }}</p>
+                    </div>
                 </div>
             </div>
         {% empty %}
@@ -121,7 +126,10 @@
             </li>
             <li class="page-item">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a href="?page=
+
+
+                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         上一页
                     </a>
                 {% else %}
@@ -130,7 +138,10 @@
             </li>
             <li class="page-item">
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a href="?page=
+
+
+                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 {% else %}
@@ -139,7 +150,10 @@
             </li>
             <li class="page-item">
                 <a class="page-link"
-                   href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                   href="?page=
+
+
+                           {{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                    aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -164,5 +178,6 @@
             <li class="page-item"><a class="page-link" href="#">100</a></li>
         </ul>
     </nav>
+
 
 {% endblock %}
