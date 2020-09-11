@@ -21,78 +21,62 @@
             </ol>
         </nav>
 
-        <div class="mdl-card mdl-shadow--4dp mdl-grid mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet">
-            <div class="mdl-card__media mdl-cell mdl-cell--12-col-tablet" style="background-color: transparent">
-                <div class="lx-square-container">
-                    <div class="lx-square-text">
-                        {% if record.recordcover_exists and record.recordcover.image_exists %}
-                            <div class="lx-center">
-                                {% with source_file=record.recordcover.image %}
-                                    {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}
-                                {% endwith %}
-                            </div>
-                        {% else %}
-                            <div class="lx-center">
-                                <i class="material-icons lx-center-content"
-                                   style="color: gray; font-size: 160px;">album</i>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
+        <div class="row no-gutters bg-light position-relative">
+            <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
+                {#                {% if record.recordcover_exists and record.recordcover.image_exists %}#}
+                {#                {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}#}
+                {#                 {% else %}#}
+                {#                {% endif %}#}
+                <img src="{{ record.recordcover.image.url }}" class="w-100" alt="{{ record.title }}">
             </div>
-            <div class="mdl-cell mdl-cell--8-col">
-                <h2 class="mdl-card__title-text">{{ record.title }}</h2>
-                <div class="mdl-card__supporting-text padding-top">
-                    <p>
-                        <span>歌手:</span>
-                        {% for artist in record.artists.all %}
-                            <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
-                        {% endfor %}
-                    </p>
-
-                    <p>
-                        介质：{{ record.format_value }}
-                        <br>
-                        编号: {{ record.number }}
-                        <br>
-                        年代: {{ record.year }}
-                        <br>
-                        发行时间: {{ record.release_detail|default_if_none:'' }}
-                        <br>
-                        {% if record.company %}
-                            唱片公司: {{ record.company.name }}
-                        {% endif %}
-                    </p>
-                    {#<div id="tt1" class=" icon material-icons portfolio-share-btn" tabindex="0">#}
-                    {#share#}
-                    {#</div>#}
-                    {#<div class="mdl-tooltip" for="tt1" data-upgraded=",MaterialTooltip" style="left: 1077.72px; margin-left: -68.5px; top: 345px;">#}
-                    {#Share via social media#}
-                    {#</div>#}
-                </div>
-                <div class="mdl-card__supporting-text no-left-padding">
-                    <p>
-                        监制: {{ record.producer|default_if_none:'-' }}
-                        <br>
-                        录音: {{ record.recorder|default_if_none:'-' }}
-                        <br>
-                        混音: {{ record.mixer|default_if_none:'-' }}
-                        <br>
-                        乐手: {{ record.bandsman|default_if_none:'-' }}
-                        <br>
-                        说明: {{ record.description|default_if_none:'-' }}
-                    </p>
-                </div>
+            <div class="col-md-6 position-static p-4 pl-md-0">
+                <h5 class="mt-0">{{ record.title }}</h5>
+                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
+                    purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+                    vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                <p>
+                <p>
+                    介质：{{ record.format_value }}
+                    <br>
+                    编号: {{ record.number }}
+                    <br>
+                    年代: {{ record.year }}
+                    <br>
+                    发行时间: {{ record.release_detail|default_if_none:'' }}
+                    <br>
+                    {% if record.company %}
+                        唱片公司: {{ record.company.name }}
+                    {% endif %}
+                </p>
+                <span>歌手:</span>
+                {% for artist in record.artists.all %}
+                    <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                {% endfor %}
+                </p>
+                <a href="#" class="stretched-link">Go somewhere</a>
             </div>
         </div>
 
+        <div class="mdl-card__supporting-text no-left-padding">
+            <p>
+                监制: {{ record.producer|default_if_none:'-' }}
+                <br>
+                录音: {{ record.recorder|default_if_none:'-' }}
+                <br>
+                混音: {{ record.mixer|default_if_none:'-' }}
+                <br>
+                乐手: {{ record.bandsman|default_if_none:'-' }}
+                <br>
+                说明: {{ record.description|default_if_none:'-' }}
+            </p>
+        </div>
+
         <table class="table">
-            <thead>
+            <thead class="thead-light">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">标题</th>
                 <th scope="col">歌手</th>
-                <th scope="col">唱片</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -112,10 +96,7 @@
                             {% endfor %}
                         </ol>
                     </td>
-                    <td>
-                        <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
-                    </td>
-                    <td></td>
+                    <td><a href="">详情</a></td>
                 </tr>
             {% empty %}
                 empty
