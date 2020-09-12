@@ -75,9 +75,7 @@
                                 {#                        <img src="{{ record.recordcover.image.url }}"#}
                                 {#                             class="card-img-top embed-responsive-item"#}
                                 {#                             alt="{{ record.title }}">#}
-                                <img src="/api/records/{{ record.id }}/cover"
-                                     class="embed-responsive-item"
-                                     alt="{{ record.title }}">
+                                <img src="/api/records/{{ record.id }}/cover" class="embed-responsive-item" alt="{{ record.title }}">
                             </a>
                             {#                <a href="{% url 'portal:record-detail' record.id %}" class="card-title">#}
                             {#                        {% if record.recordcover and record.recordcover.image_exists %}#}
