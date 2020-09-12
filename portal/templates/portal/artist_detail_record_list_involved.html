@@ -21,7 +21,7 @@
 
                     <div class="embed-responsive embed-responsive-1by1 card-img-top">
                         <a href="{% url 'portal:record-detail' record.id %}">
-                        <img src="/api/records/{{ record.id }}/cover" class="embed-responsive-item" alt="{{ record.title }}">
+                        <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}">
 {#                            {% if record.recordcover and record.recordcover.image_exists %}#}
 {#                                {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
 {#                            {% else %}#}
