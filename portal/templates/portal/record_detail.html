@@ -27,7 +27,8 @@
                 {#                {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}#}
                 {#                 {% else %}#}
                 {#                {% endif %}#}
-                <img src="{{ record.recordcover.image.url }}" class="w-100" alt="{{ record.title }}">
+                {#                <img src="{{ record.recordcover.image.url }}" class="w-100" alt="{{ record.title }}">#}
+                <img src="/api/records/{{ record.id }}/cover" class="w-100" alt="{{ record.title }}">
             </div>
             <div class="col-md-6 position-static p-4 pl-md-0">
                 <h5 class="mt-0">{{ record.title }}</h5>
@@ -105,22 +106,49 @@
         </table>
 
         {% if record.recordimages_set.all %}
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp">
-                <div class="android-screen-section mdl-typography--text-center">
-                    <a name="screens"></a>
-                    <div class="android-screens" style="text-align: left;">
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">图片</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+                    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5"
+                         style="flex-wrap: nowrap; overflow-x: auto;">
                         {% for recordimage in record.recordimages_set.all %}
-                            <div class="android-auto android-screen">
-                                <div class="lx-square-container">
-                                    <div class="lx-square-text">
-                                        {% if recordimage.image_exists %}
-                                            {% generateimage 'myapp:thumbnail' source=recordimage.image -- alt=record.title id=record.id %}
-                                        {% else %}
-                                            <div class="lx-center">
-                                                <i class="material-icons lx-center-content"
-                                                   style="color: gray; font-size: 160px;">album</i>
-                                            </div>
-                                        {% endif %}
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                                             class="embed-responsive-item img-thumbnail "
+                                             alt="{{ record.title }}">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for recordimage in record.recordimages_set.all %}
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                                             class="embed-responsive-item img-thumbnail "
+                                             alt="{{ record.title }}">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for recordimage in record.recordimages_set.all %}
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                                             class="embed-responsive-item img-thumbnail "
+                                             alt="{{ record.title }}">
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +157,12 @@
                 </div>
             </div>
         {% endif %}
+
+
+        {#        {% if recordimage.image_exists %}#}
+        {#                                            {% generateimage 'myapp:thumbnail' source=recordimage.image -- alt=record.title id=record.id %}#}
+        {#                                        {% else %}#}
+        {#                                        {% endif %}#}
 
     {% endwith %}
 

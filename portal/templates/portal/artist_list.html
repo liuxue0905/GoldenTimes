@@ -27,19 +27,19 @@
         </ol>
     </nav>
 
-    <div class="jumbotron">
+    <div class="bg-light mb-md-4 p-md-4">
         <form method="get" action="#">
 
             {#            {% csrf_token %}#}
 
             <div class="form-group">
-                <label for="id_name">歌手名</label><br>
+                <label for="id_name">歌手名</label>
                 <input type="text" class="form-control" id="id_name" name="name"
-                       value="{{ request.GET.name|default_if_none:"" }}"><br>
+                       value="{{ request.GET.name|default_if_none:"" }}">
             </div>
 
             <div class="form-group">
-                <label for="id_type">歌手类型</label><br>
+                <label for="id_type">歌手类型</label>
                 <select class="form-control" id="id_type" name="type">
                     <option value>全部</option>
                     <option value="1" {% ifequal request.GET.type '1' %}selected{% endifequal %}>男</option>
@@ -48,8 +48,8 @@
                 </select>
             </div>
 
-            <div class="form-check">
-                <label class="form-check-label" for="id_record__isnull">有无唱片</label>
+            <div class="form-group">
+                <label for="id_record__isnull">有无唱片</label><br>
                 <select class="form-control" id="id_record__isnull" name="record__isnull">
                     <option value>全部</option>
                     <option value="false" {% ifequal request.GET.record__isnull 'false' %}selected{% endifequal %}>
@@ -69,7 +69,7 @@
         {% for artist in object_list %}
             <div class="col mb-4">
                 <div class="card">
-                    <div class="embed-responsive embed-responsive-1by1">
+                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
                         <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
                             {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
                             {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
@@ -79,7 +79,7 @@
                             {#                             class="card-img-top embed-responsive-item"#}
                             {#                             alt="{{ record.title }}">#}
                             <img src="/api/artists/{{ artist.id }}/cover"
-                                 class="card-img-top embed-responsive-item"
+                                 class="embed-responsive-item"
                                  alt="{{ artist.title }}">
                         </a>
                     </div>
@@ -126,10 +126,7 @@
             </li>
             <li class="page-item">
                 {% if page_obj.has_previous %}
-                    <a href="?page=
-
-
-                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         上一页
                     </a>
                 {% else %}
@@ -138,10 +135,7 @@
             </li>
             <li class="page-item">
                 {% if page_obj.has_next %}
-                    <a href="?page=
-
-
-                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 {% else %}
@@ -150,10 +144,7 @@
             </li>
             <li class="page-item">
                 <a class="page-link"
-                   href="?page=
-
-
-                           {{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                   href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                    aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

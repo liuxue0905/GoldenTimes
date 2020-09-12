@@ -33,7 +33,7 @@
         <li class="breadcrumb-item active" aria-current="page">歌曲</li>
     </ol>
 
-    <div class="jumbotron">
+    <div class="bg-light mb-md-4 p-md-4">
         <form method="get" action="#">
 
             <div class="form-group">
@@ -63,17 +63,18 @@
                     <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
                 </td>
                 <td>
-                    <ol>
+                    <div>
                         {% for artist in song.artists.all %}
-                            <li><a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                            </li>
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}"
+                               class="float-left">{{ artist.name }}</a>
+                            <br>
                         {% endfor %}
-                    </ol>
+                    </div>
                 </td>
                 <td>
                     <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
                 </td>
-                <td></td>
+                <td><a href="">详情</a></td>
             </tr>
         {% empty %}
             empty
@@ -87,8 +88,7 @@
                 <span class="step-links">
                     {% if page_obj.has_previous %}
                         <a class="mdl-button"
-                           href="?page=
-                                   {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; 上一页</a>
+                           href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; 上一页</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
                     {% endif %}
@@ -99,8 +99,7 @@
 
                     {% if page_obj.has_next %}
                         <a class="mdl-button"
-                           href="?page=
-                                   {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页 &raquo;</a>
+                           href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页 &raquo;</a>
                     {% else %}
                         <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
                     {% endif %}
