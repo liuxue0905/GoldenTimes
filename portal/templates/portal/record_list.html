@@ -90,7 +90,7 @@
                             </a>
                             <p class="card-text">
                                 {% for artist in record.artists.all %}
-                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a><span>&nbsp;</span>
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}"><small>{{ artist.name }}</small></a><small>&nbsp;</small>
                                 {% endfor %}
                             </p>
                             <p class="card-text">
