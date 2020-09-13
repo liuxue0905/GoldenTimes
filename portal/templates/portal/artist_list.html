@@ -27,7 +27,7 @@
         </ol>
     </nav>
 
-    <div class="bg-light mb-md-4 p-md-4">
+    <div class="bg-light mb-md-4 p-md-4    mb-3 p-3">
         <form method="get" action="#">
 
             {#            {% csrf_token %}#}
@@ -67,7 +67,7 @@
 
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
         {% for artist in object_list %}
-            <div class="col mb-4">
+            <div class="col mb-2 mb-md-4 px-1 px-md-2">
                 <div class="card">
                     <div class="embed-responsive embed-responsive-1by1 card-img-top">
                         <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
@@ -78,9 +78,7 @@
                             {#                        <img src="{{ artist.artistavatar.image.url }}"#}
                             {#                             class="card-img-top embed-responsive-item"#}
                             {#                             alt="{{ record.title }}">#}
-                            <img src="/api/artists/{{ artist.id }}/cover"
-                                 class="embed-responsive-item"
-                                 alt="{{ artist.title }}">
+                            <img src="/api/artists/{{ artist.id }}/cover" class="embed-responsive-item" alt="{{ artist.title }}">
                         </a>
                     </div>
 

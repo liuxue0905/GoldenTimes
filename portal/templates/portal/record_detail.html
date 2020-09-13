@@ -28,14 +28,14 @@
                 {#                 {% else %}#}
                 {#                {% endif %}#}
                 {#                <img src="{{ record.recordcover.image.url }}" class="w-100" alt="{{ record.title }}">#}
-                <img src="/api/records/{{ record.id }}/cover" class="w-100" alt="{{ record.title }}">
+                <a href="/api/records/{{ record.id }}/cover" target="_blank" class="w-100">
+                    <div class="embed-responsive embed-responsive-1by1">
+                        <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}" style="background-color: #868e96;">
+                    </div>
+                </a>
             </div>
             <div class="col-md-6 position-static p-4 pl-md-0">
                 <h5 class="mt-0">{{ record.title }}</h5>
-                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                    purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-                    vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                <p>
                 <p>
                     介质：{{ record.format_value }}
                     <br>
@@ -49,12 +49,12 @@
                         唱片公司: {{ record.company.name }}
                     {% endif %}
                 </p>
-                <span>歌手:</span>
-                {% for artist in record.artists.all %}
-                    <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
-                {% endfor %}
+                <p>
+                    {% for artist in record.artists.all %}
+                        <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a>
+                        <span>&nbsp;</span>
+                    {% endfor %}
                 </p>
-                <a href="#" class="stretched-link">Go somewhere</a>
             </div>
         </div>
 
@@ -121,11 +121,13 @@
                         {% for recordimage in record.recordimages_set.all %}
                             <div class="col mb-4">
                                 <div class="card">
-                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
-                                             class="embed-responsive-item img-thumbnail "
-                                             alt="{{ record.title }}">
-                                    </div>
+                                    <a href="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" target="_blank">
+                                        <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                            <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                                                 class="embed-responsive-item img-thumbnail "
+                                                 alt="{{ record.title }}">
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

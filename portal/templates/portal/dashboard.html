@@ -12,47 +12,79 @@
 
 {% block body %}
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">首页</li>
-    </ol>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">首页</li>
+        </ol>
+    </nav>
 
-    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+    <div class="">
         {% for object in object_list %}
-
-            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-
-                <div class="mdl-card__title">
-                    <h4 class="mdl-card__title-text">{{ object.type }} ({{ object.artists.count }})</h4>
-                </div>
-
-                <div class="mdl-card__actions mdl-card--border">
-                    <ul class="mdl-list lx-list mdl-grid">
-                        {% for artist in object.artists %}
-                            <li class="mdl-list__item mdl-list__item--two-line mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
-                                <span class="mdl-list__item-primary-content">
-                                  <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-{#                                    <i class="material-icons mdl-list__item-avatar">person</i>#}
-                                      {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                          {% generateimage 'myapp:thumbnail-dashboard' source=artist.artistavatar.image as th %}
-                                          <img class="material-icons mdl-list__item-avatar mdl-chip__contact"
-                                               src="{{ th.url }}">
-                                      {% else %}
-                                          <i class="material-icons mdl-list__item-avatar">person</i>
-                                      {% endif %}
-                                  </a>
-                                  <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                      <span>{{ artist.name }}</span>
-                                  </a>
-                                  <span class="mdl-list__item-sub-title">{{ artist.record_set.count }} 张专辑</span>
-                                </span>
-                            </li>
-                        {% endfor %}
+            <div class="card text-left mb-4">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">{{ object.type }} ({{ object.artists.count }})</a>
+                        </li>
                     </ul>
                 </div>
-
+                <div class="card-body">
+                    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-5">
+                        {% for artist in object.artists %}
+                            <div class="media col my-3">
+                                <img src="/api/artists/{{ artist.id }}/cover?size=64" class="mr-3" alt="{{ artist.name }}" width="64" height="64" style="background-color: #868e96;">
+                                <div class="media-body">
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                        <h5 class="mt-0">{{ artist.name }}</h5>
+                                    </a>
+                                    {{ artist.record_set.count }}张唱片
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         {% endfor %}
     </div>
+
+
+    {#    <div class="mdl-cell mdl-cell--12-col mdl-grid">#}
+    {#        {% for object in object_list %}#}
+    {##}
+    {#            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">#}
+    {##}
+    {#                <div class="mdl-card__title">#}
+    {#                    <h4 class="mdl-card__title-text">{{ object.type }} ({{ object.artists.count }})</h4>#}
+    {#                </div>#}
+    {##}
+    {#                <div class="mdl-card__actions mdl-card--border">#}
+    {#                    <ul class="mdl-list lx-list mdl-grid">#}
+    {#                        {% for artist in object.artists %}#}
+    {#                            <li class="mdl-list__item mdl-list__item--two-line mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">#}
+    {#                                <span class="mdl-list__item-primary-content">#}
+    {#                                  <a href="{% url 'portal:artist-detail-record-list' artist.id %}">#}
+    {#                                    <i class="material-icons mdl-list__item-avatar">person</i>#}
+    {#                                      {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
+    {#                                          {% generateimage 'myapp:thumbnail-dashboard' source=artist.artistavatar.image as th %}#}
+    {#                                          <img class="material-icons mdl-list__item-avatar mdl-chip__contact"#}
+    {#                                               src="{{ th.url }}">#}
+    {#                                      {% else %}#}
+    {#                                          <i class="material-icons mdl-list__item-avatar">person</i>#}
+    {#                                      {% endif %}#}
+    {#                                  </a>#}
+    {#                                  <a href="{% url 'portal:artist-detail-record-list' artist.id %}">#}
+    {#                                      <span>{{ artist.name }}</span>#}
+    {#                                  </a>#}
+    {#                                  <span class="mdl-list__item-sub-title">{{ artist.record_set.count }} 张专辑</span>#}
+    {#                                </span>#}
+    {#                            </li>#}
+    {#                        {% endfor %}#}
+    {#                    </ul>#}
+    {#                </div>#}
+    {##}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
 
 {% endblock %}
 

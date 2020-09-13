@@ -25,7 +25,11 @@
             <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
                 {#                {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id %}#}
                 {#                <img src="{{ artist.artistavatar.image.url }}" class="w-100" alt="{{ artist.name }}">#}
-                <img src="/api/artists/{{ artist.id }}/cover" class="w-100" alt="{{ artist.name }}">
+                <a href="/api/artists/{{ artist.id }}/cover" target="_blank" class="w-100">
+                    <div class="embed-responsive embed-responsive-1by1">
+                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt="{{ artist.name }}" style="background-color: #868e96;">
+                    </div>
+                </a>
             </div>
             <div class="col-md-6 position-static p-4 pl-md-0">
                 <h5 class="mt-0">{{ artist.name }}</h5>
@@ -39,10 +43,6 @@
                     <br>
                     <span>参与专辑: {{ artist.record_involved_set.count }}</span>
                 </p>
-                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                    purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-                    vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                <a href="#" class="stretched-link">Go somewhere</a>
             </div>
         </div>
 
