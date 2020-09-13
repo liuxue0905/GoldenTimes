@@ -89,13 +89,9 @@
                                 {{ record.title }}
                             </a>
                             <p class="card-text">
-                            <ol>
                                 {% for artist in record.artists.all %}
-                                    <li>
-                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                    </li>
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a><span>&nbsp;</span>
                                 {% endfor %}
-                            </ol>
                             </p>
                             <p class="card-text">
                                 年代:{{ record.year|default:'-' }}<br>
