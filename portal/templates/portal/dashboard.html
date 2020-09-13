@@ -35,9 +35,9 @@
                                 <img src="/api/artists/{{ artist.id }}/cover?size=64" class="mr-3" alt="{{ artist.name }}" width="64" height="64" style="background-color: #868e96;">
                                 <div class="media-body">
                                     <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                        <h5 class="mt-0">{{ artist.name }}</h5>
+                                        <h6 class="mt-0">{{ artist.name }}</h6>
                                     </a>
-                                    {{ artist.record_set.count }}张唱片
+                                    <small>{{ artist.record_set.count }}张唱片</small>
                                 </div>
                             </div>
                         {% endfor %}

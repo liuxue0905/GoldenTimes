@@ -59,28 +59,47 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
-        <div class="mdl-card mdl-shadow--2dp lx-pagination-parent-0">
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a class="mdl-button" href="?page={{ page_obj.previous_page_number }}">&laquo; 上一页</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
-                    {% endif %}
-
-                    <span class="current mdl-button" disabled>
-                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a class="mdl-button" href="?page={{ page_obj.next_page_number }}">下一页 &raquo;</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>
+    <div class="">
+        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
     </div>
+
+    <nav aria-label="...">
+        <ul class="pagination justify-content-end">
+
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+
+            <li class="page-item active">
+                <a class="page-link" href="#">{{ page_obj.number }}</a>
+            </li>
+
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 
 {% endblock %}

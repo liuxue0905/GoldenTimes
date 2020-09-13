@@ -62,90 +62,95 @@
         </form>
     </div>
 
-    {#    <div class="container">#}
-    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
-        {% for record in object_list %}
-            <div class="col mb-2 mb-md-4 px-1 px-md-2">
-                <div class="card">
-                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                        <a href="{% url 'portal:record-detail' record.id %}">
-                            {#                    <img src="https://getbootstrap.com/docs/4.5/assets/img/bootstrap-icons.png"#}
-                            {#                         class="card-img-top embed-responsive-item"#}
-                            {#                         alt="{{ record.title }}">#}
-                            {#                        <img src="{{ record.recordcover.image.url }}"#}
-                            {#                             class="card-img-top embed-responsive-item"#}
-                            {#                             alt="{{ record.title }}">#}
-                            <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}" style="background-color: #868e96;">
-                        </a>
-                        {#                <a href="{% url 'portal:record-detail' record.id %}" class="card-title">#}
-                        {#                        {% if record.recordcover and record.recordcover.image_exists %}#}
-                        {#                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
-                        {#                        {% else %}#}
-                        {#                        {% endif %}#}
-                        {#                    </a>#}
-                    </div>
-                    <div class="card-body">
-                        <a href="{% url 'portal:record-detail' record.id %}" class="card-title">
-                            {{ record.title }}
-                        </a>
-                        <p class="card-text">
-                        <ol>
-                            {% for artist in record.artists.all %}
-                                <li>
-                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                </li>
-                            {% endfor %}
-                        </ol>
-                        </p>
-                        <p class="card-text">
-                            年代:{{ record.year|default:'-' }}<br>
-                            介质:{{ record.format_value|default:'-' }}
-                        </p>
+    <div class="container">
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+            {% for record in object_list %}
+                <div class="col mb-2 mb-md-4 px-1 px-md-2">
+                    <div class="card">
+                        <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                            <a href="{% url 'portal:record-detail' record.id %}">
+                                {#                    <img src="https://getbootstrap.com/docs/4.5/assets/img/bootstrap-icons.png"#}
+                                {#                         class="card-img-top embed-responsive-item"#}
+                                {#                         alt="{{ record.title }}">#}
+                                {#                        <img src="{{ record.recordcover.image.url }}"#}
+                                {#                             class="card-img-top embed-responsive-item"#}
+                                {#                             alt="{{ record.title }}">#}
+                                <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}" style="background-color: #868e96;">
+                            </a>
+                            {#                <a href="{% url 'portal:record-detail' record.id %}" class="card-title">#}
+                            {#                        {% if record.recordcover and record.recordcover.image_exists %}#}
+                            {#                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
+                            {#                        {% else %}#}
+                            {#                        {% endif %}#}
+                            {#                    </a>#}
+                        </div>
+                        <div class="card-body">
+                            <a href="{% url 'portal:record-detail' record.id %}" class="card-title">
+                                {{ record.title }}
+                            </a>
+                            <p class="card-text">
+                            <ol>
+                                {% for artist in record.artists.all %}
+                                    <li>
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                            </p>
+                            <p class="card-text">
+                                年代:{{ record.year|default:'-' }}<br>
+                                介质:{{ record.format_value|default:'-' }}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            empty
-        {% endfor %}
-    </div>
-    {#    </div>#}
-
-
-    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone lx-pagination-container">
-        <div class="mdl-card mdl-shadow--2dp">
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a class="mdl-button"
-                           href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; 上一页</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>&laquo; 上一页</a>
-                    {% endif %}
-
-                    <span class="current mdl-button" disabled>
-                        第 <strong>{{ page_obj.number }}</strong> 页／共 <strong>{{ page_obj.paginator.num_pages }}</strong> 页
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a class="mdl-button"
-                           href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页 &raquo;</a>
-                    {% else %}
-                        <a class="mdl-button" href="javascript:void(0)" disabled>下一页 &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
+            {% empty %}
+                empty
+            {% endfor %}
         </div>
     </div>
 
-    <nav aria-label="Page navigation">
+    <div class="">
+        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
+    </div>
+
+    <nav aria-label="...">
+
         <ul class="pagination justify-content-end">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">99</a></li>
-            <li class="page-item"><a class="page-link" href="#">100</a></li>
+
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+
+            <li class="page-item active">
+                <a class="page-link" href="#">{{ page_obj.number }}</a>
+            </li>
+
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
 
