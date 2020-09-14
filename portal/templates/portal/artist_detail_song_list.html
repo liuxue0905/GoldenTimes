@@ -28,7 +28,7 @@
                     <td><a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></td>
                     <td>
                         {% for artist in song.artists.all %}
-                            <a href="{% url 'portal:artist-detail' artist.id %}">{{ artist.name }}</a><br>
+                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a><br>
                         {% endfor %}
                     </td>
                     <td>

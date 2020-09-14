@@ -16,7 +16,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'portal:artist-list' %}">歌手</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'portal:artist-list' %}?record__isnull=false">歌手</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ artist.name }}</li>
             </ol>
         </nav>
