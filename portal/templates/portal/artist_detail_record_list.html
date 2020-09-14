@@ -12,94 +12,97 @@
 
 {% block tabs %}
 
-    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+    <div class="container">
 
-        {% for record in object_list %}
-
-            <div class="col mb-2 mb-md-4 px-1 px-md-2">
-                <div class="card">
-
-                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                        <a href="{% url 'portal:record-detail' record.id %}">
-                            <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}">
-{#                            {% if record.recordcover and record.recordcover.image_exists %}#}
-{#                                {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
-{#                            {% else %}#}
-{##}
-{#                            {% endif %}#}
-                        </a>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="card-title">
-                            <a href="{% url 'portal:record-detail' record.id %}">
-                                {{ record.title }}
-                            </a>
-                        </div>
-                        <p class="card-text">
-                            {% for artist in record.artists.all %}
-                                <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                            {% endfor %}
-                        </p>
-                        <p class="card-text">
-                            <span>年代:{{ record.year|default:'-' }}</span>
-                            <br>
-                            <span>介质:{{ record.format_value|default:'-' }}</span>
-                        </p>
-                    </div>
-
-                </div>
+        {% if object_list %}
+            <div class="">
+                {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
             </div>
 
-        {% empty %}
+            <nav aria-label="...">
+                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
+                    {% for record in object_list %}
+                        <div class="col mb-2 mb-md-4 px-1 px-md-2">
+                            <div class="card">
+                                <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                    <a href="{% url 'portal:record-detail' record.id %}">
+                                        <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item"
+                                             alt="{{ record.title }}">
+                                        {#                            {% if record.recordcover and record.recordcover.image_exists %}#}
+                                        {#                                {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
+                                        {#                            {% else %}#}
+                                        {##}
+                                        {#                            {% endif %}#}
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <a href="{% url 'portal:record-detail' record.id %}">
+                                            {{ record.title }}
+                                        </a>
+                                    </div>
+                                    <p class="card-text">
+                                        {% for artist in record.artists.all %}
+                                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                        {% endfor %}
+                                    </p>
+                                    <p class="card-text">
+                                        <span>年代:{{ record.year|default:'-' }}</span>
+                                        <br>
+                                        <span>介质:{{ record.format_value|default:'-' }}</span>
+                                    </p>
+                                </div>
 
-            暂无唱片
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <ul class="pagination pagination-sm justify-content-end">
 
-        {% endfor %}
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=
+                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
 
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ page_obj.number }}</a>
+                    </li>
+
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=
+                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <div class="text-center">
+                <p>暂无唱片</p>
+            </div>
+        {% endif %}
     </div>
 
-    <div class="">
-        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-    </div>
 
-    <nav aria-label="...">
-        <ul class="pagination justify-content-end">
-
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }}</a>
-            </li>
-
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
 
 {% endblock %}

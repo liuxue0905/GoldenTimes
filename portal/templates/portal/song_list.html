@@ -46,36 +46,50 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-sm">
             <thead class="thead-light">
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">标题</th>
-                <th scope="col">歌手</th>
-                <th scope="col">唱片</th>
+                <th scope="col"><small>#</small></th>
+                <th scope="col"><small>标题</small></th>
+                <th scope="col"><small>歌手</small></th>
+                <th scope="col"><small>唱片</small></th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             {% for song in object_list %}
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
+                    <th scope="row">
+                        <small>
+                            {{ forloop.counter }}
+                        </small>
+                    </th>
                     <td>
-                        <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
+                        <small>
+                            <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
+                        </small>
                     </td>
                     <td>
-                        <div>
-                            {% for artist in song.artists.all %}
-                                <a href="{% url 'portal:artist-detail-record-list' artist.id %}"
-                                   class="float-left">{{ artist.name }}</a>
-                                <br>
-                            {% endfor %}
-                        </div>
+                        <small>
+                            <ul class="list-inline my-0">
+                                {% for artist in song.artists.all %}
+                                    <li class="list-inline-item">
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </small>
                     </td>
                     <td>
-                        <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
+                        <small>
+                            <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
+                        </small>
                     </td>
-                    <td><a href="">详情</a></td>
+                    <td>
+                        <small>
+                            <a href="">详情</a>
+                        </small>
+                    </td>
                 </tr>
             {% empty %}
                 empty
@@ -89,7 +103,7 @@
     </div>
 
     <nav aria-label="...">
-        <ul class="pagination justify-content-end">
+        <ul class="pagination pagination-sm justify-content-end">
 
             {% if page_obj.has_previous %}
                 <li class="page-item">

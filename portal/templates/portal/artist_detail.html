@@ -27,7 +27,8 @@
                 {#                <img src="{{ artist.artistavatar.image.url }}" class="w-100" alt="{{ artist.name }}">#}
                 <a href="/api/artists/{{ artist.id }}/cover" target="_blank" class="w-100">
                     <div class="embed-responsive embed-responsive-1by1">
-                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt="{{ artist.name }}" style="background-color: #868e96;">
+                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item"
+                             alt="{{ artist.name }}" style="background-color: #868e96;">
                     </div>
                 </a>
             </div>
@@ -46,30 +47,26 @@
             </div>
         </div>
 
-        {#        <div class="card text-center">#}
-        <div class="card">
-            <div class="card-header">
-                {% block tab_bar %}
-                    <ul class="nav nav-tabs card-header-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list' %}active{% endifequal %}"
-                               href="{% url 'portal:artist-detail-record-list' artist.id %}">唱片</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-song-list' %}active{% endifequal %}"
-                               href="{% url 'portal:artist-detail-song-list' artist.id %}">歌曲</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list-involved' %}active{% endifequal %}"
-                               href="{% url 'portal:artist-detail-record-list-involved' artist.id %}">参与</a>
-                        </li>
-                    </ul>
-                {% endblock %}
-            </div>
-            <div class="card-body">
-                {% block tabs %}
-                {% endblock %}
-            </div>
+        {% block tab_bar %}
+            <ul class="nav nav-tabs bg-light my-3">
+                <li class="nav-item">
+                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list' %} active{% endifequal %}"
+                       href="{% url 'portal:artist-detail-record-list' artist.id %}">唱片</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-song-list' %} active{% endifequal %}"
+                       href="{% url 'portal:artist-detail-song-list' artist.id %}">歌曲</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list-involved' %} active{% endifequal %}"
+                       href="{% url 'portal:artist-detail-record-list-involved' artist.id %}">参与</a>
+                </li>
+            </ul>
+        {% endblock %}
+
+        <div class="tab-content">
+            {% block tabs %}
+            {% endblock %}
         </div>
 
         {% if artist.artistimages_set.all %}
