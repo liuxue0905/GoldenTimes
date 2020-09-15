@@ -38,14 +38,16 @@
             <div class="col-md-6 position-static p-4 pl-md-0">
                 <h5 class="mt-0">{{ artist.name }}</h5>
                 <p>
-                    <span>歌手类型: {{ artist.type_value|default_if_none:'-' }}</span>
-                    <br>
-                    <br>
-                    <span>专辑: {{ artist.record_set.count }}</span>
-                    <br>
-                    <span>歌曲: {{ artist.song_set.count }}</span>
-                    <br>
-                    <span>参与专辑: {{ artist.record_involved_set.count }}</span>
+                    <small>
+                        <span>{{ artist.type_value|default_if_none:'' }}</span>
+                        <br>
+                        <br>
+                        <span>专辑: {{ artist.record_set.count }}</span>
+                        <br>
+                        <span>歌曲: {{ artist.song_set.count }}</span>
+                        <br>
+                        <span>参与专辑: {{ artist.record_involved_set.count }}</span>
+                    </small>
                 </p>
             </div>
         </div>

@@ -29,7 +29,7 @@
                         <td><small><a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></small></td>
                         <td>
                             <small>
-                                <ul class="list-inline my-0">
+                                <ul class="list-inline">
                                     {% for artist in song.artists.all %}
                                         <li class="list-inline-item">
                                             <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>

@@ -82,20 +82,14 @@
                                 {{ record.title }}
                             </a>
                             <p class="card-text">
-                                <small>
-                                    <ul class="list-inline my-0">
-                                        {% for artist in record.artists.all %}
-                                            <li class="list-inline-item">
-                                                <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </small>
-                                <small>
-                                    {{ record.year|default:'-' }}
-                                    <br>
-                                    介质:{{ record.format_value|default:'-' }}
-                                </small>
+                            <ul class="list-inline my-0 small">
+                                {% for artist in record.artists.all %}
+                                    <li class="list-inline-item">
+                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <small>{{ record.year|default:'-' }} - {{ record.format_value|default:'-' }}</small>
                             </p>
                         </div>
                     </div>

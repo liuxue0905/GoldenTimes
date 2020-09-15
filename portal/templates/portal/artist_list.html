@@ -89,10 +89,10 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                    {{ artist.name }}
+                                    <small>{{ artist.name }}</small>
                                 </a>
                             </div>
-                            <p class="card-text">类型:{{ artist.type_value|default:'-' }}</p>
+                            <p class="card-text"><small>{{ artist.type_value|default:'-' }} - {{ artist.record_set.count }}张唱片</small></p>
                         </div>
                     </div>
                 </div>
@@ -102,29 +102,12 @@
         </div>
     </div>
 
-    <nav>
-        <ul>
-            <li>{{ page_obj }}</li>
-            <li>number: {{ page_obj.number }}</li>
-            {#            <li>previous_page_number: {{ page_obj.previous_page_number }}</li>#}
-            {#            <li>next_page_number: {{ page_obj.next_page_number }}</li>#}
-            <li>start_index: {{ page_obj.start_index }}</li>
-            <li>end_index: {{ page_obj.end_index }}</li>
-            <li>has_other_pages: {{ page_obj.has_other_pages }}</li>
-            <li>paginator: {{ page_obj.paginator }}</li>
-            <li>paginator.count: {{ page_obj.paginator.count }}</li>
-            <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>
-            <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>
-            <li>paginator.page_range: {{ page_obj.paginator.page_range }}</li>
-        </ul>
-    </nav>
-
     <div class="">
         {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
     </div>
 
     <nav aria-label="...">
-        <ul class="pagination justify-content-end">
+        <ul class="pagination pagination-sm justify-content-end">
 
             {% if page_obj.has_previous %}
                 <li class="page-item">
@@ -159,6 +142,28 @@
                     </a>
                 </li>
             {% endif %}
+        </ul>
+    </nav>
+
+
+
+
+
+
+    <nav>
+        <ul>
+            <li>{{ page_obj }}</li>
+            <li>number: {{ page_obj.number }}</li>
+            {#            <li>previous_page_number: {{ page_obj.previous_page_number }}</li>#}
+            {#            <li>next_page_number: {{ page_obj.next_page_number }}</li>#}
+            <li>start_index: {{ page_obj.start_index }}</li>
+            <li>end_index: {{ page_obj.end_index }}</li>
+            <li>has_other_pages: {{ page_obj.has_other_pages }}</li>
+            <li>paginator: {{ page_obj.paginator }}</li>
+            <li>paginator.count: {{ page_obj.paginator.count }}</li>
+            <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>
+            <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>
+            <li>paginator.page_range: {{ page_obj.paginator.page_range }}</li>
         </ul>
     </nav>
 
