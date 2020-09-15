@@ -46,6 +46,11 @@
     padding-right: 8px;
 }
 
+.radio-artist-background {
+    background: url("/static/img/illo_default_artistradio_smallcard.png");
+    background-size: 100%;
+}
+
 /*.card-columns {*/
 /*  @include media-breakpoint-only(xs) {*/
 /*    column-count: 1;*/

@@ -68,7 +68,7 @@
             {% for artist in object_list %}
                 <div class="col mb-2 mb-md-4 px-1 px-md-2">
                     <div class="card">
-                        <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                        <div class="embed-responsive embed-responsive-1by1 card-img-top radio-artist-background">
                             <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
                                 {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
                                 {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
