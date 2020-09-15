@@ -43,7 +43,7 @@
                                 <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
                             </small>
                         </td>
-                        <td><small><a href="">详情</a></small></td>
+                        <td><small><a href="{% url 'portal:song-detail' song.id %}">详情</a></small></td>
                     </tr>
                 {% endfor %}
                 </tbody>
