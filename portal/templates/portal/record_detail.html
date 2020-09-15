@@ -21,19 +21,14 @@
             </ol>
         </nav>
 
-        {#                {% if record.recordcover_exists and record.recordcover.image_exists %}#}
-        {#                {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}#}
-        {#                 {% else %}#}
-        {#                {% endif %}#}
-        {#                <img src="{{ record.recordcover.image.url }}" class="w-100" alt="{{ record.title }}">#}
-
         <div class="row no-gutters bg-light position-relative">
             <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
                 <a href="/api/records/{{ record.id }}/cover" target="_blank" class="w-100">
                     <div class="embed-responsive embed-responsive-1by1">
+                        {#                    {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}#}
                         {% if record.recordcover_exists and record.recordcover.image_exists %}
                             <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
-                            {% else %}
+                        {% else %}
                             <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
                         {% endif %}
                     </div>

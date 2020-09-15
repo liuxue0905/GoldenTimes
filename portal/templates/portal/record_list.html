@@ -69,15 +69,13 @@
                     <div class="card">
                         <div class="embed-responsive embed-responsive-1by1 card-img-top">
                             <a href="{% url 'portal:record-detail' record.id %}">
-                                <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt="{{ record.title }}" style="background-color: #868e96;">
+                                {% if record.recordcover and record.recordcover.image_exists %}#}
+                                    <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
+                                {% else %}
+                                    <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
+                                {% endif %}
+                                {#                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
                             </a>
-                            {#                <a href="{% url 'portal:record-detail' record.id %}" class="card-title">#}
-                            {#                        {% if record.recordcover and record.recordcover.image_exists %}#}
-                            {#                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
-                            {#                        {% else %}#}
-                            {#                        {% endif %}#}
-                            {#                    </a>#}
-                            {#                            {{ record.recordcover.image.url }}#}
                         </div>
                         <div class="card-body">
                             <a href="{% url 'portal:record-detail' record.id %}" class="card-title">

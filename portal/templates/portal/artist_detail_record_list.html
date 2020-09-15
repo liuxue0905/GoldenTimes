@@ -15,10 +15,6 @@
     <div class="container">
 
         {% if object_list %}
-            <div class="">
-                {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-            </div>
-
             <nav aria-label="...">
                 <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
                     {% for record in object_list %}
@@ -26,13 +22,12 @@
                             <div class="card">
                                 <div class="embed-responsive embed-responsive-1by1 card-img-top">
                                     <a href="{% url 'portal:record-detail' record.id %}">
-                                        <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item"
-                                             alt="{{ record.title }}">
-                                        {#                            {% if record.recordcover and record.recordcover.image_exists %}#}
-                                        {#                                {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
-                                        {#                            {% else %}#}
-                                        {##}
-                                        {#                            {% endif %}#}
+                                        {% if record.recordcover and record.recordcover.image_exists %}
+                                            <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
+                                        {% else %}
+                                            <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
+                                        {% endif %}
+                                        {#                                    {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
                                     </a>
                                 </div>
                                 <div class="card-body">
@@ -57,6 +52,11 @@
                         </div>
                     {% endfor %}
                 </div>
+
+                <div class="">
+                    {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
+                </div>
+
                 <ul class="pagination pagination-sm justify-content-end">
 
                     {% if page_obj.has_previous %}
