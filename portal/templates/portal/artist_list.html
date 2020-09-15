@@ -78,7 +78,11 @@
                                 {#                        <img src="{{ artist.artistavatar.image.url }}"#}
                                 {#                             class="card-img-top embed-responsive-item"#}
                                 {#                             alt="{{ record.title }}">#}
-                                <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt="{{ artist.title }}">
+                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                    <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt>
+                                {% else %}
+                                    <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="embed-responsive-item" alt>
+                                {% endif %}
                             </a>
                         </div>
 
@@ -102,8 +106,8 @@
         <ul>
             <li>{{ page_obj }}</li>
             <li>number: {{ page_obj.number }}</li>
-{#            <li>previous_page_number: {{ page_obj.previous_page_number }}</li>#}
-{#            <li>next_page_number: {{ page_obj.next_page_number }}</li>#}
+            {#            <li>previous_page_number: {{ page_obj.previous_page_number }}</li>#}
+            {#            <li>next_page_number: {{ page_obj.next_page_number }}</li>#}
             <li>start_index: {{ page_obj.start_index }}</li>
             <li>end_index: {{ page_obj.end_index }}</li>
             <li>has_other_pages: {{ page_obj.has_other_pages }}</li>

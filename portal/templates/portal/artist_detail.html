@@ -27,8 +27,11 @@
                 {#                <img src="{{ artist.artistavatar.image.url }}" class="w-100" alt="{{ artist.name }}">#}
                 <a href="/api/artists/{{ artist.id }}/cover" target="_blank" class="w-100">
                     <div class="embed-responsive embed-responsive-1by1">
-                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item"
-                             alt="{{ artist.name }}" style="background-color: #868e96;">
+                        {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                            <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt>
+                        {% else %}
+                            <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="embed-responsive-item" alt>
+                        {% endif %}
                     </div>
                 </a>
             </div>
