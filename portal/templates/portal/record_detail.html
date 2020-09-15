@@ -31,6 +31,7 @@
                         {% else %}
                             <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
                         {% endif %}
+                        <div id="overlayText" class="style-scope sj-card"><small>{{ record.format_value|default:'-' }}</small></div>
                     </div>
                 </a>
             </div>
@@ -49,8 +50,6 @@
                 </p>
                 <p>
                     <small>
-                        介质&nbsp;{{ record.format_value }}
-                        <br>
                         {% if record.company %}
                             唱片公司&nbsp;{{ record.company.name }}
                         {% endif %}

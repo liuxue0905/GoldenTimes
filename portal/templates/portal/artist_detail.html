@@ -32,6 +32,7 @@
                         {% else %}
                             <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="embed-responsive-item" alt>
                         {% endif %}
+                        <div id="overlayText" class="style-scope sj-card"><small>{{ artist.type_value|default:'-' }}</small></div>
                     </div>
                 </a>
             </div>
@@ -39,8 +40,6 @@
                 <h5 class="mt-0">{{ artist.name }}</h5>
                 <p>
                     <small>
-                        <span>{{ artist.type_value|default_if_none:'' }}</span>
-                        <br>
                         <br>
                         <span>专辑: {{ artist.record_set.count }}</span>
                         <br>

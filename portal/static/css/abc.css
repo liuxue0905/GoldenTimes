@@ -23,6 +23,29 @@
     }
 }
 
+#overlayText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+    background-color: #212121;
+    overflow: hidden;
+
+    width: auto;
+    min-width: 32px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 /*.card-columns {*/
 /*  @include media-breakpoint-only(xs) {*/
 /*    column-count: 1;*/

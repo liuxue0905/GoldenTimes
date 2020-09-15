@@ -75,6 +75,8 @@
                                     <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
                                 {% endif %}
                                 {#                            {% generateimage 'myapp:thumbnail' source=record.recordcover.image -- alt=record.title id=record.id %}#}
+
+                                <div id="overlayText" class="style-scope sj-card"><small>{{ record.format_value|default:'-' }}</small></div>
                             </a>
                         </div>
                         <div class="card-body">
@@ -89,7 +91,7 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <small>{{ record.year|default:'-' }} - {{ record.format_value|default:'-' }}</small>
+                            <small>{{ record.year|default:'-' }}</small>
                             </p>
                         </div>
                     </div>
