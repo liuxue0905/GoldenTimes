@@ -1,4 +1,3 @@
-
 @media (min-width: 576px) {
     .card-columns {
         column-count: 2;
@@ -49,6 +48,27 @@
 .radio-artist-background {
     background: url("/static/img/illo_default_artistradio_smallcard.png");
     background-size: 100%;
+}
+
+.image-inner-wrapper {
+    position: absolute;
+    top: 0;
+}
+
+.image-inner-wrapper {
+    border-radius: 2px 2px 0 0;
+    width: 100%;
+    height: 100%;
+}
+
+.image-inner-wrapper .image {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 80%;
+    height: 80%;
+    margin-top: 10%;
+    margin-left: 10%;
+    display: inline-block;
 }
 
 /*.card-columns {*/

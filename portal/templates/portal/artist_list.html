@@ -63,6 +63,14 @@
         </form>
     </div>
 
+    {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
+    {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
+    {#                        {% else %}#}
+    {#                        {% endif %}#}
+    {#                        <img src="{{ artist.artistavatar.image.url }}"#}
+    {#                             class="card-img-top embed-responsive-item"#}
+    {#                             alt="{{ record.title }}">#}
+
     <div class="container">
         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5">
             {% for artist in object_list %}
@@ -70,22 +78,16 @@
                     <div class="card">
                         <div class="embed-responsive embed-responsive-1by1 card-img-top radio-artist-background">
                             <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                {#                        {% if artist.artistavatar and artist.artistavatar.image_exists %}#}
-                                {#                            {% generateimage 'myapp:thumbnail' source=artist.artistavatar.image -- alt=artist.name id=artist.id class="card-img-top embed-responsive-item" %}#}
-                                {#                        {% else %}#}
-                                {#                        {% endif %}#}
-                                {#                        <img src="{{ artist.artistavatar.image.url }}"#}
-                                {#                             class="card-img-top embed-responsive-item"#}
-                                {#                             alt="{{ record.title }}">#}
-                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                    <img src="/api/artists/{{ artist.id }}/cover?size=200" class="embed-responsive-item" alt>
-                                {% else %}
-                                    <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="embed-responsive-item" alt>
-                                {% endif %}
+                                <div class="embed-responsive-item image-inner-wrapper">
+                                    {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="image" alt>
+                                    {% else %}
+                                        <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="image" alt>
+                                    {% endif %}
+                                </div>
                                 <div id="overlayText" class="style-scope sj-card"><small>{{ artist.type_value|default:'-' }}</small></div>
                             </a>
                         </div>
-
                         <div class="card-body">
                             <div class="card-title">
                                 <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
