@@ -2,27 +2,13 @@
 GoldenTimes Python Django
 
 
-## manage
-
+## 依赖
 ```shell script
-$ pip install Pillow
-
-$ python manage.py makemigrations
-$ python manage.py migrate
-$ python manage.py createsuperuser
+$ sudo apt-get install libjpeg-dev libxml2-dev
 ```
-
-```shell script
-$ python manage.py runserver 0:8000
-```
-
-```shell script
-$ gunicorn -b 0:8000 GoldenTimes.wsgi
-```
-
-
 ```shell script
 $ pip install pipreqs
+$ pip install Pillow
 ```
 
 ```shell script
@@ -37,6 +23,30 @@ $ pip install --no-cache-dir -r requirements.txt
 $ pip install --upgrade django -i https://pypi.douban.com/simple
 ```
 
+## manage
+
 ```shell script
-$ sudo apt-get install libjpeg-dev libxml2-dev
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py createsuperuser
 ```
+
+```shell script
+$ python manage.py runserver 0:8000
+```
+
+```shell script
+$ gunicorn -b 0:8000 GoldenTimes.wsgi
+```
+
+## 部署清单
+```shell script
+$ python manage.py check --deploy
+```
+
+## 部署
+运行 collectstatic 管理命令:
+```shell script
+$ python manage.py collectstatic
+```
+这将会把静态目录下的所有文件拷贝至 STATIC_ROOT 目录。

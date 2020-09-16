@@ -22,7 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'r-x*n)2kq^%x9jdt$@mxkciiwla^0#7uo331snzg1c=z=ire*+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -185,3 +186,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_REGEX_WHITELIST = [
 #     # r"^https://\w+\.example\.com$",
 # ]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+SECURE_REFERRER_POLICY = "same-origin"
+
+# SECURE_HSTS_SECONDS
+# SECURE_SSL_REDIRECT
