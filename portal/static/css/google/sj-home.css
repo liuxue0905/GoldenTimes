@@ -1,0 +1,130 @@
+/*<style scope="sj-home">*/
+sj-home {
+    display: block;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+sj-home.refresh-pending {
+    transition: opacity 0.5s ease;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+sj-home > [slot="loading-indicator"] {
+    position: fixed;
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+sj-home #moduleContainer.sj-home > sj-scrolling-module {
+    will-change: transform;
+}
+
+sj-home #moduleContainer.sj-home > sj-scrolling-module:last-of-type {
+    min-height: calc(100vh - 90px - 64px);
+}
+
+sj-home #pageIndicatorContainer.sj-home {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    position: fixed;
+    top: 64px;
+    bottom: 90px;
+    right: 24px;
+
+    z-index: 1;
+    pointer-events: none;
+    will-change: transform;
+}
+
+sj-home #pageIndicatorContainer.sj-home > [slot="ifl-fab"] {
+    margin-bottom: 12px;
+}
+
+sj-home #pageIndicator.sj-home {
+    pointer-events: auto;
+    margin: 0 12px 0 0;
+}
+
+sj-home #quickNavContainer.sj-home {
+    position: fixed;
+    top: 64px;
+    bottom: 90px;
+    left: 0;
+    z-index: 1;
+    will-change: transform;
+}
+
+sj-home #quickNavContainer.sj-home > [slot="quick-nav"] {
+    height: calc(100% - 16px);
+    margin-top: 16px;
+}
+
+sj-home:not([mini-page-indicator]) #quickNavContainer.sj-home {
+    display: none;
+}
+
+sj-home[mini-page-indicator] #pageIndicatorContainer.sj-home {
+    justify-content: flex-start;
+    right: 36px;
+}
+
+sj-home[mini-page-indicator] #pageIndicatorContainer.sj-home > [slot="ifl-fab"] {
+    margin: 36px 0 16px 0;
+}
+
+sj-home[mini-page-indicator] #pageIndicator.sj-home {
+    margin: 0 22px 0 0;
+}
+
+sj-home #backgroundContainer.sj-home {
+    position: fixed;
+    top: 64px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    will-change: transform;
+}
+
+sj-home #backgroundColor.sj-home {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+sj-home #backgroundImageContainer.sj-home {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 30vw;
+    width: 60vw;
+    pointer-events: none;
+}
+
+sj-home #backgroundImages.sj-home, sj-home #gradient.sj-home, sj-home #backgroundImageContainer.sj-home .background-image.sj-home {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+sj-home #backgroundImageContainer.sj-home .background-image.sj-home {
+    background-size: cover;
+    opacity: 0;
+
+    transition: opacity 0.5s ease;
+}
+
+sj-home #backgroundImageContainer.sj-home .background-image.selected.sj-home {
+    opacity: 1;
+}
+
+/*</style>*/
