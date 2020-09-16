@@ -38,11 +38,15 @@
                                         </a>
                                     </div>
                                     <p class="card-text">
-                                        {% for artist in record.artists.all %}
-                                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                        {% endfor %}
-                                    </p>
-                                    <p class="card-text">
+                                        <small>
+                                            <ul class="list-inline my-0 small">
+                                                {% for artist in record.artists.all %}
+                                                    <li class="list-inline-item">
+                                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </small>
                                         <small>{{ record.year|default:'-' }}</small>
                                     </p>
                                 </div>

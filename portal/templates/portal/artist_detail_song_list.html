@@ -19,7 +19,7 @@
                     <th scope="col"><small>标题</small></th>
                     <th scope="col"><small>歌手</small></th>
                     <th scope="col"><small>唱片</small></th>
-                    <th scope="col"></th>
+                    <th scope="col"><img src="{% static '/img/svg/more_horiz-24px.svg' %}" alt="" width="18" height="18" title="{{ song.title }}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,7 +43,11 @@
                                 <a href="{% url 'portal:record-detail' song.record.id %}">{{ song.record.title }}</a>
                             </small>
                         </td>
-                        <td><small><a href="{% url 'portal:song-detail' song.id %}">详情</a></small></td>
+                        <td>
+                            <a href="{% url 'portal:song-detail' song.id %}">
+                                <img src="{% static '/img/svg/info-24px-outlined.svg' %}" alt="" width="18" height="18" title="{{ song.title }}">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
