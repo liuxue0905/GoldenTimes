@@ -5,6 +5,7 @@ GoldenTimes Python Django
 ## 依赖
 ```shell script
 $ sudo apt-get install libjpeg-dev libxml2-dev
+python -m pip install gunicorn
 ```
 ```shell script
 $ pip install pipreqs
