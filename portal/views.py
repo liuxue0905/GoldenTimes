@@ -152,7 +152,8 @@ class ArtistListView(ListView):
             try:
                 return int(q)
             except Exception as e:
-                print(e)
+                pass
+                # print(e)
             return None
 
         def querystring_bool(q):
@@ -166,7 +167,7 @@ class ArtistListView(ListView):
         form_type = querystring_int(self.request.GET.get('type'))
         form_record__isnull = querystring_bool(self.request.GET.get('record__isnull'))
 
-        print('form_record__isnull', form_record__isnull)
+        # print('form_record__isnull', form_record__isnull)
 
         if form_name is not None:
             queryset = queryset.filter(name__contains=form_name)
