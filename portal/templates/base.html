@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap-4.5.2-dist/css/bootstrap.min.css' %}">
 
-    <title>流金岁月</title>
+    <title>{% block title %}流金岁月{% endblock %}</title>
 
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
@@ -34,9 +34,6 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="{% static 'css/navbar-top-fixed.css' %}" rel="stylesheet">
-
-    {% block title %}
-    {% endblock %}
 
     {% block style %}
     {% endblock %}
