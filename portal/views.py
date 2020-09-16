@@ -334,7 +334,7 @@ class ArtistSongList(ListView):
     model = Song
     template_name = 'portal/artist_detail_song_list.html'
     # context_object_name = ''
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super(ArtistSongList, self).get_queryset()
@@ -403,7 +403,7 @@ class CompanyRecordListView(ListView):
     model = Record
     template_name = 'portal/company_record_list.html'
     # context_object_name = 'my_favorite_publishers'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super(CompanyRecordListView, self).get_queryset()
