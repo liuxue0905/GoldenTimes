@@ -35,13 +35,13 @@
             {#            {% csrf_token %}#}
 
             <div class="form-group">
-                <label for="title">标题</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ request.GET.title }}">
+                <label for="title"><small>标题</small></label>
+                <input type="text" class="form-control form-control-sm" id="title" name="title" value="{{ request.GET.title }}">
             </div>
 
             <div class="form-group">
-                <label for="format">介质</label>
-                <select class="form-control" id="format" name="format">
+                <label for="format"><small>介质</small></label>
+                <select class="form-control form-control-sm" id="format" name="format">
                     <option value="" selected>全部</option>
                     <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>
                         CD
@@ -58,7 +58,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">搜索</button>
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </div>
 

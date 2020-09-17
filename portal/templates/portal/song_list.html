@@ -37,11 +37,11 @@
         <form method="get" action="#">
 
             <div class="form-group">
-                <label for="title">歌曲标题</label><br>
-                <input type="text" class="form-control" id="title" name="title" value="{{ request.GET.title }}"><br>
+                <label for="title"><small>歌曲标题</small></label>
+                <input type="text" class="form-control form-control-sm" id="title" name="title" value="{{ request.GET.title }}">
             </div>
 
-            <button type="submit" class="btn btn-primary">搜索</button>
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </div>
 
