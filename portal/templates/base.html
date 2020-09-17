@@ -45,7 +45,7 @@
 
 <body data-admin-utc-offset="{% now "Z" %}">
 
-{% block android_header %}
+{% block navbar %}
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark    fixed-top">
         <a class="navbar-brand" href="#">流金岁月唱片库</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,21 +54,21 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item{% ifequal mdl_navigation__link__current 'dashboard' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:dashboard' %}">首页{% ifequal mdl_navigation__link__current 'dashboard' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% ifequal nav_item_active 'dashboard' %} active{% endifequal %}">
+                    <a class="nav-link" href="{% url 'portal:dashboard' %}">首页{% ifequal nav_item_active 'dashboard' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
                 </li>
-                <li class="nav-item{% ifequal mdl_navigation__link__current 'record-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:record-list' %}">唱片{% ifequal mdl_navigation__link__current 'record-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% ifequal nav_item_active 'record-list' %} active{% endifequal %}">
+                    <a class="nav-link" href="{% url 'portal:record-list' %}">唱片{% ifequal nav_item_active 'record-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
                 </li>
-                <li class="nav-item{% ifequal mdl_navigation__link__current 'artist-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:artist-list' %}?record__isnull=false">歌手{% ifequal mdl_navigation__link__current 'artist-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% ifequal nav_item_active 'artist-list' %} active{% endifequal %}">
+                    <a class="nav-link" href="{% url 'portal:artist-list' %}?record__isnull=false">歌手{% ifequal nav_item_active 'artist-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
                 </li>
-                <li class="nav-item{% ifequal mdl_navigation__link__current 'song-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:song-list' %}">歌曲{% ifequal mdl_navigation__link__current 'song-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% ifequal nav_item_active 'song-list' %} active{% endifequal %}">
+                    <a class="nav-link" href="{% url 'portal:song-list' %}">歌曲{% ifequal nav_item_active 'song-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'portal:about' %}" target="_blank">关于</a>
+                <li class="nav-item{% ifequal nav_item_active 'about' %} active{% endifequal %}">
+                    <a class="nav-link" href="{% url 'portal:about' %}" target="_blank">关于{% ifequal nav_item_active 'about' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
                 </li>
 
                 {#                <li class="nav-item">#}

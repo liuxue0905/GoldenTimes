@@ -4,8 +4,8 @@
 {% load imagekit %}
 {#{% load material_form %}#}
 
-{% block android_header %}
-    {% with mdl_navigation__link__current='record-list' %}
+{% block navbar %}
+    {% with nav_item_active='record-list' %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}

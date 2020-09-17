@@ -3,8 +3,8 @@
 {% load static %}
 {% load imagekit %}
 
-{% block android_header %}
-    {% with mdl_navigation__link__current='artist-list' %}
+{% block navbar %}
+    {% with nav_item_active='artist-list' %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}
