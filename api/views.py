@@ -301,12 +301,13 @@ def image_generate(request, image: ImageFieldFile):
         height = request.query_params.get('height', size)
         resize = request.query_params.get('resize', None)
 
-        if size:
-            size = int(size)
         if width:
             width = int(width)
         if height:
             height = int(height)
+
+        width = min(width, 400)
+        height = min(height, 400)
 
         # print('cover', type(size), size)
         # print('width', type(width), width)
