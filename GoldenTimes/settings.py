@@ -187,8 +187,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     # r"^https://\w+\.example\.com$",
 # ]
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 SECURE_REFERRER_POLICY = "same-origin"
 

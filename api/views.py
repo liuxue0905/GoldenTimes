@@ -224,7 +224,7 @@ class ArtistCompsViewSet(viewsets.ReadOnlyModelViewSet):
 from rest_framework.decorators import api_view
 from django.http import HttpResponseNotFound, FileResponse
 from imagekit import ImageSpec
-from imagekit.processors import ResizeToCover, ResizeToFit, ResizeToFill, ResizeCanvas, Resize
+from imagekit.processors import ResizeToCover, ResizeToFit, ResizeToFill, ResizeCanvas, Resize, SmartResize
 from portal.imagekit.watermark import ImageWatermark
 
 from django.conf import settings
@@ -271,13 +271,17 @@ class GTImageSpec(ImageSpec):
         if (width is not None) and (height is not None):
             if resize is None:
                 self.processors.append(Resize(width, height))
-            elif resize == 'cover':
+            elif resize == 'cover' or resize == 'centerCrop':
                 self.processors.append(ResizeToCover(width, height))
             elif resize == 'fill':
                 self.processors.append(ResizeToFill(width, height))
             elif resize == 'fit':
                 self.processors.append(ResizeToFit(width, height))
+            elif resize == 'centerInside':
+                self.processors.append(ResizeToFit(width, height))
                 self.processors.append(ResizeCanvas(width, height, color='#000000', anchor=Anchor.CENTER))
+            elif resize == 'smart':
+                self.processors.append(SmartResize(width, height))
 
         self.processors.append(ImageWatermark(os.path.join(settings.MEDIA_ROOT, 'watermarks/watermark.png'),
                                               position=('bottom', 'right'),
@@ -301,18 +305,24 @@ def image_generate(request, image: ImageFieldFile):
         height = request.query_params.get('height', size)
         resize = request.query_params.get('resize', None)
 
-        if width:
+        if width and height:
             width = int(width)
-        if height:
             height = int(height)
 
-        width = min(width, 400)
-        height = min(height, 400)
+            width = min(width, 400)
+            height = min(height, 400)
+        else:
+            width = 400
+            height = 400
+
+        if resize is None:
+            resize = 'smart'
+
 
         # print('cover', type(size), size)
         # print('width', type(width), width)
         # print('height', type(height), height)
-        # print('resize', resize)
+        print('resize', resize)
 
         image_spec = GTImageSpec(source=image)
         image_spec.config(resize, width, height)

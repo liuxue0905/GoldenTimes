@@ -17,6 +17,13 @@ from django.core.files.storage import FileSystemStorage
 # FileStorage get_available_name record/[ECHO][PA-FPD 001]/ECHOPA-FPD_001.jpg 100
 # FileStorage get_available_name ret record/[ECHO][PA-FPD 001]/ECHOPA-FPD_001.jpg
 
+class TryExceptImageField(models.ImageField):
+    def update_dimension_fields(self, instance, force=False, *args, **kwargs):
+        try:
+            super().update_dimension_fields(instance, force, *args, **kwargs)
+        except:
+            pass
+
 
 class FileStorage(FileSystemStorage):
     def generate_filename(self, filename):
@@ -297,7 +304,7 @@ def record_cover_upload_to(instance, filename):
 class RecordCover(models.Model):
     record = models.OneToOneField('Record', on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to=record_cover_upload_to, height_field='height', width_field='width',
+    image = TryExceptImageField(upload_to=record_cover_upload_to, height_field='height', width_field='width',
                               null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
@@ -354,7 +361,7 @@ def record_images_upload_to(instance, filename):
 class RecordImages(models.Model):
     record = models.ForeignKey('Record', on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to=record_images_upload_to, height_field='height', width_field='width',
+    image = TryExceptImageField(upload_to=record_images_upload_to, height_field='height', width_field='width',
                               null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
@@ -415,7 +422,7 @@ def artist_avatar_upload_to(instance, filename):
 class ArtistAvatar(models.Model):
     artist = models.OneToOneField('Artist', on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to=artist_avatar_upload_to, height_field='height', width_field='width',
+    image = TryExceptImageField(upload_to=artist_avatar_upload_to, height_field='height', width_field='width',
                               null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
@@ -470,7 +477,7 @@ def artist_images_upload_to(instance, filename):
 class ArtistImages(models.Model):
     artist = models.ForeignKey('Artist', on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to=artist_images_upload_to, height_field='height', width_field='width',
+    image = TryExceptImageField(upload_to=artist_images_upload_to, height_field='height', width_field='width',
                               null=True, verbose_name='图片', storage=fs)
 
     width = models.PositiveIntegerField(blank=True, null=True)
