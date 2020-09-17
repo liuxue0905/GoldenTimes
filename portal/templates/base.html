@@ -87,10 +87,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">管理员</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown03">
-                        <a class="dropdown-item" href="{% url 'admin:login' %}?next=/portal/dashboard/">登录</a>
-                        <a class="dropdown-item" href="{% url 'admin:logout' %}?next=/portal/dashboard/">退出</a>
-                        <a class="dropdown-item" href="{% url 'portal:import-records' %}">导入唱片</a>
-                        <a class="dropdown-item" href="{% url 'portal:import-artists' %}">导入歌手</a>
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">后台</a>
+                            <a class="dropdown-item" href="{% url 'admin:logout' %}?next=/portal/dashboard/">退出</a>
+                            <a class="dropdown-item" href="{% url 'portal:import-records' %}">导入唱片</a>
+                            <a class="dropdown-item" href="{% url 'portal:import-artists' %}">导入歌手</a>
+                        {% else %}
+                            <a class="dropdown-item" href="{% url 'admin:login' %}?next=/portal/dashboard/">登录</a>
+                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -112,17 +116,19 @@
 <sj-home mini-page-indicator selected="2">
     {#    gpm-loading-indicator#}
     <div id="backgroundContainer" class="style-scope sj-home">
-{#        <div id="backgroundColor" class="style-scope sj-home" style="background-color: rgb(33, 33, 33);"></div>#}
+        {#        <div id="backgroundColor" class="style-scope sj-home" style="background-color: rgb(33, 33, 33);"></div>#}
         <div id="backgroundColor" class="style-scope sj-home" style="background-color: rgb(250, 250, 250);"></div>
         <div id="backgroundImageContainer" class="style-scope sj-home" style="width: 100vw; height: 50vw; margin-top: -24px">
             <div id="backgroundImages" class="style-scope sj-home">
-                <div class="background-image style-scope sj-home" style="background-image: url("");"></div>
-                <div class="background-image style-scope sj-home" style="background-image: url("");"></div>
-                <div class="background-image style-scope sj-home selected" style="background-image: url(/static/img/home.jpg);"></div>
+                <div class="background-image style-scope sj-home" style="background-image: url("");">
             </div>
-            <div id="gradient" class="style-scope sj-home" style="background: linear-gradient(to top, rgb(250, 250, 250), rgba(250, 250, 250, 0)), linear-gradient(to right, rgb(250, 250, 250), rgba(250, 250, 250, 0));"></div>
-            {#            <div id="gradient" class="style-scope sj-home" style="background: linear-gradient(to top, rgb(33, 33, 33), rgba(33, 33, 33, 0)), linear-gradient(to right, rgb(33, 33, 33), rgba(33, 33, 33, 0));"></div>#}
+            <div class="background-image style-scope sj-home" style="background-image: url("");">
         </div>
+        <div class="background-image style-scope sj-home selected" style="background-image: url(/static/img/home.jpg);"></div>
+    </div>
+    <div id="gradient" class="style-scope sj-home" style="background: linear-gradient(to top, rgb(250, 250, 250), rgba(250, 250, 250, 0)), linear-gradient(to right, rgb(250, 250, 250), rgba(250, 250, 250, 0));"></div>
+    {#            <div id="gradient" class="style-scope sj-home" style="background: linear-gradient(to top, rgb(33, 33, 33), rgba(33, 33, 33, 0)), linear-gradient(to right, rgb(33, 33, 33), rgba(33, 33, 33, 0));"></div>#}
+    </div>
     </div>
 </sj-home>
 
