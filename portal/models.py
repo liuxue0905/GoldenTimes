@@ -169,9 +169,9 @@ class Record(models.Model):
     def __str__(self):
         return 'Record({}, {})'.format(self.title, self.number)
 
-    def delete(self, using=None, keep_parents=False):
-        print('Record', 'delete')
-        super(Record, self).delete(using, keep_parents)
+    # def delete(self, using=None, keep_parents=False):
+    #     print('Record', 'delete')
+    #     super(Record, self).delete(using, keep_parents)
 
     class Meta:
         # ordering = ['release', 'release_order', 'title']
@@ -260,9 +260,9 @@ class Artist(models.Model):
     def __str__(self):
         return '{name}'.format(name=self.name)
 
-    def delete(self, using=None, keep_parents=False):
-        print('Artist', 'delete')
-        super(Artist, self).delete(using, keep_parents)
+    # def delete(self, using=None, keep_parents=False):
+    #     print('Artist', 'delete')
+    #     super(Artist, self).delete(using, keep_parents)
 
     class Meta:
         ordering = ['name']
@@ -291,9 +291,8 @@ def record_cover_upload_to(instance, filename):
     import portal.util as util
     extension = util.get_extension(filename)
 
-    format = 'record/{record_dirname}/{record_dirname}{extension}'
-
-    upload_to = format.format(record_dirname=record_dirname,
+    pattern = 'record/{record_dirname}/{record_dirname}{extension}'
+    upload_to = pattern.format(record_dirname=record_dirname,
                               extension=extension)
 
     print('record_cover_upload_to', 'upload_to', upload_to)
@@ -323,25 +322,24 @@ class RecordCover(models.Model):
             print(e)
         return False
 
-    def delete(self, using=None, keep_parents=False):
-        print('RecordCover', 'delete')
-        print('RecordCover', 'self.image', self.image)
-        try:
-            self.image.delete()
-        except:
-            pass
-        super().delete(using, keep_parents)
+    # def delete(self, using=None, keep_parents=False):
+    #     try:
+    #         print('RecordCover', 'delete')
+    #         print('RecordCover', 'self.image', self.image)
+    #         self.image.delete()
+    #     except:
+    #         pass
+    #     super().delete(using, keep_parents)
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        print('RecordCover', 'save')
-        try:
-            this = RecordCover.objects.get(pk=self.id)
-            this.image.delete()
-        except:
-            pass
-        super().save(force_insert, force_update, using,
-                     update_fields)
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     try:
+    #         this = RecordCover.objects.get(pk=self.id)
+    #         this.image.delete()
+    #     except:
+    #         pass
+    #     # super().save(force_insert, force_update, using,
+    #     #              update_fields)
 
 
 def record_images_upload_to(instance, filename):
@@ -351,8 +349,8 @@ def record_images_upload_to(instance, filename):
     import portal.util as util
     extension = util.get_extension(filename)
 
-    format = 'record/{record_dirname}/{record_dirname}{extension}'
-    upload_to = format.format(record_dirname=record_dirname,
+    pattern = 'record/{record_dirname}/{record_dirname}{extension}'
+    upload_to = pattern.format(record_dirname=record_dirname,
                               extension=extension)
 
     return upload_to
@@ -411,9 +409,8 @@ def artist_avatar_upload_to(instance, filename):
     import portal.util as util
     extension = util.get_extension(filename)
 
-    format = 'artist/{artist_dirname}/{artist_dirname}(0){extension}'
-
-    upload_to = format.format(artist_dirname=artist_dirname,
+    pattern = 'artist/{artist_dirname}/{artist_dirname}(0){extension}'
+    upload_to = pattern.format(artist_dirname=artist_dirname,
                               extension=extension)
 
     return upload_to
@@ -437,25 +434,24 @@ class ArtistAvatar(models.Model):
             print(e)
         return False
 
-    def delete(self, using=None, keep_parents=False):
-        print('ArtistAvatar', 'delete')
-        print('ArtistAvatar', 'self.image', self.image)
-        try:
-            self.image.delete()
-        except:
-            pass
-        super().delete(using, keep_parents)
+    # def delete(self, using=None, keep_parents=False):
+    #     print('ArtistAvatar', 'delete')
+    #     print('ArtistAvatar', 'self.image', self.image)
+    #     try:
+    #         self.image.delete()
+    #     except:
+    #         pass
+    #     super().delete(using, keep_parents)
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        print('ArtistAvatar', 'save')
-        try:
-            this = ArtistAvatar.objects.get(pk=self.id)
-            this.image.delete()
-        except:
-            pass
-        super().save(force_insert, force_update, using,
-                     update_fields)
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     try:
+    #         this = ArtistAvatar.objects.get(pk=self.id)
+    #         this.image.delete()
+    #     except:
+    #         pass
+    #     super().save(force_insert, force_update, using,
+    #                  update_fields)
 
 
 def artist_images_upload_to(instance, filename):
@@ -467,8 +463,8 @@ def artist_images_upload_to(instance, filename):
     import portal.util as util
     extension = util.get_extension(filename)
 
-    format = 'artist/{artist_dirname}/{artist_dirname}{extension}'
-    upload_to = format.format(artist_dirname=artist_dirname,
+    pattern = 'artist/{artist_dirname}/{artist_dirname}{extension}'
+    upload_to = pattern.format(artist_dirname=artist_dirname,
                               extension=extension)
 
     return upload_to
