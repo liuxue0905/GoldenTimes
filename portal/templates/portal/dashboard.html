@@ -13,7 +13,7 @@
 {% block body %}
 
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb small">
             <li class="breadcrumb-item active" aria-current="page">首页</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
         {% for object in object_list %}
             <ul class="nav nav-tabs bg-light">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">{{ object.type }} ({{ object.artists.count }})</a>
+                    <a class="nav-link active" href="#"><small>{{ object.type }} ({{ object.artists.count }})</small></a>
                 </li>
             </ul>
             <div class="container bg-light px-4 mb-4">

@@ -11,7 +11,7 @@
 {% block body %}
 
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb small">
             <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
             <li class="breadcrumb-item"><a href="{% url 'portal:song-list' %}">歌曲</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ object.title }}</li>
@@ -24,9 +24,9 @@
             {#            <img src="..." class="mr-3" alt="...">#}
             <div class="mr-3">
                 {% if record.recordcover_exists and record.recordcover.image_exists %}
-                    <img src="/api/records/{{ record.id }}/cover?size=64" width="64" height="64" class="embed-responsive-item" alt>
+                    <img src="/api/records/{{ record.id }}/cover?size=128" width="128" height="128" class="embed-responsive-item" alt>
                 {% else %}
-                    <img src="{% static 'img/svg/default_album.svg' %}" width="64" height="64" class="embed-responsive-item" alt>
+                    <img src="{% static 'img/svg/default_album.svg' %}" width="128" height="128" class="embed-responsive-item" alt>
                 {% endif %}
             </div>
             <div class="media-body">
@@ -42,36 +42,36 @@
 
     {% endwith %}
 
-    <div class="table-responsive bg-light">
+    <div class="table-responsive bg-light px-2">
         <table class="table table-sm">
             <tbody>
             <tr>
-                <th scope="row">作词</th>
-                <td>{{ object.lyricist|default:"" }}</td>
+                <th scope="row"><small>作词</small></th>
+                <td><small>{{ object.lyricist|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">作曲</th>
-                <td>{{ object.composer|default:"" }}</td>
+                <th scope="row"><small>作曲</small></th>
+                <td><small>{{ object.composer|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">编曲</th>
-                <td>{{ object.arranger|default:"" }}</td>
+                <th scope="row"><small>编曲</small></th>
+                <td><small>{{ object.arranger|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">和音</th>
-                <td>{{ object.vocalist|default:"" }}</td>
+                <th scope="row"><small>和音</small></th>
+                <td><small>{{ object.vocalist|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">监制</th>
-                <td>{{ object.producer|default:"" }}</td>
+                <th scope="row"><small>监制</small></th>
+                <td><small>{{ object.producer|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">乐手</th>
-                <td>{{ object.bandsman|default:"" }}</td>
+                <th scope="row"><small>乐手</small></th>
+                <td><small>{{ object.bandsman|default:"" }}</small></td>
             </tr>
             <tr>
-                <th scope="row">说明</th>
-                <td>{{ object.description|default:"" }}</td>
+                <th scope="row"><small>说明</small></th>
+                <td><small>{{ object.description|default:"" }}</small></td>
             </tr>
             </tbody>
         </table>
