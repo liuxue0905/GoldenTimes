@@ -7,9 +7,11 @@ GoldenTimes Python Django
 $ sudo apt-get install libjpeg-dev libxml2-dev
 python -m pip install gunicorn
 ```
+
+pip install --upgrade pip
+
 ```shell script
 $ pip install pipreqs
-$ pip install Pillow
 ```
 
 ```shell script
@@ -18,10 +20,8 @@ $ pipreqs --force ./
 
 ```shell script
 $ pip install --no-cache-dir -r requirements.txt
-```
-
-```shell script
 $ pip install --upgrade django -i https://pypi.douban.com/simple
+$ pip install --upgrade --force-reinstall -r requirements.txt
 ```
 
 ## manage
