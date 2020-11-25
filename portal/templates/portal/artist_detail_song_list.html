@@ -15,7 +15,7 @@
             <table class="table table-sm table-light">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col"><small>#</small></th>
+                    <th scope="col" class="px-2"><small>#</small></th>
                     <th scope="col"><small>标题</small></th>
                     <th scope="col"><small>歌手</small></th>
                     <th scope="col"><small>唱片</small></th>
@@ -25,7 +25,7 @@
                 <tbody>
                 {% for song in object_list %}
                     <tr>
-                        <th scope="row"><small>{{ forloop.counter }}</small></th>
+                        <th scope="row" class="px-2"><small>{{ forloop.counter }}</small></th>
                         <td><small><a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a></small></td>
                         <td>
                             <small>

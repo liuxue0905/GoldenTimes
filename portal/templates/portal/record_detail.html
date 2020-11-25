@@ -14,7 +14,7 @@
     {% with record=object %}
 
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb small">
                 <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
                 <li class="breadcrumb-item"><a href="{% url 'portal:record-list' %}">唱片</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ record.title }}</li>
@@ -25,7 +25,6 @@
             <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
                 <a href="/api/records/{{ record.id }}/cover" target="_blank" class="w-100">
                     <div class="embed-responsive embed-responsive-1by1">
-                        {#                    {% generateimage 'myapp:thumbnail' source=source_file -- alt=record.title id=record.id %}#}
                         {% if record.recordcover_exists and record.recordcover.image_exists %}
                             <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
                         {% else %}
@@ -58,7 +57,7 @@
             </div>
         </div>
 
-        <div class="table-responsive bg-light my-3">
+        <div class="table-responsive bg-light my-3 px-2">
             <table class="table table-sm">
                 {#                <thead class="thead-light">#}
                 {#                <tr>#}
@@ -68,28 +67,28 @@
                 {#                </thead>#}
                 <tbody>
                 <tr>
-                    <th scope="row" class="w-25">发行时间</th>
-                    <td>{{ record.release_detail|default_if_none:'-' }}</td>
+                    <th scope="row" class="w-25"><small>发行时间</small></th>
+                    <td><small>{{ record.release_detail|default_if_none:'-' }}</small></td>
                 </tr>
                 <tr>
-                    <th scope="row" class="w-25">监制</th>
-                    <td>{{ record.producer|default_if_none:'-' }}</td>
+                    <th scope="row" class="w-25"><small>监制</small></th>
+                    <td><small>{{ record.producer|default_if_none:'-' }}</small></td>
                 </tr>
                 <tr>
-                    <th scope="row">录音</th>
-                    <td>{{ record.recorder|default_if_none:'-' }}</td>
+                    <th scope="row"><small>录音</small></th>
+                    <td><small>{{ record.recorder|default_if_none:'-' }}</small></td>
                 </tr>
                 <tr>
-                    <th scope="row">混音</th>
-                    <td>{{ record.mixer|default_if_none:'-' }}</td>
+                    <th scope="row"><small>混音</small></th>
+                    <td><small>{{ record.mixer|default_if_none:'-' }}</small></td>
                 </tr>
                 <tr>
-                    <th scope="row">乐手</th>
-                    <td>{{ record.bandsman|default_if_none:'-' }}</td>
+                    <th scope="row"><small>乐手</small></th>
+                    <td><small>{{ record.bandsman|default_if_none:'-' }}</small></td>
                 </tr>
                 <tr>
-                    <th scope="row">说明</th>
-                    <td>{{ record.description|default_if_none:'-' }}</td>
+                    <th scope="row"><small>说明</small></th>
+                    <td><small>{{ record.description|default_if_none:'-' }}</small></td>
                 </tr>
                 </tbody>
             </table>
@@ -100,7 +99,7 @@
             <table class="table table-sm table-light">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col"><small>#</small></th>
+                    <th scope="col" class="px-2"><small>#</small></th>
                     <th scope="col"><small>标题</small></th>
                     <th scope="col"><small>歌手</small></th>
                     <th scope="col"><img src="{% static '/img/svg/more_horiz-24px.svg' %}" alt="" width="18" height="18" title="{{ song.title }}"></th>
@@ -109,7 +108,7 @@
                 <tbody>
                 {% for song in record.song_set.all %}
                     <tr>
-                        <th scope="row"><small>{{ song.track }}</small></th>
+                        <th scope="row" class="px-2"><small>{{ song.track }}</small></th>
                         <td>
                             <small>
                                 <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
@@ -153,37 +152,21 @@
                         {% for recordimage in record.recordimages_set.all %}
                             <div class="col mb-4">
                                 <div class="card">
-                                    <a href="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" target="_blank">
+                                    {% if recordimage.image_exists %}
+                                        <a href="/api/records/{{ record.id }}/images/{{ recordimage.id }}" target="_blank">
+                                            <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                                <img src="/api/records/{{ record.id }}/images/{{ recordimage.id }}"
+                                                     class="embed-responsive-item img-thumbnail "
+                                                     alt="{{ record.title }}">
+                                            </div>
+                                        </a>
+                                    {% else %}
                                         <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                            <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+                                            <img src="{% static 'img/svg/default_album.svg' %}"
                                                  class="embed-responsive-item img-thumbnail "
                                                  alt="{{ record.title }}">
                                         </div>
-                                    </a>
-                                </div>
-                            </div>
-                        {% endfor %}
-
-                        {% for recordimage in record.recordimages_set.all %}
-                            <div class="col mb-4">
-                                <div class="card">
-                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
-                                             class="embed-responsive-item img-thumbnail "
-                                             alt="{{ record.title }}">
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-
-                        {% for recordimage in record.recordimages_set.all %}
-                            <div class="col mb-4">
-                                <div class="card">
-                                    <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                        <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
-                                             class="embed-responsive-item img-thumbnail "
-                                             alt="{{ record.title }}">
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
@@ -191,12 +174,6 @@
                 </div>
             </div>
         {% endif %}
-
-
-        {#        {% if recordimage.image_exists %}#}
-        {#                                            {% generateimage 'myapp:thumbnail' source=recordimage.image -- alt=record.title id=record.id %}#}
-        {#                                        {% else %}#}
-        {#                                        {% endif %}#}
 
     {% endwith %}
 
