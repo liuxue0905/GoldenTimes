@@ -153,9 +153,9 @@
                             <div class="col mb-4">
                                 <div class="card">
                                     {% if recordimage.image_exists %}
-                                        <a href="/api/records/{{ record.id }}/images/{{ recordimage.id }}" target="_blank">
+                                        <a href="/api/records/{{ record.id }}/images/{{ recordimage.id }}?resize=centerInside" target="_blank">
                                             <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                                <img src="/api/records/{{ record.id }}/images/{{ recordimage.id }}"
+                                                <img src="/api/records/{{ record.id }}/images/{{ recordimage.id }}?resize=centerInside"
                                                      class="embed-responsive-item img-thumbnail "
                                                      alt="{{ record.title }}">
                                             </div>

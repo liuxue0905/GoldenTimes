@@ -90,9 +90,9 @@
                             <div class="col mb-4">
                                 <div class="card">
                                     {% if artistimage.image_exists %}
-                                        <a href="/api/artists/{{ artist.id }}/images/{{ artistimage.id }}" target="_blank">
+                                        <a href="/api/artists/{{ artist.id }}/images/{{ artistimage.id }}?resize=centerInside" target="_blank">
                                             <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                                <img src="/api/artists/{{ artist.id }}/images/{{ artistimage.id }}"
+                                                <img src="/api/artists/{{ artist.id }}/images/{{ artistimage.id }}?resize=centerInside"
                                                      class="embed-responsive-item img-thumbnail "
                                                      alt="{{ artist.name }}">
                                             </div>
