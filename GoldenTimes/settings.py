@@ -137,16 +137,6 @@ MEDIA_URL = '/media/'
 # WARNING
 # TEMPLATE_DEBUG = True
 
-## Thumbnail settings
-THUMBNAIL_DEBUG = True
-
-## Watermark settings - django-watermark
-# WATERMARK_QUALITY = 85
-# WATERMARK_OBSCURE_ORIGINAL = False
-# WATERMARK_RANDOM_POSITION_ONCE = True
-# WATERMARK_PERCENTAGE = 40
-
-
 # FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler",
 #                         "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
