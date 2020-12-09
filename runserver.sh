@@ -34,7 +34,8 @@ LOG_FILE=${LOG_DIR}/nohup_${LOG_FILE_NAME}.out
 echo "LOG_FILE	: ${LOG_FILE}"
 
 #COMMAND_RUNSERVER="python manage.py runserver 0:8000"
-COMMAND_RUNSERVER="gunicorn -b 0:8000 -w 3 --threads 2 GoldenTimes.wsgi"
+#COMMAND_RUNSERVER="gunicorn -b 0:8000 -w 3 --threads 2 GoldenTimes.wsgi"
+COMMAND_RUNSERVER="gunicorn GoldenTimes.wsgi -c gunicorn.conf.py"
 COMMAND="nohup ${COMMAND_RUNSERVER} > ${LOG_FILE} 2>&1 &"
 
 echo "COMMAND		: ${COMMAND}"
