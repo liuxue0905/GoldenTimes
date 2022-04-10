@@ -54,21 +54,21 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item{% ifequal nav_item_active 'dashboard' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:dashboard' %}">首页{% ifequal nav_item_active 'dashboard' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% if nav_item_active == 'dashboard' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'portal:dashboard' %}">首页{% if nav_item_active == 'dashboard' %} <span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
-                <li class="nav-item{% ifequal nav_item_active 'record-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:record-list' %}">唱片{% ifequal nav_item_active 'record-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% if nav_item_active == 'record-list' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'portal:record-list' %}">唱片{% if nav_item_active == 'record-list' %} <span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
-                <li class="nav-item{% ifequal nav_item_active 'artist-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:artist-list' %}?record__isnull=false">歌手{% ifequal nav_item_active 'artist-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% if nav_item_active == 'artist-list' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'portal:artist-list' %}?record__isnull=false">歌手{% if nav_item_active == 'artist-list' %} <span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
-                <li class="nav-item{% ifequal nav_item_active 'song-list' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:song-list' %}">歌曲{% ifequal nav_item_active 'song-list' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% if nav_item_active == 'song-list' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'portal:song-list' %}">歌曲{% if nav_item_active == 'song-list' %} <span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
 
-                <li class="nav-item{% ifequal nav_item_active 'about' %} active{% endifequal %}">
-                    <a class="nav-link" href="{% url 'portal:about' %}">关于{% ifequal nav_item_active 'about' %} <span class="sr-only">(current)</span>{% endifequal %}</a>
+                <li class="nav-item{% if nav_item_active == 'about' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'portal:about' %}">关于{% if nav_item_active == 'about' %} <span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
 
                 {#                <li class="nav-item">#}
@@ -106,11 +106,11 @@
 {% endblock %}
 
 {#<li>#}
-{#            <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-records' %} mdl-navigation__link--current{% endifequal %}"#}
+{#            <a class="mdl-navigation__link{% if mdl_navigation__link__current == 'import-records' %} mdl-navigation__link--current{% endif %}"#}
 {#               href="{% url 'portal:import-records' %}">导入唱片</a>#}
 {#        </li>#}
 {#        <li>#}
-{#            <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-artists' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:import-artists' %}">导入歌手</a>#}
+{#            <a class="mdl-navigation__link{% if mdl_navigation__link__current == 'import-artists' %} mdl-navigation__link--current{% end %}" href="{% url 'portal:import-artists' %}">导入歌手</a>#}
 {#        </li>#}
 
 <sj-home mini-page-indicator selected="2">

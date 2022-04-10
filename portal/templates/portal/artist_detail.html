@@ -54,15 +54,15 @@
         {% block tab_bar %}
             <ul class="nav nav-tabs bg-light my-3">
                 <li class="nav-item">
-                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list' %} active{% endifequal %}"
+                    <a class="nav-link{% if mdl_tabs_tab_is_active == 'artist-detail-record-list' %} active{% endif %}"
                        href="{% url 'portal:artist-detail-record-list' artist.id %}">唱片</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-song-list' %} active{% endifequal %}"
+                    <a class="nav-link{% if mdl_tabs_tab_is_active == 'artist-detail-song-list' %} active{% endif %}"
                        href="{% url 'portal:artist-detail-song-list' artist.id %}">歌曲</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{% ifequal mdl_tabs_tab_is_active 'artist-detail-record-list-involved' %} active{% endifequal %}"
+                    <a class="nav-link{% if mdl_tabs_tab_is_active == 'artist-detail-record-list-involved' %} active{% endif %}"
                        href="{% url 'portal:artist-detail-record-list-involved' artist.id %}">参与</a>
                 </li>
             </ul>

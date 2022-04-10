@@ -43,16 +43,16 @@
                 <label for="format"><small>介质</small></label>
                 <select class="form-control form-control-sm" id="format" name="format">
                     <option value="" selected>全部</option>
-                    <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>
+                    <option value="1" {% if request.GET.format == '1' %}selected{% endif %}>
                         CD
                     </option>
-                    <option value="2" {% ifequal request.GET.format '2' %}selected{% endifequal %}>
+                    <option value="2" {% if request.GET.format == '2' %}selected{% endif %}>
                         LP
                     </option>
-                    <option value="3" {% ifequal request.GET.format '3' %}selected{% endifequal %}>
+                    <option value="3" {% if request.GET.format == '3' %}selected{% endif %}>
                         MC
                     </option>
-                    <option value="4" {% ifequal request.GET.format '4' %}selected{% endifequal %}>
+                    <option value="4" {% if request.GET.format == '4' %}selected{% endif %}>
                         DATA
                     </option>
                 </select>

@@ -88,9 +88,9 @@
                     {#                    <td>{{ excel_log.created_at|date:"Y-m-d H:i:s" }}</td>#}
                     <td>
                         {# {{ excel_log.status }} #}
-                        {% ifequal log.status 0 %}开始{% endifequal %}
-                        {% ifequal log.status 1 %}完成{% endifequal %}
-                        {% ifequal log.status -1 %}失败{% endifequal %}
+                        {% if log.status == 0 %}开始{% endif %}
+                        {% if log.status == 1 %}完成{% endif %}
+                        {% if log.status == -1 %}失败{% endif %}
                     </td>
                     <td>
                         <a href="{{ log.file_excel.url }}">查看文件</a>
