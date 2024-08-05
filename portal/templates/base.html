@@ -102,11 +102,11 @@
 {% endblock %}
 
 {#<li>#}
-{#            <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-records' %} mdl-navigation__link--current{% endifequal %}"#}
+{#            <a class="mdl-navigation__link{% if mdl_navigation__link__current == 'import-records' %} mdl-navigation__link--current{% endif %}"#}
 {#               href="{% url 'portal:import-records' %}">导入唱片</a>#}
 {#        </li>#}
 {#        <li>#}
-{#            <a class="mdl-navigation__link{% ifequal mdl_navigation__link__current 'import-artists' %} mdl-navigation__link--current{% endifequal %}" href="{% url 'portal:import-artists' %}">导入歌手</a>#}
+{#            <a class="mdl-navigation__link{% if mdl_navigation__link__current == 'import-artists' %} mdl-navigation__link--current{% end %}" href="{% url 'portal:import-artists' %}">导入歌手</a>#}
 {#        </li>#}
 
 <sj-home mini-page-indicator selected="2">

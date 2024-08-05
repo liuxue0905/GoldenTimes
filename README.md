@@ -12,6 +12,7 @@ pip install --upgrade pip
 
 ```shell script
 $ pip install pipreqs
+$ pip install pipreqs -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ```shell script
