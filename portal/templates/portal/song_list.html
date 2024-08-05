@@ -28,7 +28,7 @@
 
 {% block body %}
 
-    <ol class="breadcrumb small">
+    <ol class="breadcrumb small" data-bs-theme="dark">
         <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
         <li class="breadcrumb-item active" aria-current="page">歌曲</li>
     </ol>
@@ -47,7 +47,7 @@
 
     <div class="table-responsive">
         <table class="table table-sm table-light">
-            <thead class="thead-light">
+            <thead>
             <tr>
                 <th scope="col" class="px-2"><small>#</small></th>
                 <th scope="col"><small>标题</small></th>
@@ -98,46 +98,5 @@
         </table>
     </div>
 
-    <div class="" style="color: white;">
-        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-    </div>
-
-    <nav aria-label="...">
-        <ul class="pagination pagination-sm justify-content-end">
-
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }}</a>
-            </li>
-
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+    {% include "include/pagination.html" with page_obj=page_obj %}
 {% endblock %}

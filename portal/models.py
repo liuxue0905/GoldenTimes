@@ -113,17 +113,21 @@ class Record(models.Model):
     format = models.IntegerField(choices=FORMATE_CHOICES, blank=True, null=True, verbose_name='介质')
     year = models.CharField(max_length=4, blank=True, null=True, verbose_name='年代', help_text='yyyy')
 
-    release_detail = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间', help_text='空|yyyy|yyyymm|yyyymmdd')
-    release_order = models.CharField(max_length=128, blank=True, null=True, verbose_name='发布时间排序', help_text='yyyy0000')
+    release_detail = models.CharField(max_length=8, blank=True, null=True, verbose_name='发布时间',
+                                      help_text='空|yyyy|yyyymm|yyyymmdd')
+    release_order = models.CharField(max_length=128, blank=True, null=True, verbose_name='发布时间排序',
+                                     help_text='yyyy0000')
 
     producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
     recorder = models.CharField(max_length=128, blank=True, null=True, verbose_name='录音')
     mixer = models.CharField(max_length=128, blank=True, null=True, verbose_name='混音')
     bandsman = models.TextField(blank=True, null=True, verbose_name='乐手')
+
     description = models.TextField(blank=True, null=True, verbose_name='说明')
 
     artists = models.ManyToManyField('Artist', blank=True, verbose_name='歌手')
     company = models.ForeignKey('Company', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='唱片公司')
+    # works = models.ManyToManyField('222Work', blank=True, null=True, verbose_name='工作人员')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -190,16 +194,19 @@ class Record(models.Model):
 class Song(models.Model):
     track = models.CharField(max_length=128, verbose_name='序号')
     title = models.CharField(max_length=128, verbose_name='标题')
+
     lyricist = models.CharField(max_length=128, blank=True, null=True, verbose_name='作词')
     composer = models.CharField(max_length=128, blank=True, null=True, verbose_name='作曲')
     arranger = models.CharField(max_length=128, blank=True, null=True, verbose_name='编曲')
     vocalist = models.CharField(max_length=128, blank=True, null=True, verbose_name='和音')
     producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
     bandsman = models.TextField(blank=True, null=True, verbose_name='乐手')
+
     description = models.TextField(blank=True, null=True, verbose_name='说明')
 
     artists = models.ManyToManyField('Artist', blank=True, verbose_name='歌手')
     record = models.ForeignKey('Record', on_delete=models.CASCADE)
+    # works = models.ManyToManyField('111Work', blank=True, null=True, verbose_name='工作人员')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -284,6 +291,60 @@ class Company(models.Model):
         ordering = ['name']
 
 
+class LRecordWork(models.Model):
+    # link = models.ForeignKey('Link', models.DO_NOTHING, db_column='link')
+    record = models.ForeignKey('Record', on_delete=models.CASCADE, db_column='record')
+    work = models.ForeignKey('Work', on_delete=models.CASCADE, db_column='work')
+    # edits_pending = models.IntegerField()
+    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    # link_order = models.IntegerField()
+
+    class Meta:
+        # managed = False
+        db_table = 'l_record_work'
+
+
+class LSongWork(models.Model):
+    # link = models.ForeignKey('Link', models.DO_NOTHING, db_column='link')
+    song = models.ForeignKey('Song', on_delete=models.CASCADE, db_column='song')
+    work = models.ForeignKey('Work', on_delete=models.CASCADE, db_column='work')
+    # edits_pending = models.IntegerField()
+    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    # link_order = models.IntegerField()
+
+    class Meta:
+        # managed = False
+        db_table = 'l_song_work'
+
+
+class Work(models.Model):
+    # gid = models.UUIDField(blank=True, null=True)
+    name = models.CharField(max_length=256)
+    type = models.ForeignKey('WorkType', models.DO_NOTHING, db_column='type', blank=True, null=True)
+    comment = models.CharField(max_length=255)
+    # edits_pending = models.IntegerField()
+    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        # managed = False
+        db_table = 'work'
+
+
+class WorkType(models.Model):
+    name = models.CharField(max_length=255)
+    # parent = models.IntegerField(blank=True, null=True)
+    # child_order = models.IntegerField()
+    description = models.TextField(blank=True, null=True)
+
+    # gid = models.UUIDField()
+
+    class Meta:
+        # managed = False
+        db_table = 'work_type'
+
+
 def record_cover_upload_to(instance, filename):
     record = instance.record
 
@@ -293,7 +354,7 @@ def record_cover_upload_to(instance, filename):
 
     pattern = 'record/{record_dirname}/{record_dirname}{extension}'
     upload_to = pattern.format(record_dirname=record_dirname,
-                              extension=extension)
+                               extension=extension)
 
     print('record_cover_upload_to', 'upload_to', upload_to)
 
@@ -304,7 +365,7 @@ class RecordCover(models.Model):
     record = models.OneToOneField('Record', on_delete=models.CASCADE)
 
     image = TryExceptImageField(upload_to=record_cover_upload_to, height_field='height', width_field='width',
-                              null=True, verbose_name='图片', storage=fs)
+                                null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
 
@@ -351,7 +412,7 @@ def record_images_upload_to(instance, filename):
 
     pattern = 'record/{record_dirname}/{record_dirname}{extension}'
     upload_to = pattern.format(record_dirname=record_dirname,
-                              extension=extension)
+                               extension=extension)
 
     return upload_to
 
@@ -360,7 +421,7 @@ class RecordImages(models.Model):
     record = models.ForeignKey('Record', on_delete=models.CASCADE)
 
     image = TryExceptImageField(upload_to=record_images_upload_to, height_field='height', width_field='width',
-                              null=True, verbose_name='图片', storage=fs)
+                                null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
 
@@ -411,7 +472,7 @@ def artist_avatar_upload_to(instance, filename):
 
     pattern = 'artist/{artist_dirname}/{artist_dirname}(0){extension}'
     upload_to = pattern.format(artist_dirname=artist_dirname,
-                              extension=extension)
+                               extension=extension)
 
     return upload_to
 
@@ -420,7 +481,7 @@ class ArtistAvatar(models.Model):
     artist = models.OneToOneField('Artist', on_delete=models.CASCADE)
 
     image = TryExceptImageField(upload_to=artist_avatar_upload_to, height_field='height', width_field='width',
-                              null=True, verbose_name='图片', storage=fs)
+                                null=True, verbose_name='图片', storage=fs)
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)
 
@@ -465,7 +526,7 @@ def artist_images_upload_to(instance, filename):
 
     pattern = 'artist/{artist_dirname}/{artist_dirname}{extension}'
     upload_to = pattern.format(artist_dirname=artist_dirname,
-                              extension=extension)
+                               extension=extension)
 
     return upload_to
 
@@ -474,7 +535,7 @@ class ArtistImages(models.Model):
     artist = models.ForeignKey('Artist', on_delete=models.CASCADE)
 
     image = TryExceptImageField(upload_to=artist_images_upload_to, height_field='height', width_field='width',
-                              null=True, verbose_name='图片', storage=fs)
+                                null=True, verbose_name='图片', storage=fs)
 
     width = models.PositiveIntegerField(blank=True, null=True)
     height = models.PositiveIntegerField(blank=True, null=True)

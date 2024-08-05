@@ -26,10 +26,23 @@ def cached_admin_thumb_record_recordcover(instance):
     return None
 
 
+def cached_admin_thumb_artist(instance):
+    try:
+        # `image` is the name of the image field on the model
+        cached = ImageCacheFile(AdminThumbnailSpec(instance.artistavatar.image))
+        # only generates the first time, subsequent calls use cache
+        cached.generate()
+        return cached
+    except Exception as e:
+        print(e)
+    return None
+
+
 # Register your models here.
 
 
 from .models import Record, Song, Artist, Company, RecordCover, RecordImages, ArtistAvatar, ArtistImages
+from .models import WorkType, Work, LRecordWork, LSongWork
 from .models import LogImportRecord, LogImportArtist
 
 
@@ -54,6 +67,13 @@ class RecordImagesAdmin(admin.TabularInline):
     extra = 0
 
     fields = ('image',)
+
+
+# class LRecordWorkAdmin(admin.TabularInline):
+#     model = LRecordWork
+#     extra = 0
+#
+#     fields = ('work',)
 
 
 class RecordAdmin(admin.ModelAdmin):
@@ -118,18 +138,21 @@ class ArtistAdmin(admin.ModelAdmin):
     inlines = [ArtistAvatarAdmin, ArtistImagesAdmin]
 
     # list_display = ('avatar', 'name', 'type')
-    list_display = ('name', 'type')
+    list_display = ('cover', 'name', 'type')
     list_display_links = ('name',)
     list_filter = ('type',)
     list_per_page = 100
 
     search_fields = ('name',)
 
-    def avatar(self, object):
-        return '<img src="{src}" width="13" height="13">'.format(src=object.artistavatar.image.url)
+    cover = AdminThumbnail(image_field=cached_admin_thumb_artist)
+    cover.short_description = ''
 
-    avatar.allow_tags = True
-    avatar.short_description = ''
+    # def avatar(self, object):
+    #     return '<img src="{src}" width="13" height="13">'.format(src=object.artistavatar.image.url)
+    #
+    # avatar.allow_tags = True
+    # avatar.short_description = ''
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -180,8 +203,17 @@ class LogImportArtistAdmin(admin.ModelAdmin):
         return os.path.basename(object.file_log.name)
 
 
+class WorkTypeAdmin(admin.ModelAdmin):
+    module = WorkType
+    list_display = ('name', 'description')
+    list_per_page = 100
+
+
 admin.site.register(Record, RecordAdmin)
 admin.site.register(Artist, ArtistAdmin)
 admin.site.register(Company, CompanyAdmin)
+
+admin.site.register(WorkType, WorkTypeAdmin)
+
 admin.site.register(LogImportRecord, LogImportRecordAdmin)
 admin.site.register(LogImportArtist, LogImportArtistAdmin)

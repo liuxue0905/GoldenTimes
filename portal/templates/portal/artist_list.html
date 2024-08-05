@@ -20,7 +20,7 @@
 
 {% block body %}
 
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" data-bs-theme="dark">
         <ol class="breadcrumb small">
             <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
             <li class="breadcrumb-item active" aria-current="page">歌手</li>
@@ -34,16 +34,17 @@
 
             <div class="form-group">
                 <label for="id_name"><small>歌手名</small></label>
-                <input type="text" class="form-control form-control-sm" id="id_name" name="name" value="{{ request.GET.name|default_if_none:"" }}">
+                <input type="text" class="form-control form-control-sm" id="id_name" name="name"
+                       value="{{ request.GET.name|default_if_none:"" }}">
             </div>
 
             <div class="form-group">
                 <label for="id_type"><small>歌手类型</small></label>
                 <select class="form-control form-control-sm" id="id_type" name="type">
                     <option value>全部</option>
-                    <option value="1" {% ifequal request.GET.type '1' %}selected{% endifequal %}>男</option>
-                    <option value="0" {% ifequal request.GET.type '0' %}selected{% endifequal %}>女</option>
-                    <option value="2" {% ifequal request.GET.type '2' %}selected{% endifequal %}>组合</option>
+                    <option value="1" {% if request.GET.type == '1' %}selected{% endif %}>男</option>
+                    <option value="0" {% if request.GET.type == '0' %}selected{% endif %}>女</option>
+                    <option value="2" {% if request.GET.type == '2' %}selected{% endif %}>组合</option>
                 </select>
             </div>
 
@@ -51,10 +52,10 @@
                 <label for="id_record__isnull"><small>有无唱片</small></label><br>
                 <select class="form-control form-control-sm" id="id_record__isnull" name="record__isnull">
                     <option value>全部</option>
-                    <option value="false" {% ifequal request.GET.record__isnull 'false' %}selected{% endifequal %}>
+                    <option value="false" {% if request.GET.record__isnull == 'false' %}selected{% endif %}>
                         有
                     </option>
-                    <option value="true" {% ifequal request.GET.record__isnull 'true' %}selected{% endifequal %}>无
+                    <option value="true" {% if request.GET.record__isnull == 'true' %}selected{% endif %}>无
                     </option>
                 </select>
             </div>
@@ -68,17 +69,22 @@
             {% for artist in object_list %}
                 <div class="col mb-2 mb-md-4 px-1 px-md-2">
                     <div class="card">
-                        <div class="embed-responsive embed-responsive-1by1 card-img-top radio-artist-background">
-                            <a href="{% url 'portal:artist-detail-record-list' artist.id %}">
-                                <div class="embed-responsive-item image-inner-wrapper">
-                                    {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                        <img src="/api/artists/{{ artist.id }}/cover?size=200" class="image" alt>
-                                    {% else %}
-                                        <img src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="image" alt>
-                                    {% endif %}
-                                </div>
-                                <div id="overlayText" class="style-scope sj-card"><small>{{ artist.type_value|default:'-' }}</small></div>
+                        <div class="card-img-top ratio-1x1 w-100 position-relative">
+                            <img class="card-img-top ratio-1x1 w-100"
+                                 src="{% static 'img/illo_default_artistradio_smallcard.png' %}" alt>
+
+                            <a class="card-img-top ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle" style="width: 80%;" href="{% url 'portal:artist-detail-record-list' artist.id %}">
+                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                    <img class="ratio-1x1 w-100 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
+                                         src="/api/artists/{{ artist.id }}/cover?size=200" alt>
+                                {% else %}
+                                    <img class="ratio-1x1 w-100 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
+                                         src="{% static 'img/illo_default_artistradio_portrait.png' %}" alt>
+                                {% endif %}
                             </a>
+
+                            <div id="overlayText" class="style-scope sj-card">
+                                <small>{{ artist.type_value|default:'-' }}</small></div>
                         </div>
                         <div class="card-body">
                             <div class="card-title">
@@ -96,69 +102,6 @@
         </div>
     </div>
 
-    <div class="" style="color: white;">
-        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-    </div>
-
-    <nav aria-label="...">
-        <ul class="pagination pagination-sm justify-content-end">
-
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }}</a>
-            </li>
-
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-
-
-
-
-
-
-{#    <nav>#}
-{#        <ul>#}
-{#            <li>{{ page_obj }}</li>#}
-{#            <li>number: {{ page_obj.number }}</li>#}
-            {#            <li>previous_page_number: {{ page_obj.previous_page_number }}</li>#}
-            {#            <li>next_page_number: {{ page_obj.next_page_number }}</li>#}
-{#            <li>start_index: {{ page_obj.start_index }}</li>#}
-{#            <li>end_index: {{ page_obj.end_index }}</li>#}
-{#            <li>has_other_pages: {{ page_obj.has_other_pages }}</li>#}
-{#            <li>paginator: {{ page_obj.paginator }}</li>#}
-{#            <li>paginator.count: {{ page_obj.paginator.count }}</li>#}
-{#            <li>paginator.num_pages: {{ page_obj.paginator.num_pages }}</li>#}
-{#            <li>paginator.per_page: {{ page_obj.paginator.per_page }}</li>#}
-{#            <li>paginator.page_range: {{ page_obj.paginator.page_range }}</li>#}
-{#        </ul>#}
-{#    </nav>#}
+    {% include "include/pagination.html" with page_obj=page_obj %}
 
 {% endblock %}

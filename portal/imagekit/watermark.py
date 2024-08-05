@@ -5,15 +5,14 @@
 #
 
 from abc import abstractmethod, ABCMeta
-from imagekit.lib import Image
 # from imagekit.lib import ImageDraw, ImageFont, ImageColor, ImageEnhance
-from imagekit.lib import ImageDraw, ImageColor, ImageEnhance
+from imagekit.processors import ImageDraw, ImageColor, ImageEnhance
 import warnings
 # L&X
 # import weakref
 
 try:
-    from PIL import ImageFont
+    from PIL import ImageFont, Image
 except ImportError:
     try:
         import ImageFont

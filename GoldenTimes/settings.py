@@ -131,6 +131,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "root", 'media')
 MEDIA_URL = '/media/'
 
+
+
 # STATICFILES_DIRS = [
 # ]
 
@@ -141,6 +143,21 @@ MEDIA_URL = '/media/'
 #                         "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
 # DEFAULT_FILE_STORAGE = portal.models.FileStorage
+
+# FILE_UPLOAD_MAX_MEMORY_SIZE=2621440
+# FILE_UPLOAD_PERMISSIONS=0o644
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
 
 
 REST_FRAMEWORK = {

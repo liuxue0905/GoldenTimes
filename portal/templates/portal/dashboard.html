@@ -12,7 +12,7 @@
 
 {% block body %}
 
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" data-bs-theme="dark">
         <ol class="breadcrumb small">
             <li class="breadcrumb-item active" aria-current="page">首页</li>
         </ol>
@@ -28,16 +28,22 @@
             <div class="container bg-light px-4 mb-4">
                 <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-5">
                     {% for artist in object.artists %}
-                        <div class="media text-muted pt-3">
-                            {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                <img class="bd-placeholder-img mr-2 rounded" src="/api/artists/{{ artist.id }}/cover?size=32" class="mr-3" width="32" height="32" alt>
-                            {% else %}
-                                <img class="bd-placeholder-img mr-2 rounded" src="{% static 'img/illo_default_artistradio_portrait.png' %}" class="mr-3" width="32" height="32" alt>
-                            {% endif %}
-                            <p class="media-body pb-3 mb-0 small lh-125">
-                                <strong class="d-block text-gray-dark"><a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a></strong>
-                                <small>{{ artist.record_set.count }}张唱片</small>
-                            </p>
+                        <div class="d-flex flex-row justify-content-start align-items-center m-2">
+                            <div class="ratio-1x1 border rounded-1" style="width: 48px; height: 48px;">
+                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                    <img class="img-fluid ratio-1x1 w-100" src="/api/artists/{{ artist.id }}/cover?size=32">
+                                {% else %}
+                                    <img class="img-fluid ratio-1x1 w-100" src="{% static 'img/illo_default_artistradio_portrait.png' %}">
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column align-items-start ms-2">
+                                <p class="m-0">
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}"><strong>{{ artist.name }}</strong></a>
+                                </p>
+                                <p class="m-0 mt-1">
+                                    <small>{{ artist.record_set.count }}张唱片</small>
+                                </p>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>

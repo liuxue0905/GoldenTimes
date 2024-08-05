@@ -236,6 +236,7 @@ mime_types = MimeTypes()
 
 
 class GTImageSpec(ImageSpec):
+
     processors = [
         Resize(240, 240),
 

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import include, path
 
 from . import views
 from portal.views import RecordListView, RecordDetailView
@@ -10,30 +10,30 @@ from portal.views import CompanyRecordListView
 
 app_name = 'portal'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    path("", views.index, name='index'),
 
-    url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    path("dashboard/", views.dashboard, name='dashboard'),
 
-    url(r'^about/$', views.about, name='about'),
+    path("about/", views.about, name='about'),
 
-    url(r'^records/$', RecordListView.as_view(), name='record-list'),
-    url(r'^records/(?P<pk>[0-9]+)/$', RecordDetailView.as_view(), name='record-detail'),
+    path("records/", RecordListView.as_view(), name='record-list'),
+    path("records/<int:pk>/", RecordDetailView.as_view(), name='record-detail'),
 
-    url(r'^songs/$', SongListView.as_view(), name='song-list'),
-    url(r'^songs/(?P<pk>[0-9]+)/$', SongDetailView.as_view(), name='song-detail'),
+    path("songs/", SongListView.as_view(), name='song-list'),
+    path("songs/<int:pk>/", SongDetailView.as_view(), name='song-detail'),
 
-    url(r'^artists/$', ArtistListView.as_view(), name='artist-list'),
-    url(r'^artists/(?P<pk>[0-9]+)/$', ArtistDetailView.as_view(), name='artist-detail'),
+    path("artists/", ArtistListView.as_view(), name='artist-list'),
+    path("artists/<int:pk>/", ArtistDetailView.as_view(), name='artist-detail'),
 
-    url(r'^artists/(?P<pk>[0-9]+)/records/$', ArtistRecordList.as_view(), name='artist-detail-record-list'),
-    url(r'^artists/(?P<pk>[0-9]+)/songs/$', ArtistSongList.as_view(), name='artist-detail-song-list'),
-    url(r'^artists/(?P<pk>[0-9]+)/records/involved$', ArtistRecordListInvolved.as_view(),
+    path("artists/<int:pk>/records/", ArtistRecordList.as_view(), name='artist-detail-record-list'),
+    path("artists/<int:pk>/songs/", ArtistSongList.as_view(), name='artist-detail-song-list'),
+    path("artists/<int:pk>/records/involved", ArtistRecordListInvolved.as_view(),
         name='artist-detail-record-list-involved'),
 
-    url(r'^companies/$', CompanyListView.as_view(), name='company-list'),
-    url(r'^companies/(?P<pk>[0-9]+)/$', CompanyDetailView.as_view(), name='company-detail'),
-    url(r'^companies/(?P<pk>[0-9]+)/records/$', CompanyRecordListView.as_view(), name='company-record-list'),
+    path("companies/", CompanyListView.as_view(), name='company-list'),
+    path("companies/<int:pk>/", CompanyDetailView.as_view(), name='company-detail'),
+    path("companies/<int:pk>/records/", CompanyRecordListView.as_view(), name='company-record-list'),
 
-    url(r'^import/records/$', views.LogImportRecordsView.as_view(), name='import-records'),
-    url(r'^import/artists/$', views.LogImportArtistsView.as_view(), name='import-artists'),
+    path("import/records/", views.LogImportRecordsView.as_view(), name='import-records'),
+    path("import/artists/", views.LogImportArtistsView.as_view(), name='import-artists'),
 ]

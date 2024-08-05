@@ -20,12 +20,12 @@
                     {% for record in object_list %}
                         <div class="col mb-2 mb-md-4 px-1 px-md-2">
                             <div class="card">
-                                <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                                <div class="card-img-top ratio-1x1 position-relative">
                                     <a href="{% url 'portal:record-detail' record.id %}">
                                         {% if record.recordcover and record.recordcover.image_exists %}
-                                            <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
+                                            <img class="ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=200" alt>
                                         {% else %}
-                                            <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
+                                            <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
                                         {% endif %}
                                         <div id="overlayText" class="style-scope sj-card"><small>{{ record.format_value|default:'-' }}</small></div>
                                     </a>
@@ -55,48 +55,7 @@
                     {% endfor %}
                 </div>
 
-                <div class="">
-                    {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-                </div>
-
-                <ul class="pagination pagination-sm justify-content-end">
-
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=
-                            {{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-
-                    <li class="page-item active">
-                        <a class="page-link" href="#">{{ page_obj.number }}</a>
-                    </li>
-
-
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=
-                            {{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
+                {% include "include/pagination.html" with page_obj=page_obj %}
             </nav>
         {% else %}
             <div class="text-center">

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import path
 from django.conf.urls import include
 from rest_framework import routers
 
@@ -22,17 +22,17 @@ from django.urls import path
 # from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    path("", include(router.urls)),
 
-    url(r'^artists/(?P<pk>[^/.]+)/records/$', views.ArtistRecordViewSet.as_view({'get': 'list'})),
-    url(r'^artists/(?P<pk>[^/.]+)/songs/$', views.ArtistSongViewSet.as_view({'get': 'list'})),
-    url(r'^artists/(?P<pk>[^/.]+)/comps/$', views.ArtistCompsViewSet.as_view({'get': 'list'})),
+    path("artists/<int:pk>/records/", views.ArtistRecordViewSet.as_view({'get': 'list'})),
+    path("artists/<int:pk>/songs/", views.ArtistSongViewSet.as_view({'get': 'list'})),
+    path("artists/<int:pk>/comps/", views.ArtistCompsViewSet.as_view({'get': 'list'})),
 
-    url(r'^artists/(?P<artist_id>[^/.]+)/cover/$', views.artist_cover),
-    url(r'^artists/(?P<artist_id>[^/.]+)/images/(?P<image_id>[^/.]+)/$', views.artist_image_detail),
+    path("artists/<int:artist_id>/cover/", views.artist_cover),
+    path("artists/<int:artist_id>/images/<int:image_id>/", views.artist_image_detail),
 
-    url(r'^records/(?P<record_id>[^/.]+)/cover/$', views.record_cover),
-    url(r'^records/(?P<record_id>[^/.]+)/images/(?P<image_id>[^/.]+)/$', views.record_image_detail),
+    path("records/<int:record_id>/cover/", views.record_cover),
+    path("records/<int:record_id>/images/<int:image_id>/", views.record_image_detail),
 ]
 
 # print('urlpatterns', urlpatterns)

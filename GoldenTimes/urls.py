@@ -13,23 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import include, path
 from django.contrib import admin
-
-from django.conf.urls import include
 
 from django.views.generic import RedirectView
 
 urlpatterns = [
     # url(r'^$', RedirectView.as_view(url='http://liujin.jios.org:8888')),
-    url(r'^$', RedirectView.as_view(url='/portal/')),
+    path("", RedirectView.as_view(url='/portal/')),
 
-    url(r'^admin/', admin.site.urls),
-    url(r'^portal/', include('portal.urls')),
+    path("admin/", admin.site.urls),
+    path("portal/", include('portal.urls')),
 
-    url(r'^api/', include('api.urls')),
+    path("api/", include('api.urls')),
 
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path("api-auth/", include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 from django.conf import settings

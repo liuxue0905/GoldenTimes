@@ -22,7 +22,7 @@
 
 {% block body %}
 
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" data-bs-theme="dark">
         <ol class="breadcrumb small">
             <li class="breadcrumb-item"><a href="{% url 'portal:dashboard' %}">首页</a></li>
             <li class="breadcrumb-item active" aria-current="page">唱片</li>
@@ -34,31 +34,43 @@
 
             {#            {% csrf_token %}#}
 
-            <div class="form-group">
-                <label for="title"><small>标题</small></label>
-                <input type="text" class="form-control form-control-sm" id="title" name="title" value="{{ request.GET.title }}">
+            <div>
+                搜索
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    Button with data-bs-target
+                </button>
             </div>
 
-            <div class="form-group">
-                <label for="format"><small>介质</small></label>
-                <select class="form-control form-control-sm" id="format" name="format">
-                    <option value="" selected>全部</option>
-                    <option value="1" {% ifequal request.GET.format '1' %}selected{% endifequal %}>
-                        CD
-                    </option>
-                    <option value="2" {% ifequal request.GET.format '2' %}selected{% endifequal %}>
-                        LP
-                    </option>
-                    <option value="3" {% ifequal request.GET.format '3' %}selected{% endifequal %}>
-                        MC
-                    </option>
-                    <option value="4" {% ifequal request.GET.format '4' %}selected{% endifequal %}>
-                        DATA
-                    </option>
-                </select>
+            <div class="collapse" id="collapseExample">
+                <div class="form-group">
+                    <label for="title"><small>标题</small></label>
+                    <input type="text" class="form-control form-control-sm" id="title" name="title"
+                           value="{{ request.GET.title }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="format"><small>介质</small></label>
+                    <select class="form-control form-control-sm" id="format" name="format">
+                        <option value="" selected>全部</option>
+                        <option value="1" {% if request.GET.format == '1' %}selected{% endif %}>
+                            CD
+                        </option>
+                        <option value="2" {% if request.GET.format == '2' %}selected{% endif %}>
+                            LP
+                        </option>
+                        <option value="3" {% if request.GET.format == '3' %}selected{% endif %}>
+                            MC
+                        </option>
+                        <option value="4" {% if request.GET.format == '4' %}selected{% endif %}>
+                            DATA
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm">搜索</button>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </div>
 
@@ -67,15 +79,17 @@
             {% for record in object_list %}
                 <div class="col mb-2 mb-md-4 px-1 px-md-2">
                     <div class="card">
-                        <div class="embed-responsive embed-responsive-1by1 card-img-top">
+                        <div class="card-img-top ratio-1x1 position-relative">
                             <a href="{% url 'portal:record-detail' record.id %}">
                                 {% if record.recordcover and record.recordcover.image_exists %}
-                                    <img src="/api/records/{{ record.id }}/cover?size=200" class="embed-responsive-item" alt>
+                                    <img src="/api/records/{{ record.id }}/cover?size=200" class="ratio-1x1 w-100"
+                                         alt="">
                                 {% else %}
-                                    <img src="{% static 'img/svg/default_album.svg' %}" class="embed-responsive-item" alt>
+                                    <img src="{% static 'img/svg/default_album.svg' %}" class="ratio-1x1 w-100" alt="">
                                 {% endif %}
-                                <div id="overlayText" class="style-scope sj-card"><small>{{ record.format_value|default:'-' }}</small></div>
                             </a>
+                            <div id="overlayText" class="style-scope sj-card">
+                                <small>{{ record.format_value|default:'-' }}</small></div>
                         </div>
                         <div class="card-body">
                             <a href="{% url 'portal:record-detail' record.id %}" class="card-title">
@@ -100,48 +114,6 @@
         </div>
     </div>
 
-    <div class="" style="color: white;">
-        {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
-    </div>
-
-    <nav aria-label="...">
-
-        <ul class="pagination pagination-sm justify-content-end">
-
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }}</a>
-            </li>
-
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+    {% include "include/pagination.html" with page_obj=page_obj %}
 
 {% endblock %}
