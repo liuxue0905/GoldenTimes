@@ -181,6 +181,8 @@ class Record(models.Model):
         # ordering = ['release', 'release_order', 'title']
         ordering = ['year', 'release_order', 'title']
         # unique_together = ('title', 'number')
+        verbose_name = '唱片'
+        verbose_name_plural = '唱片'
 
 
 # class PersonTable(tables.Table):
@@ -273,6 +275,8 @@ class Artist(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = '艺人'
+        verbose_name_plural = '艺人'
 
 
 class Company(models.Model):
@@ -289,6 +293,8 @@ class Company(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = '唱片公司'
+        verbose_name_plural = '唱片公司'
 
 
 class LRecordWork(models.Model):
@@ -330,6 +336,8 @@ class Work(models.Model):
     class Meta:
         # managed = False
         db_table = 'work'
+        verbose_name = '工作人员'
+        verbose_name_plural = '工作人员'
 
 
 class WorkType(models.Model):
@@ -343,6 +351,8 @@ class WorkType(models.Model):
     class Meta:
         # managed = False
         db_table = 'work_type'
+        verbose_name = '工作类型'
+        verbose_name_plural = '工作类型'
 
 
 def record_cover_upload_to(instance, filename):
@@ -595,6 +605,8 @@ class LogImportRecord(models.Model):
 
     class Meta:
         ordering = ['-datetime_start']
+        verbose_name = '导入 唱片'
+        verbose_name_plural = '导入 唱片'
 
 
 class LogImportArtist(models.Model):
@@ -621,3 +633,5 @@ class LogImportArtist(models.Model):
 
     class Meta:
         ordering = ['-datetime_start']
+        verbose_name = '导入 艺人'
+        verbose_name_plural = '导入 艺人'
