@@ -21,43 +21,58 @@
             </ol>
         </nav>
 
-        <div class="row no-gutters bg-light position-relative">
-            <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
-                <a href="/api/records/{{ record.id }}/cover" target="_blank" class="w-100">
-                    <div class="ratio-1x1 w-100 position-relative">
-                        {% if record.recordcover_exists and record.recordcover.image_exists %}
-                            <img class="ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=200" alt>
-                        {% else %}
-                            <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
-                        {% endif %}
-                        <div id="overlayText" class="style-scope sj-card">
-                            <small>{{ record.format_value|default:'-' }}</small>
+        <div class="card mb-3 w-100">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <a href="/api/records/{{ record.id }}/cover" target="_blank" class="w-100">
+                        <div class="ratio-1x1 w-100 position-relative">
+                            {% if record.recordcover_exists and record.recordcover.image_exists %}
+                                <img class="ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=200" alt>
+                            {% else %}
+                                <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
+                            {% endif %}
+                            <div id="overlayText" class="style-scope sj-card">
+                                <small>{{ record.format_value|default:'-' }}</small>
+                            </div>
                         </div>
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ record.title }}</h5>
+
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                {#                                <ul class="list-inline my-0">#}
+                                {% for artist in record.artists.all %}
+                                    {#                                    <li class="list-inline-item">#}
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    &nbsp;
+                                    {#                                    </li>#}
+                                {% endfor %}
+                                {#                                </ul>#}
+                            </small>
+                        </p>
+
+                        <p class="card-text">
+                            <span><small class="text-body-secondary">编号:&nbsp;{{ record.number }}</small></span>
+                            <br>
+                            <span><small class="text-body-secondary">年代:&nbsp;{{ record.year }}</small></span>
+                            <br>
+                            <span><small class="text-body-secondary">发行时间:&nbsp;{{ record.release_detail|default_if_none:'-' }}</small></span>
+                            <br>
+                            <br>
+                            <span>
+                                <small class="text-body-secondary">
+                                    {% if record.company %}
+                                        唱片公司:&nbsp;{{ record.company.name }}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </p>
+
                     </div>
-                </a>
-            </div>
-            <div class="col-md-6 position-static p-4 pl-md-0">
-                <h5 class="mt-0">{{ record.title }}</h5>
-                <h6><small>编号&nbsp;{{ record.number }}</small></h6>
-                <h6><small>年代&nbsp;{{ record.year }}</small></h6>
-                <p>
-                    <small>
-                        <ul class="list-inline my-0">
-                            {% for artist in record.artists.all %}
-                                <li class="list-inline-item"><a
-                                        href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </small>
-                </p>
-                <p>
-                    <small>
-                        {% if record.company %}
-                            唱片公司&nbsp;{{ record.company.name }}
-                        {% endif %}
-                    </small>
-                </p>
+                </div>
             </div>
         </div>
 
@@ -69,23 +84,12 @@
                 {#                    <th scope="col"></th>#}
                 {#                </tr>#}
                 {#                </thead>#}
-                <tbody>
-                <tr>
-                    <th scope="row" class="w-25"><small>发行时间</small></th>
-                    <td><small>{{ record.release_detail|default_if_none:'-' }}</small></td>
-                </tr>
-                <tr>
-                    <th scope="row" class="w-25"><small>监制</small></th>
-                    <td><small>{{ record.producer|default_if_none:'-' }}</small></td>
-                </tr>
-                <tr>
-                    <th scope="row"><small>录音</small></th>
-                    <td><small>{{ record.recorder|default_if_none:'-' }}</small></td>
-                </tr>
-                <tr>
-                    <th scope="row"><small>混音</small></th>
-                    <td><small>{{ record.mixer|default_if_none:'-' }}</small></td>
-                </tr>
+                {% for worker in record.recordworker_set.all %}
+                    <tr>
+                        <th scope="row" class="w-25"><small>{{ worker.type }}</small></th>
+                        <td><small>{{ worker.name|default:"-" }}</small></td>
+                    </tr>
+                {% endfor %}
                 <tr>
                     <th scope="row"><small>乐手</small></th>
                     <td><small>{{ record.bandsman|default_if_none:'-' }}</small></td>

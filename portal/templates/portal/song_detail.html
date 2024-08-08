@@ -20,23 +20,37 @@
 
     {% with record=object.record %}
 
-        <div class="media bg-light mb-4">
-            {#            <img src="..." class="mr-3" alt="...">#}
-            <div class="mr-3">
-                {% if record.recordcover_exists and record.recordcover.image_exists %}
-                    <img src="/api/records/{{ record.id }}/cover?size=128" width="128" height="128" class="embed-responsive-item" alt>
-                {% else %}
-                    <img src="{% static 'img/svg/default_album.svg' %}" width="128" height="128" class="embed-responsive-item" alt>
-                {% endif %}
-            </div>
-            <div class="media-body">
-                <h5 class="mt-0">{{ object.title }}</h5>
-                <ul class="list-inline small">
-                    {% for artist in song.artists.all %}
-                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
-                    {% endfor %}
-                </ul>
-                <small>唱片 <a href="{% url 'portal:record-detail' song.record.id %}">{{ object.record.title }}</a></small>
+
+        <div class="card mb-3 w-100">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <div class="ratio-1x1 w-100">
+                        {#                        <img src="..." class="img-fluid rounded-start" alt="...">#}
+                        {% if record.recordcover_exists and record.recordcover.image_exists %}
+                            <img class="img-fluid ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=128"
+                                 width="128" height="128" alt>
+                        {% else %}
+                            <img class="img-fluid ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}"
+                                 width="128" height="128" alt>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ object.title }}</h5>
+                        <p class="card-text"><a
+                                href="{% url 'portal:record-detail' song.record.id %}">[{{ object.record.title }}]</a>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                {% for artist in song.artists.all %}
+                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                {% endfor %}
+                            </small>
+                        </p>
+                        <p class="card-text"><small class="text-body-secondary">{{ object.record.year }}</small></p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -45,33 +59,21 @@
     <div class="table-responsive bg-light px-2">
         <table class="table table-sm">
             <tbody>
-            <tr>
-                <th scope="row"><small>作词</small></th>
-                <td><small>{{ object.lyricist|default:"" }}</small></td>
-            </tr>
-            <tr>
-                <th scope="row"><small>作曲</small></th>
-                <td><small>{{ object.composer|default:"" }}</small></td>
-            </tr>
-            <tr>
-                <th scope="row"><small>编曲</small></th>
-                <td><small>{{ object.arranger|default:"" }}</small></td>
-            </tr>
-            <tr>
-                <th scope="row"><small>和音</small></th>
-                <td><small>{{ object.vocalist|default:"" }}</small></td>
-            </tr>
-            <tr>
-                <th scope="row"><small>监制</small></th>
-                <td><small>{{ object.producer|default:"" }}</small></td>
-            </tr>
+
+            {% for worker in object.songworker_set.all %}
+                <tr>
+                    <th scope="row" class="w-25"><small>{{ worker.type }}</small></th>
+                    <td><small>{{ worker.name|default:"-" }}</small></td>
+                </tr>
+            {% endfor %}
+
             <tr>
                 <th scope="row"><small>乐手</small></th>
-                <td><small>{{ object.bandsman|default:"" }}</small></td>
+                <td><small>{{ object.bandsman|default:"-" }}</small></td>
             </tr>
             <tr>
                 <th scope="row"><small>说明</small></th>
-                <td><small>{{ object.description|default:"" }}</small></td>
+                <td><small>{{ object.description|default:"-" }}</small></td>
             </tr>
             </tbody>
         </table>

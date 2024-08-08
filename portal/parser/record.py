@@ -10,6 +10,7 @@ import logging.config
 from portal.parser.logging_config import LOGGING
 
 from portal.models import Record, Song, Artist, Company
+from portal.models import RecordWorker, SongWorker
 
 logger = logging.getLogger('parser')
 
@@ -26,7 +27,7 @@ def column_index(column):
 
 
 COLUMN_INDEX_RECORD_TITLE = column_index('唱片标题')  # 0
-COLUMN_INDEX_RECORD_PRODUCER = column_index('唱片监制')  # 1
+COLUMN_INDEX_RECORD_PRODUCER = column_index('唱片监制')  # 1 # D
 COLUMN_INDEX_RECORD_NUMBER = column_index('唱片编号')  # 2
 COLUMN_INDEX_RECORD_FORMAT = column_index('介质')  # 3
 COLUMN_INDEX_RECORD_YEAR = column_index('年代')  # 4
@@ -34,21 +35,21 @@ COLUMN_INDEX_RECORD_RELEASE_DETAIL = column_index('发布时间')  # 5
 COLUMN_INDEX_RECORD_RELEASE_ORDER = column_index('发布时间排序')  # 6
 COLUMN_INDEX_RECORD_COMPANY = column_index('唱片公司')  # 7
 COLUMN_INDEX_RECORD_ALBUM_ARTIST = column_index('唱片歌手')  # 8
-COLUMN_INDEX_RECORD_RECORDER = column_index('唱片录音')  # 9
-COLUMN_INDEX_RECORD_MIXER = column_index('唱片混音')  # 10
+COLUMN_INDEX_RECORD_RECORDER = column_index('唱片录音')  # 9 # D
+COLUMN_INDEX_RECORD_MIXER = column_index('唱片混音')  # 10 # D
 COLUMN_INDEX_RECORD_DESCRIPTION = column_index('唱片说明')  # 11
 COLUMN_INDEX_RECORD_BANDSMAN = column_index('唱片乐手信息')  # 12
 
 COLUMN_INDEX_SONG_TRACK = column_index('序号')  # 13
 COLUMN_INDEX_SONG_ARTIST = column_index('歌手')  # 14
 COLUMN_INDEX_SONG_TITLE = column_index('歌名')  # 15
-COLUMN_INDEX_SONG_COMPOSER = column_index('作曲')  # 16
-COLUMN_INDEX_SONG_LYRICIST = column_index('作词')  # 17
-COLUMN_INDEX_SONG_ARRANGER = column_index('编曲')  # 18
+COLUMN_INDEX_SONG_COMPOSER = column_index('作曲')  # 16 # D
+COLUMN_INDEX_SONG_LYRICIST = column_index('作词')  # 17 # D
+COLUMN_INDEX_SONG_ARRANGER = column_index('编曲')  # 18 # D
 COLUMN_INDEX_SONG_BANDSMAN = column_index('歌曲乐手信息')  # 19
 COLUMN_INDEX_SONG_ARTIST_PART = column_index('歌曲合唱')  # 14
-COLUMN_INDEX_SONG_VOCALIST = column_index('歌曲和唱')  # 21
-COLUMN_INDEX_SONG_PRODUCER = column_index('歌曲监制')  # 22
+COLUMN_INDEX_SONG_VOCALIST = column_index('歌曲和唱')  # 21 # D
+COLUMN_INDEX_SONG_PRODUCER = column_index('歌曲监制')  # 22 # D
 COLUMN_INDEX_SONG_DESCRIPTION = column_index('歌曲说明')  # 23
 
 
@@ -56,14 +57,11 @@ class CSVRow:
     class Record:
         def __init__(self):
             self.title: str = None
-            self.producer: str = None
             self.number: str = None
             self.format: str = None
             self.year: str = None
             self.release_detail: str = None
             self.release_order: str = None
-            self.recorder: str = None
-            self.mixer: str = None
             self.bandsman: str = None
             self.description: str = None
 
@@ -76,14 +74,11 @@ class CSVRow:
             record = CSVRow.Record()
 
             record.title = util.str_strip(row[COLUMN_INDEX_RECORD_TITLE])
-            record.producer = row[COLUMN_INDEX_RECORD_PRODUCER]
             record.number = util.str_strip(row[COLUMN_INDEX_RECORD_NUMBER])
             record.format = row[COLUMN_INDEX_RECORD_FORMAT]
             record.year = row[COLUMN_INDEX_RECORD_YEAR]
             record.release_detail = row[COLUMN_INDEX_RECORD_RELEASE_DETAIL]
             record.release_order = row[COLUMN_INDEX_RECORD_RELEASE_ORDER]
-            record.recorder = row[COLUMN_INDEX_RECORD_RECORDER]
-            record.mixer = row[COLUMN_INDEX_RECORD_MIXER]
             record.bandsman = row[COLUMN_INDEX_RECORD_BANDSMAN]
             record.description = row[COLUMN_INDEX_RECORD_DESCRIPTION]
 
@@ -103,12 +98,12 @@ class CSVRow:
         def __init__(self):
             self.track: str = None
             self.title: str = None
-            self.composer: str = None
-            self.lyricist: str = None
-            self.arranger: str = None
+            # self.composer: str = None
+            # self.lyricist: str = None
+            # self.arranger: str = None
             self.bandsman: str = None
-            self.vocalist: str = None
-            self.producer: str = None
+            # self.vocalist: str = None
+            # self.producer: str = None
             self.description: str = None
 
             self.artists: str = None
@@ -120,12 +115,12 @@ class CSVRow:
 
             song.track = util.str_strip(row[COLUMN_INDEX_SONG_TRACK])
             song.title = util.str_strip(row[COLUMN_INDEX_SONG_TITLE])
-            song.composer = row[COLUMN_INDEX_SONG_COMPOSER]
-            song.lyricist = row[COLUMN_INDEX_SONG_LYRICIST]
-            song.arranger = row[COLUMN_INDEX_SONG_ARRANGER]
+            # song.composer = row[COLUMN_INDEX_SONG_COMPOSER]
+            # song.lyricist = row[COLUMN_INDEX_SONG_LYRICIST]
+            # song.arranger = row[COLUMN_INDEX_SONG_ARRANGER]
             song.bandsman = row[COLUMN_INDEX_SONG_BANDSMAN]
-            song.vocalist = row[COLUMN_INDEX_SONG_VOCALIST]
-            song.producer = row[COLUMN_INDEX_SONG_PRODUCER]
+            # song.vocalist = row[COLUMN_INDEX_SONG_VOCALIST]
+            # song.producer = row[COLUMN_INDEX_SONG_PRODUCER]
             song.description = row[COLUMN_INDEX_SONG_DESCRIPTION]
 
             song.artists = row[COLUMN_INDEX_SONG_ARTIST]
@@ -139,8 +134,58 @@ class CSVRow:
         def __repr__(self):
             return '[{track}][{title}]'.format(track=self.track, title=self.title)
 
+    class RecordWorker:
+        def __init__(self):
+            self.producer: str = None
+            self.recorder: str = None
+            self.mixer: str = None
+
+        @staticmethod
+        def read_from_row(row):
+            worker = CSVRow.RecordWorker()
+
+            worker.producer = row[COLUMN_INDEX_RECORD_PRODUCER]
+            worker.recorder = row[COLUMN_INDEX_RECORD_RECORDER]
+            worker.mixer = row[COLUMN_INDEX_RECORD_MIXER]
+
+            return worker
+
+        def __str__(self):
+            return '[{producer}][{recorder}][{mixer}]'.format(producer=self.producer, recorder=self.recorder, mixer=self.mixer)
+
+        def __repr__(self):
+            return '[{producer}][{recorder}][{mixer}]'.format(producer=self.producer, recorder=self.recorder, mixer=self.mixer)
+
+    class SongWorker:
+        def __init__(self):
+            self.composer: str = None
+            self.lyricist: str = None
+            self.arranger: str = None
+            self.vocalist: str = None
+            self.producer: str = None
+
+        @staticmethod
+        def read_from_row(row):
+            worker = CSVRow.SongWorker()
+
+            worker.composer = row[COLUMN_INDEX_SONG_COMPOSER]
+            worker.lyricist = row[COLUMN_INDEX_SONG_LYRICIST]
+            worker.arranger = row[COLUMN_INDEX_SONG_ARRANGER]
+            worker.vocalist = row[COLUMN_INDEX_SONG_VOCALIST]
+            worker.producer = row[COLUMN_INDEX_SONG_PRODUCER]
+
+            return worker
+
+        def __str__(self):
+            return '[{composer}][{lyricist}][{arranger}][{vocalist}][{producer}]'.format(composer=self.lyricist, lyricist=self.lyricist, arranger=self.arranger, vocalist=self.vocalist, producer=self.producer)
+
+        def __repr__(self):
+            return '[{composer}][{lyricist}][{arranger}][{vocalist}][{producer}]'.format(composer=self.lyricist, lyricist=self.lyricist, arranger=self.arranger, vocalist=self.vocalist, producer=self.producer)
+
     record: Record = None
     song: Song = None
+    recordWorker: RecordWorker = None
+    songWorker: SongWorker = None
 
     @staticmethod
     def read_from_row(row):
@@ -148,6 +193,9 @@ class CSVRow:
 
         ws_row.record = CSVRow.Record.read_from_row(row)
         ws_row.song = CSVRow.Song.read_from_row(row)
+
+        ws_row.recordWorker = CSVRow.RecordWorker.read_from_row(row)
+        ws_row.songWorker = CSVRow.SongWorker.read_from_row(row)
 
         return ws_row
 
@@ -219,14 +267,11 @@ class RecordParser:
 
             record_defaults = {
                 'title': csv_row.record.title,
-                'producer': csv_row.record.producer,
                 'number': csv_row.record.number,
                 'format': Record.format_value_to_key(csv_row.record.format),
                 'year': csv_row.record.year,
                 'release_detail': csv_row.record.release_detail,
                 'release_order': csv_row.record.release_order,
-                'recorder': csv_row.record.recorder,
-                'mixer': csv_row.record.mixer,
                 'bandsman': csv_row.record.bandsman,
                 'description': csv_row.record.description,
                 'company': company,
@@ -239,6 +284,21 @@ class RecordParser:
             # print('record.artists', 'start', obj.artists, obj.artists.all())
             obj.artists.set(artists)
             # print('record.artists', 'stop', obj.artists, obj.artists.all())
+
+            def _save_record_worker(type_id, name):
+                if worker.producer:
+                    defaults = {
+                        'name': name,
+                    }
+                    model, created = RecordWorker.objects.update_or_create(record=obj, type_id=type_id, defaults=defaults)
+                    model.save()
+                else:
+                    RecordWorker.objects.filter(record=obj, type_id=type_id).delete()
+
+            worker = csv_row.recordWorker
+            _save_record_worker(5, worker.producer)
+            _save_record_worker(6, worker.recorder)
+            _save_record_worker(7, worker.mixer)
 
             return obj
 
@@ -267,12 +327,7 @@ class RecordParser:
             song_defaults = {
                 'track': raw_song.track,
                 'title': raw_song.title,
-                'composer': raw_song.composer,
-                'lyricist': raw_song.lyricist,
-                'arranger': raw_song.arranger,
                 'bandsman': raw_song.bandsman,
-                'vocalist': raw_song.vocalist,
-                'producer': raw_song.producer,
                 'description': raw_song.description,
             }
 
@@ -282,6 +337,26 @@ class RecordParser:
             # print('song.artists', 'start', obj.artists, obj.artists.all())
             obj.artists.set(artists)
             # print('song.artists', 'stop', obj.artists, obj.artists.all())
+
+            def _save_song_worker(type_id, name):
+                if worker.producer:
+                    defaults = {
+                        'name': name,
+                    }
+                    model = SongWorker.objects.update_or_create(song=obj, type_id=type_id, defaults=defaults)
+                    model.save()
+                else:
+                    try:
+                        RecordWorker.objects.filter(record=obj, type_id=type_id).delete()
+                    except Exception as e:
+                        print(e)
+
+            worker = csv_row.songWorker
+            _save_song_worker(1, worker.composer)
+            _save_song_worker(2, worker.lyricist)
+            _save_song_worker(3, worker.arranger)
+            _save_song_worker(4, worker.vocalist)
+            _save_song_worker(5, worker.producer)
 
             return obj
 

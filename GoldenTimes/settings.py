@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'imagekit',
+
+    'nested_admin',
+    'nested_inline',
 ]
 
 MIDDLEWARE = [

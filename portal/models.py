@@ -220,6 +220,8 @@ class Song(models.Model):
         # order_with_respect_to = 'record'
         ordering = ['track']
         # unique_together = ('record', 'track', 'title')
+        verbose_name = '歌曲'
+        verbose_name_plural = '歌曲列表'
 
 
 class Artist(models.Model):
@@ -297,62 +299,60 @@ class Company(models.Model):
         verbose_name_plural = '唱片公司'
 
 
-class LRecordWork(models.Model):
-    # link = models.ForeignKey('Link', models.DO_NOTHING, db_column='link')
-    record = models.ForeignKey('Record', on_delete=models.CASCADE, db_column='record')
-    work = models.ForeignKey('Work', on_delete=models.CASCADE, db_column='work')
-    # edits_pending = models.IntegerField()
-    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+class RecordWorker(models.Model):
+    record = models.ForeignKey('Record', on_delete=models.CASCADE, db_column='record_id')
+    name = models.CharField(max_length=128, verbose_name='名称', help_text='/分割')
+    type = models.ForeignKey('WorkerType', on_delete=models.SET_NULL, blank=True, null=True, db_column='type', verbose_name='类型')
+    # last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+    # order = models.IntegerField(verbose_name='排序')
 
-    # link_order = models.IntegerField()
+    def __unicode__(self):
+        return '%s - %s' % (self.type, self.name)
 
-    class Meta:
-        # managed = False
-        db_table = 'l_record_work'
-
-
-class LSongWork(models.Model):
-    # link = models.ForeignKey('Link', models.DO_NOTHING, db_column='link')
-    song = models.ForeignKey('Song', on_delete=models.CASCADE, db_column='song')
-    work = models.ForeignKey('Work', on_delete=models.CASCADE, db_column='work')
-    # edits_pending = models.IntegerField()
-    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
-
-    # link_order = models.IntegerField()
+    def __str__(self):
+        return '{type} - {name}'.format(type=self.type, name=self.name)
 
     class Meta:
-        # managed = False
-        db_table = 'l_song_work'
+        db_table = 'record_worker'
+        # ordering = ['order']
+        verbose_name = '唱片参与者'
+        verbose_name_plural = '唱片参与者'
 
 
-class Work(models.Model):
-    # gid = models.UUIDField(blank=True, null=True)
-    name = models.CharField(max_length=256)
-    type = models.ForeignKey('WorkType', models.DO_NOTHING, db_column='type', blank=True, null=True)
-    comment = models.CharField(max_length=255)
-    # edits_pending = models.IntegerField()
-    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+class SongWorker(models.Model):
+    song = models.ForeignKey('Song', on_delete=models.CASCADE, db_column='song_id')
+    name = models.CharField(max_length=128, verbose_name='名称', help_text='/分割')
+    type = models.ForeignKey('WorkerType', on_delete=models.SET_NULL, blank=True, null=True, db_column='type', verbose_name='类型')
+    # last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+    # order = models.IntegerField(verbose_name='排序')
+
+    def __unicode__(self):
+        return '%s - %s' % (self.type, self.name)
+
+    def __str__(self):
+        return '{type} - {name}'.format(type=self.type, name=self.name)
 
     class Meta:
-        # managed = False
-        db_table = 'work'
-        verbose_name = '工作人员'
-        verbose_name_plural = '工作人员'
+        db_table = 'song_worker'
+        # ordering = ['order']
+        verbose_name = '歌曲参与者'
+        verbose_name_plural = '歌曲参与者'
 
 
-class WorkType(models.Model):
+class WorkerType(models.Model):
     name = models.CharField(max_length=255)
-    # parent = models.IntegerField(blank=True, null=True)
-    # child_order = models.IntegerField()
     description = models.TextField(blank=True, null=True)
 
-    # gid = models.UUIDField()
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return '{name}'.format(name=self.name)
 
     class Meta:
-        # managed = False
-        db_table = 'work_type'
-        verbose_name = '工作类型'
-        verbose_name_plural = '工作类型'
+        db_table = 'worker_type'
+        verbose_name = '参与者类型'
+        verbose_name_plural = '参与者类型'
 
 
 def record_cover_upload_to(instance, filename):

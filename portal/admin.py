@@ -42,45 +42,62 @@ def cached_admin_thumb_artist(instance):
 
 
 from .models import Record, Song, Artist, Company, RecordCover, RecordImages, ArtistAvatar, ArtistImages
-from .models import WorkType, Work, LRecordWork, LSongWork
+from .models import WorkerType, RecordWorker, SongWorker
 from .models import LogImportRecord, LogImportArtist
+
+from nested_admin import NestedModelAdmin, NestedTabularInline, NestedStackedInline
+
+
+# from nested_inline.admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
+
+# class SongWorkerAdmin(admin.TabularInline):
+class SongWorkerAdmin(NestedTabularInline):
+    model = SongWorker
+    extra = 0
+    fields = ('type', 'name')
+    # sortable_field_name = "order"
 
 
 # admin.StackedInline
 # admin.TabularInline
-class SongAdmin(admin.StackedInline):
-    # class SongAdmin(admin.TabularInline):
+# class SongAdmin(admin.StackedInline):
+class SongAdmin(NestedStackedInline):
     model = Song
     extra = 0
     filter_horizontal = ('artists',)
+    inlines = [SongWorkerAdmin]
+    readonly_fields = ['composer', 'lyricist', 'arranger', 'vocalist', 'producer']
 
 
-class RecordCoverAdmin(admin.StackedInline):
-    # class RecordCoverAdmin(admin.TabularInline):
+# class RecordCoverAdmin(admin.TabularInline):
+class RecordCoverAdmin(NestedTabularInline):
     model = RecordCover
     fields = ('image',)
 
 
 # class RecordImagesAdmin(admin.StackedInline):
-class RecordImagesAdmin(admin.TabularInline):
+# class RecordImagesAdmin(admin.TabularInline):
+class RecordImagesAdmin(NestedTabularInline):
     model = RecordImages
     extra = 0
 
     fields = ('image',)
 
 
-# class LRecordWorkAdmin(admin.TabularInline):
-#     model = LRecordWork
-#     extra = 0
-#
-#     fields = ('work',)
+# class RecordWorkerAdmin(admin.TabularInline):
+class RecordWorkerAdmin(NestedTabularInline):
+    model = RecordWorker
+    extra = 0
+    fields = ('type', 'name')
 
 
-class RecordAdmin(admin.ModelAdmin):
+# class RecordAdmin(admin.ModelAdmin):
+class RecordAdmin(NestedModelAdmin):
     model = Record
 
     filter_horizontal = ('artists',)
-    inlines = [SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
+    inlines = [RecordWorkerAdmin, SongAdmin, RecordCoverAdmin, RecordImagesAdmin]
 
     list_display = (
         'cover', 'title', 'number', 'artist_list', 'year', 'release_detail', 'release_order', 'format', 'company',
@@ -96,6 +113,8 @@ class RecordAdmin(admin.ModelAdmin):
 
     cover = AdminThumbnail(image_field=cached_admin_thumb_record_recordcover)
     cover.short_description = ''
+
+    readonly_fields = ['producer', 'recorder', 'mixer']
 
     def artist_list(self, object):
         from django.utils.html import format_html_join
@@ -203,8 +222,8 @@ class LogImportArtistAdmin(admin.ModelAdmin):
         return os.path.basename(object.file_log.name)
 
 
-class WorkTypeAdmin(admin.ModelAdmin):
-    module = WorkType
+class WorkerTypeAdmin(admin.ModelAdmin):
+    module = WorkerType
     list_display = ('name', 'description')
     list_per_page = 100
 
@@ -213,7 +232,7 @@ admin.site.register(Record, RecordAdmin)
 admin.site.register(Artist, ArtistAdmin)
 admin.site.register(Company, CompanyAdmin)
 
-admin.site.register(WorkType, WorkTypeAdmin)
+admin.site.register(WorkerType, WorkerTypeAdmin)
 
 admin.site.register(LogImportRecord, LogImportRecordAdmin)
 admin.site.register(LogImportArtist, LogImportArtistAdmin)

@@ -21,45 +21,53 @@
             </ol>
         </nav>
 
-        <div class="row no-gutters bg-light position-relative">
-            <div class="cols-sm-1 col-md-3 col-lg-3 col-xl-3 mb-md-0 p-md-4">
-                <a href="/api/artists/{{ artist.id }}/cover" target="_blank">
-                    <div class="ratio-1x1 w-100 position-relative">
-                        <img class="ratio-1x1 w-100"
-                             src="{% static 'img/illo_default_artistradio_smallcard.png' %}" alt>
+        <div class="card mb-3 w-100">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <a href="/api/artists/{{ artist.id }}/cover" target="_blank">
+                        <div class="ratio-1x1 w-100 position-relative">
+                            <img class="ratio-1x1 w-100"
+                                 src="{% static 'img/illo_default_artistradio_smallcard.png' %}" alt>
 
-                        {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                            <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
-                                 style="width: 80%;"
-                                 src="/api/artists/{{ artist.id }}/cover?size=200" alt>
-                        {% else %}
-                            <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
-                                 style="width: 80%;"
-                                 src="{% static 'img/illo_default_artistradio_portrait.png' %}" alt>
-                        {% endif %}
+                            {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
+                                     style="width: 80%;"
+                                     src="/api/artists/{{ artist.id }}/cover?size=200" alt>
+                            {% else %}
+                                <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
+                                     style="width: 80%;"
+                                     src="{% static 'img/illo_default_artistradio_portrait.png' %}" alt>
+                            {% endif %}
 
-                        <div id="overlayText" class="style-scope sj-card">
-                            <small>{{ artist.type_value|default:'-' }}</small></div>
+                            <div id="overlayText" class="style-scope sj-card">
+                                <small>{{ artist.type_value|default:'-' }}</small></div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ artist.name }}</h5>
+                        <p class="card-text">
+                            <small>
+                                <br>
+                                <span>专辑: {{ artist.record_set.count }}</span>
+                                <br>
+                                <span>歌曲: {{ artist.song_set.count }}</span>
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                <span>参与专辑: {{ artist.record_involved_set.count }}</span>
+                            </small>
+                        </p>
+                        <p class="card-text"><small class="text-body-secondary">{{ object.record.year }}</small></p>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-6 position-static p-4 pl-md-0">
-                <h5 class="mt-0">{{ artist.name }}</h5>
-                <p>
-                    <small>
-                        <br>
-                        <span>专辑: {{ artist.record_set.count }}</span>
-                        <br>
-                        <span>歌曲: {{ artist.song_set.count }}</span>
-                        <br>
-                        <span>参与专辑: {{ artist.record_involved_set.count }}</span>
-                    </small>
-                </p>
+                </div>
             </div>
         </div>
 
         {% block tab_bar %}
-            <ul class="nav nav-tabs bg-light my-3">
+            <ul class="nav nav-tabs nav-pills mb-3" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link{% if mdl_tabs_tab_is_active == 'artist-detail-record-list' %} active{% endif %}"
                        href="{% url 'portal:artist-detail-record-list' artist.id %}">唱片</a>
