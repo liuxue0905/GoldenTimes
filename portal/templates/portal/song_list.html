@@ -62,31 +62,26 @@
 {#        </div>#}
 {#        <div class="card-body collapse" id="collapseExample">#}
         <div class="card-body" id="collapseExample">
-            <form class="row g-3" method="get" action="#">
+            <form class="" method="get" action="#">
                 {#            {% csrf_token %}#}
-                <div class="mb-1 row"></div>
-                <div class="mb-1 row">
-                    <label for="inputTitle" class="col-sm-2 col-form-label col-form-label-sm">标题</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control form-control-sm" id="inputTitle" name="title"
-                               value="{{ request.GET.title }}">
-                    </div>
+                <div class="mb-2">
+                    <label for="inputTitle" class="form-label"><small>标题</small></label>
+                    <input type="text" class="form-control form-control-sm" id="inputTitle" name="title"
+                           value="{{ request.GET.title }}">
                 </div>
-                <div class="col-md-6">
-                    <label for="inputWorkType1" class="form-label col-form-label-sm">作曲</label>
-                    <input type="text" class="form-control form-control-sm" id="inputWorkType1" name="worker_type_1"
+                <div class="mb-2">
+                    <label for="inputWorkerType1" class="form-label"><small>作曲</small></label>
+                    <input type="text" class="form-control form-control-sm" id="inputWorkerType1" name="worker_type_1"
                            value="{{ request.GET.worker_type_1 }}">
                 </div>
 
-                <div class="col-md-6">
-                    <label for="inputWorkType2" class="form-label col-form-label-sm">作词</label>
-                    <input type="text" class="form-control form-control-sm" id="inputWorkType2" name="worker_type_2"
+                <div class=mb-2">
+                    <label for="inputWorkerType2" class="form-label"><small>作词</small></label>
+                    <input type="text" class="form-control form-control-sm" id="inputWorkerType2" name="worker_type_2"
                            value="{{ request.GET.worker_type_2 }}">
                 </div>
 
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-sm">搜索</button>
-                </div>
+                <button type="submit" class="btn btn-primary btn-sm mt-2">搜索</button>
 
             </form>
         </div>

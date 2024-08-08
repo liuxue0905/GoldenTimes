@@ -32,14 +32,14 @@
 
             {#            {% csrf_token %}#}
 
-            <div class="form-group">
-                <label for="id_name"><small>歌手名</small></label>
+            <div class="mb-2">
+                <label for="id_name" class="form-label"><small>歌手名</small></label>
                 <input type="text" class="form-control form-control-sm" id="id_name" name="name"
                        value="{{ request.GET.name|default_if_none:"" }}">
             </div>
 
-            <div class="form-group">
-                <label for="id_type"><small>歌手类型</small></label>
+            <div class="mb-2">
+                <label for="id_type" class="form-label"><small>歌手类型</small></label>
                 <select class="form-control form-control-sm" id="id_type" name="type">
                     <option value>全部</option>
                     <option value="1" {% if request.GET.type == '1' %}selected{% endif %}>男</option>
@@ -48,8 +48,8 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="id_record__isnull"><small>有无唱片</small></label><br>
+            <div class="mb-2">
+                <label for="id_record__isnull" class="form-label"><small>有无唱片</small></label><br>
                 <select class="form-control form-control-sm" id="id_record__isnull" name="record__isnull">
                     <option value>全部</option>
                     <option value="false" {% if request.GET.record__isnull == 'false' %}selected{% endif %}>
@@ -60,7 +60,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+            <button type="submit" class="btn btn-primary btn-sm mt-2">搜索</button>
         </form>
     </div>
 

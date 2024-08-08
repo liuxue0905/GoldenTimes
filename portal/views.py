@@ -241,11 +241,18 @@ class SongListView(ListView):
 
     def get_queryset(self):
         title = self.request.GET.get('title')
+        worker_type_1_name = self.request.GET.get('worker_type_1')
+        worker_type_2_name = self.request.GET.get('worker_type_2')
 
         queryset = Song.objects.order_by('title').all()
 
         if title:
             queryset = queryset.filter(title__contains=title)
+
+        if worker_type_1_name:
+            queryset = queryset.filter(songworker__type_id=1, songworker__name__contains=worker_type_1_name)
+        if worker_type_2_name:
+            queryset = queryset.filter(songworker__type_id=2, songworker__name__contains=worker_type_2_name)
 
         return queryset
 
