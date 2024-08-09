@@ -69,6 +69,8 @@ class CSVRow:
 
             self.artists: str = None
 
+            self.recordWorker: CSVRow.RecordWorker = None
+
         @staticmethod
         def read_from_row(row):
             record = CSVRow.Record()
@@ -86,6 +88,8 @@ class CSVRow:
 
             record.artists = row[COLUMN_INDEX_RECORD_ALBUM_ARTIST]
 
+            record.recordWorker = CSVRow.RecordWorker.read_from_row(row)
+
             return record
 
         def __str__(self):
@@ -98,16 +102,13 @@ class CSVRow:
         def __init__(self):
             self.track: str = None
             self.title: str = None
-            # self.composer: str = None
-            # self.lyricist: str = None
-            # self.arranger: str = None
             self.bandsman: str = None
-            # self.vocalist: str = None
-            # self.producer: str = None
             self.description: str = None
 
             self.artists: str = None
             self.artists_part: str = None
+
+            self.songWorker: CSVRow.SongWorker = None
 
         @staticmethod
         def read_from_row(row):
@@ -115,16 +116,13 @@ class CSVRow:
 
             song.track = util.str_strip(row[COLUMN_INDEX_SONG_TRACK])
             song.title = util.str_strip(row[COLUMN_INDEX_SONG_TITLE])
-            # song.composer = row[COLUMN_INDEX_SONG_COMPOSER]
-            # song.lyricist = row[COLUMN_INDEX_SONG_LYRICIST]
-            # song.arranger = row[COLUMN_INDEX_SONG_ARRANGER]
             song.bandsman = row[COLUMN_INDEX_SONG_BANDSMAN]
-            # song.vocalist = row[COLUMN_INDEX_SONG_VOCALIST]
-            # song.producer = row[COLUMN_INDEX_SONG_PRODUCER]
             song.description = row[COLUMN_INDEX_SONG_DESCRIPTION]
 
             song.artists = row[COLUMN_INDEX_SONG_ARTIST]
             song.artists_part = row[COLUMN_INDEX_SONG_ARTIST_PART]
+
+            song.songWorker = CSVRow.SongWorker.read_from_row(row)
 
             return song
 
@@ -184,8 +182,6 @@ class CSVRow:
 
     record: Record = None
     song: Song = None
-    recordWorker: RecordWorker = None
-    songWorker: SongWorker = None
 
     @staticmethod
     def read_from_row(row):
@@ -193,9 +189,6 @@ class CSVRow:
 
         ws_row.record = CSVRow.Record.read_from_row(row)
         ws_row.song = CSVRow.Song.read_from_row(row)
-
-        ws_row.recordWorker = CSVRow.RecordWorker.read_from_row(row)
-        ws_row.songWorker = CSVRow.SongWorker.read_from_row(row)
 
         return ws_row
 
@@ -286,16 +279,25 @@ class RecordParser:
             # print('record.artists', 'stop', obj.artists, obj.artists.all())
 
             def _save_record_worker(type_id, name):
-                if worker.producer:
+                print('RecordWorker', '_save_record_worker', 'type_id: %s type_name: %s' % (type_id, name))
+                if name:
                     defaults = {
                         'name': name,
                     }
                     model, created = RecordWorker.objects.update_or_create(record=obj, type_id=type_id, defaults=defaults)
-                    model.save()
+                    print('RecordWorker', '_save_record_worker', 'model: %s created: %s' % (model, created))
                 else:
-                    RecordWorker.objects.filter(record=obj, type_id=type_id).delete()
+                    try:
+                        model = RecordWorker.objects.filter(record=obj, type_id=type_id)
+                        print('RecordWorker', '_save_record_worker', 'model', model)
+                        if model:
+                            model.delete()
+                            print('RecordWorker', '_save_record_worker', 'delete', model)
+                    except Exception as e:
+                        print('RecordWorker', '_save_record_worker', 'Exception', e)
 
-            worker = csv_row.recordWorker
+            worker = csv_row.record.recordWorker
+            print('RecordWorker', 'recordWorker', worker)
             _save_record_worker(5, worker.producer)
             _save_record_worker(6, worker.recorder)
             _save_record_worker(7, worker.mixer)
@@ -339,19 +341,25 @@ class RecordParser:
             # print('song.artists', 'stop', obj.artists, obj.artists.all())
 
             def _save_song_worker(type_id, name):
-                if worker.producer:
+                print('SongWorker', '_save_song_worker', 'type_id: %s type_name: %s' % (type_id, name))
+                if name:
                     defaults = {
                         'name': name,
                     }
-                    model = SongWorker.objects.update_or_create(song=obj, type_id=type_id, defaults=defaults)
-                    model.save()
+                    model, created = SongWorker.objects.update_or_create(song=obj, type_id=type_id, defaults=defaults)
+                    print('SongWorker', '_save_song_worker', 'model: %s created: %s' % (model, created))
                 else:
                     try:
-                        RecordWorker.objects.filter(record=obj, type_id=type_id).delete()
+                        model = SongWorker.objects.filter(song=obj, type_id=type_id)
+                        print('SongWorker', '_save_song_worker', 'model', model)
+                        if model:
+                            model.delete()
+                            print('SongWorker', '_save_song_worker', 'delete', model)
                     except Exception as e:
-                        print(e)
+                        print('SongWorker', '_save_song_worker', 'Exception', e)
 
-            worker = csv_row.songWorker
+            worker = raw_song.songWorker
+            print('SongWorker', 'songWorker', worker.__dict__)
             _save_song_worker(1, worker.composer)
             _save_song_worker(2, worker.lyricist)
             _save_song_worker(3, worker.arranger)
