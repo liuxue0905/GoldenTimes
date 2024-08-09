@@ -51,7 +51,7 @@
                                     <ul class="list-inline my-0">
                                         {% for artist in song.artists.all %}
                                             <li class="list-inline-item">
-                                                <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                <a class="text-decoration-none text-body-secondary" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
