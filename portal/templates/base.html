@@ -13,22 +13,6 @@
     <link rel="stylesheet" href="{% static 'css/abc.css' %}">
     <link rel="stylesheet" href="{% static 'css/google/sj-home.css' %}">
 
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
     <!-- Custom styles for this template -->
 
     {% block style %}
@@ -69,13 +53,20 @@
     </div>
 </sj-home>
 
+{#<div style="width: 100%; height: 100%; background-color: #000000; position: fixed;">#}
+{#    <div style="width: 100%; height: auto; position: relative; background-color: #000000; margin-top: -9px;">#}
+{#        <img src="{% static 'img/home.jpg' %}" width="100%" height="auto" alt>#}
+{#        <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgb(33, 33, 33), rgba(33, 33, 33, 0)), linear-gradient(to right, rgb(33, 33, 33), rgba(33, 33, 33, 0));"></div>#}
+{#        <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgb(0, 0, 0), rgba(33, 33, 33, 0)), linear-gradient(to right, rgb(33, 33, 33), rgba(33, 33, 33, 0));"></div>#}
+{#    </div>#}
+{#</div>#}
+
 <main role="main" class="container">
     <div class="pt-2">
         {% block body %}
         {% endblock %}
     </div>
 </main>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
