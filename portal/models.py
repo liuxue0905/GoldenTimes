@@ -118,9 +118,9 @@ class Record(models.Model):
     release_order = models.CharField(max_length=128, blank=True, null=True, verbose_name='发布时间排序',
                                      help_text='yyyy0000')
 
-    producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
-    recorder = models.CharField(max_length=128, blank=True, null=True, verbose_name='录音')
-    mixer = models.CharField(max_length=128, blank=True, null=True, verbose_name='混音')
+    # producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
+    # recorder = models.CharField(max_length=128, blank=True, null=True, verbose_name='录音')
+    # mixer = models.CharField(max_length=128, blank=True, null=True, verbose_name='混音')
     bandsman = models.TextField(blank=True, null=True, verbose_name='乐手')
 
     description = models.TextField(blank=True, null=True, verbose_name='说明')
@@ -197,11 +197,11 @@ class Song(models.Model):
     track = models.CharField(max_length=128, verbose_name='序号')
     title = models.CharField(max_length=128, verbose_name='标题')
 
-    lyricist = models.CharField(max_length=128, blank=True, null=True, verbose_name='作词')
-    composer = models.CharField(max_length=128, blank=True, null=True, verbose_name='作曲')
-    arranger = models.CharField(max_length=128, blank=True, null=True, verbose_name='编曲')
-    vocalist = models.CharField(max_length=128, blank=True, null=True, verbose_name='和音')
-    producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
+    # lyricist = models.CharField(max_length=128, blank=True, null=True, verbose_name='作词')
+    # composer = models.CharField(max_length=128, blank=True, null=True, verbose_name='作曲')
+    # arranger = models.CharField(max_length=128, blank=True, null=True, verbose_name='编曲')
+    # vocalist = models.CharField(max_length=128, blank=True, null=True, verbose_name='和音')
+    # producer = models.CharField(max_length=128, blank=True, null=True, verbose_name='监制')
     bandsman = models.TextField(blank=True, null=True, verbose_name='乐手')
 
     description = models.TextField(blank=True, null=True, verbose_name='说明')
@@ -301,7 +301,7 @@ class Company(models.Model):
 
 class RecordWorker(models.Model):
     record = models.ForeignKey('Record', on_delete=models.CASCADE, db_column='record_id')
-    name = models.CharField(max_length=128, verbose_name='名称', help_text='/分割')
+    name = models.CharField(max_length=128, verbose_name='名称(多个使用/分割)', help_text='/分割')
     type = models.ForeignKey('WorkerType', on_delete=models.SET_NULL, blank=True, null=True, db_column='type', verbose_name='类型')
     # last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     # order = models.IntegerField(verbose_name='排序')
@@ -321,7 +321,7 @@ class RecordWorker(models.Model):
 
 class SongWorker(models.Model):
     song = models.ForeignKey('Song', on_delete=models.CASCADE, db_column='song_id')
-    name = models.CharField(max_length=128, verbose_name='名称', help_text='/分割')
+    name = models.CharField(max_length=128, verbose_name='名称(多个使用/分割)', help_text='/分割')
     type = models.ForeignKey('WorkerType', on_delete=models.SET_NULL, blank=True, null=True, db_column='type', verbose_name='类型')
     # last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
     # order = models.IntegerField(verbose_name='排序')
