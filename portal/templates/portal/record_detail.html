@@ -46,7 +46,7 @@
                                 {#                                <ul class="list-inline my-0">#}
                                 {% for artist in record.artists.all %}
                                     {#                                    <li class="list-inline-item">#}
-                                    <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                     &nbsp;
                                     {#                                    </li>#}
                                 {% endfor %}
@@ -137,13 +137,13 @@
                             <div class="col-1 p-0"><small>{{ song.track }}</small></div>
                             <div class="col-10 col-xs-10 col-sm-10 col-md-6 col-lg-5 d-flex flex-column justify-content-start align-items-start">
                                 <small>
-                                    <a href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
+                                    <a class="text-decoration-none" href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
                                 </small>
                                 <small class="d-block d-xs-block d-sm-block d-md-none">
                                     <ul class="list-inline my-0">
                                         {% for artist in song.artists.all %}
                                             <li class="list-inline-item">
-                                                <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -154,7 +154,7 @@
                                     <ul class="list-inline my-0">
                                         {% for artist in song.artists.all %}
                                             <li class="list-inline-item">
-                                                <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>

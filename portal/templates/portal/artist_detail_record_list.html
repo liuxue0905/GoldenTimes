@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="card-title">
-                                        <a href="{% url 'portal:record-detail' record.id %}">
+                                        <a class="text-decoration-none" href="{% url 'portal:record-detail' record.id %}">
                                             {{ record.title }}
                                         </a>
                                     </div>
@@ -41,7 +41,7 @@
                                             <ul class="list-inline my-0 small">
                                                 {% for artist in record.artists.all %}
                                                     <li class="list-inline-item">
-                                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                        <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>

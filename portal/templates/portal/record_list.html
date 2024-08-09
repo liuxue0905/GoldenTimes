@@ -99,7 +99,7 @@
     <div class="container mt-4">
         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-4 row-cols-xl-5">
             {% for record in object_list %}
-                <div class="col mb-2 mb-md-4 px-1 px-md-2">
+                <div class="cols mb-2 mb-md-4 px-1 px-md-2">
                     <div class="card">
                         <div class="card-img-top ratio-1x1 position-relative">
                             <a href="{% url 'portal:record-detail' record.id %}">
@@ -114,14 +114,16 @@
                                 <small>{{ record.format_value|default:'-' }}</small></div>
                         </div>
                         <div class="card-body">
-                            <a href="{% url 'portal:record-detail' record.id %}" class="card-title">
-                                {{ record.title }}
-                            </a>
+                            <div class="card-title">
+                                <a class="text-decoration-none" href="{% url 'portal:record-detail' record.id %}">
+                                    {{ record.title }}
+                                </a>
+                            </div>
                             <p class="card-text">
                             <ul class="list-inline my-0 small">
                                 {% for artist in record.artists.all %}
                                     <li class="list-inline-item">
-                                        <a href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                        <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                     </li>
                                 {% endfor %}
                             </ul>
