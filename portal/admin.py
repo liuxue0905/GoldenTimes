@@ -67,7 +67,7 @@ class SongAdmin(NestedStackedInline):
     extra = 0
     filter_horizontal = ('artists',)
     inlines = [SongWorkerAdmin]
-    readonly_fields = ['songworker']
+    # readonly_fields = ['songworker']
 
 
 # class RecordCoverAdmin(admin.TabularInline):
@@ -114,7 +114,7 @@ class RecordAdmin(NestedModelAdmin):
     cover = AdminThumbnail(image_field=cached_admin_thumb_record_recordcover)
     cover.short_description = ''
 
-    readonly_fields = ['recordworker']
+    # readonly_fields = ['recordworker']
 
     def artist_list(self, object):
         from django.utils.html import format_html_join
