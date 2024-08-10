@@ -16,6 +16,11 @@ Including another URLconf
 from django.urls import include, path
 from django.contrib import admin
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+from debug_toolbar.toolbar import debug_toolbar_urls
+
 from django.views.generic import RedirectView
 
 urlpatterns = [
@@ -30,17 +35,39 @@ urlpatterns = [
     path("api-auth/", include('rest_framework.urls', namespace='rest_framework'))
 ]
 
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf import settings
+# from django.conf.urls.static import static
+#
+# urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+#
+# # ... the rest of your URLconf here ...
+#
+# urlpatterns += staticfiles_urlpatterns()
 
-
-from django.conf import settings
-from debug_toolbar.toolbar import debug_toolbar_urls
+urlpatterns = (
+        [
+            # ... the rest of your URLconf goes here ...
+            *urlpatterns,
+        ]
+        + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
 
 if not settings.TESTING:
     urlpatterns = [
                       *urlpatterns,
                   ] + debug_toolbar_urls()
+
+if not settings.DEBUG:
+    from .static_debug_false import static as static_debug_false
+    urlpatterns = (
+            [
+                # ... the rest of your URLconf goes here ...
+                *urlpatterns,
+            ]
+            + static_debug_false(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+            + static_debug_false(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    )

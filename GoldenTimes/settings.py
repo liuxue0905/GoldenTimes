@@ -25,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'r-x*n)2kq^%x9jdt$@mxkciiwla^0#7uo331snzg1c=z=ire*+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -135,9 +135,13 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "root", 'media')
 MEDIA_URL = '/media/'
 
-
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+#     "/var/www/static/",
+# ]
 
 # STATICFILES_DIRS = [
+#     BASE_DIR / "root" / "static",
 # ]
 
 # WARNING
@@ -161,8 +165,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
-
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -202,9 +204,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 SECURE_REFERRER_POLICY = "same-origin"
 
-
-
 import sys
+
 TESTING = "test" in sys.argv
 
 if not TESTING:
@@ -216,9 +217,6 @@ if not TESTING:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
         *MIDDLEWARE,
     ]
-
-
-
 
 # manage.py check --deploy
 

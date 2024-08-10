@@ -10,7 +10,7 @@ def get_file_content(filePath):
 
 
 windows = '"*/:<>?\|'
-
+# a = '\/:*?"<>|'
 
 def lx_quote(string):
     from io import StringIO
