@@ -30,37 +30,38 @@
     </nav>
 
     <div class="card m-100">
-{#        <div class="card-header">#}
-{#            <div class="btn-toolbar" role="toolbar">#}
-{#                <button type="button" class="btn btn-primary btn-sm me-2"#}
-{#                        data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
-{#                        aria-expanded="false" aria-controls="collapseExample">#}
-{#                    <span>#}
-{#                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">#}
-{#                            <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"/>#}
-{#                        </svg>#}
-{#                    </span>#}
-{#                    <span>#}
-{#                        展开 搜索#}
-{#                    </span>#}
-{#                </button>#}
-{#                <button type="button" class="btn btn-secondary btn-sm me-2">标题：{{ request.GET.title }}</button>#}
-{#                <button type="button" class="btn btn-secondary btn-sm me-2">介质：{{ request.GET.format }}</button>#}
-{#                <button type="button" class="btn btn-secondary me-2">作曲：{{ request.GET.work_type_1 }}</button>#}
-{#                <button type="button" class="btn btn-secondary">作词：{{ request.GET.work_type_2 }}</button>#}
-{#            </div>#}
-{#            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
-{#                    aria-expanded="false" aria-controls="collapseExample">#}
-{#                Button with data-bs-target#}
-{#            </button>#}
-{#        </div>#}
-{#        <div class="card-body collapse" id="collapseExample">#}
+        {#        <div class="card-header">#}
+        {#            <div class="btn-toolbar" role="toolbar">#}
+        {#                <button type="button" class="btn btn-primary btn-sm me-2"#}
+        {#                        data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
+        {#                        aria-expanded="false" aria-controls="collapseExample">#}
+        {#                    <span>#}
+        {#                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">#}
+        {#                            <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"/>#}
+        {#                        </svg>#}
+        {#                    </span>#}
+        {#                    <span>#}
+        {#                        展开 搜索#}
+        {#                    </span>#}
+        {#                </button>#}
+        {#                <button type="button" class="btn btn-secondary btn-sm me-2">标题：{{ request.GET.title }}</button>#}
+        {#                <button type="button" class="btn btn-secondary btn-sm me-2">介质：{{ request.GET.format }}</button>#}
+        {#                <button type="button" class="btn btn-secondary me-2">作曲：{{ request.GET.work_type_1 }}</button>#}
+        {#                <button type="button" class="btn btn-secondary">作词：{{ request.GET.work_type_2 }}</button>#}
+        {#            </div>#}
+        {#            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
+        {#                    aria-expanded="false" aria-controls="collapseExample">#}
+        {#                Button with data-bs-target#}
+        {#            </button>#}
+        {#        </div>#}
+        {#        <div class="card-body collapse" id="collapseExample">#}
         <div class="card-body" id="collapseExample">
             <form class="" method="get" action="#">
-                {#            {% csrf_token %}#}
+                {% csrf_token %}
                 <div class="mb-2">
                     <label for="inputTitle" class="form-label"><small>标题</small></label>
-                    <input type="text" class="form-control form-control-sm" id="inputTitle" name="title" value="{{ request.GET.title }}">
+                    <input type="text" class="form-control form-control-sm" id="inputTitle" name="title"
+                           value="{{ request.GET.title }}">
                 </div>
                 <div class="mb-2">
                     <label for="inputFormat" class="form-label"><small>介质</small></label>
@@ -81,15 +82,15 @@
                     </select>
                 </div>
 
-{#                <div class="col-md-6">#}
-{#                    <label for="inputWorkType1" class="form-label">作曲</label>#}
-{#                    <input type="text" class="form-control" id="inputWorkType1" name="work_type_1" value="{{ request.GET.work_type_1 }}">#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-6">#}
-{#                    <label for="inputWorkType2" class="form-label">作词</label>#}
-{#                    <input type="text" class="form-control" id="inputWorkType2" name="work_type_2" value="{{ request.GET.work_type_2 }}">#}
-{#                </div>#}
+                {#<div class="col-md-6">#}
+                {#    <label for="inputWorkType1" class="form-label">作曲</label>#}
+                {#    <input type="text" class="form-control" id="inputWorkType1" name="work_type_1" value="{{ request.GET.work_type_1 }}">#}
+                {#</div>#}
+                {##}
+                {#<div class="col-md-6">#}
+                {#    <label for="inputWorkType2" class="form-label">作词</label>#}
+                {#    <input type="text" class="form-control" id="inputWorkType2" name="work_type_2" value="{{ request.GET.work_type_2 }}">#}
+                {#</div>#}
 
                 <button type="submit" class="btn btn-primary btn-sm mt-2">搜索</button>
             </form>
@@ -123,7 +124,8 @@
                             <ul class="list-inline my-0 small">
                                 {% for artist in record.artists.all %}
                                     <li class="list-inline-item">
-                                        <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                        <a class="text-decoration-none"
+                                           href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                     </li>
                                 {% endfor %}
                             </ul>
