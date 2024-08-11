@@ -18,16 +18,16 @@
                 {% for record in object_list %}
                     <div class="col mb-2 mb-md-4 px-1 px-md-2">
                         <div class="card">
-
-                            <div class="card-img-top ratio-1x1 position-relative">
-                                <a href="{% url 'portal:record-detail' record.id %}">
+                            <div class="card-img-top ratio-1x1 w-100 position-relative">
+                                <a class="ratio-1x1 w-100" href="{% url 'portal:record-detail' record.id %}">
+                                    <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
                                     {% if record.recordcover and record.recordcover.image_exists %}
-                                        <img class="ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=200" alt>
-                                    {% else %}
-                                        <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
+                                        <img class="position-absolute top-0 start-0 bottom-0 end-0 ratio-1x1 w-100"
+                                             src="/api/records/{{ record.id }}/cover?size=200" alt>
                                     {% endif %}
-                                    <div id="overlayText" class="style-scope sj-card"><small>{{ record.format_value|default:'-' }}</small></div>
                                 </a>
+                                <div id="overlayText" class="style-scope sj-card">
+                                    <small>{{ record.format_value|default:'-' }}</small></div>
                             </div>
 
                             <div class="card-body">
@@ -41,7 +41,8 @@
                                         <ul class="list-inline my-0 small">
                                             {% for artist in record.artists.all %}
                                                 <li class="list-inline-item">
-                                                    <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                    <a class="text-decoration-none"
+                                                       href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                                 </li>
                                             {% endfor %}
                                         </ul>
