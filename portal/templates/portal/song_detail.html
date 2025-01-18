@@ -27,7 +27,7 @@
                     <div class="ratio-1x1 w-100">
                         {#                        <img src="..." class="img-fluid rounded-start" alt="...">#}
                         {% if record.recordcover_exists and record.recordcover.image_exists %}
-                            <img class="img-fluid ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=128"
+                            <img class="img-fluid ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover/?size=128"
                                  width="128" height="128" alt>
                         {% else %}
                             <img class="img-fluid ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}"

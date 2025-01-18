@@ -31,7 +31,7 @@
                             <div class="d-flex flex-row justify-content-start align-items-start flex-1 m-2">
                                 <div class="ratio-1x1 border rounded-1" style="width: 48px; height: 48px;">
                                     {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                        <img class="img-fluid ratio-1x1 w-100" src="/api/artists/{{ artist.id }}/cover?size=32">
+                                        <img class="img-fluid ratio-1x1 w-100" src="/api/artists/{{ artist.id }}/cover/?size=32">
                                     {% else %}
                                         <img class="img-fluid ratio-1x1 w-100" src="{% static 'img/illo_default_artistradio_portrait.png' %}">
                                     {% endif %}

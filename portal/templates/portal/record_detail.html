@@ -28,7 +28,7 @@
                         <div class="ratio-1x1 w-100 position-relative">
                             <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
                             {% if record.recordcover_exists and record.recordcover.image_exists %}
-                                <img class="position-absolute top-0 start-0 bottom-0 end-0 ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover?size=200" alt>
+                                <img class="position-absolute top-0 start-0 bottom-0 end-0 ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover/?size=200" alt>
                             {% endif %}
                         </div>
                         <div id="overlayText" class="">
