@@ -1,30 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
 
-# Create your views here.
-
-from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
-
-from django.views.decorators.csrf import csrf_exempt
-
-from django.db.models import Q
-
-from portal.models import Record, Song, Artist, Company
-
-import portal.forms as forms
-
-from django.views.generic import ListView, DetailView, FormView
 # from django.views import generic
 from django.utils import timezone
+from django.views.generic import ListView, DetailView, FormView
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from portal.models import Record, Song, Artist, Company, ArtistImages, RecordImages
 
-from django.shortcuts import get_object_or_404, get_list_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+# Create your views here.
 
 
 def index(request):
@@ -600,3 +591,144 @@ class LogImportArtistsView(LoginRequiredMixin, FormView, ListView):
         # context['status'] = ExcelLog.STATUS_CHOICES
 
         return context
+
+
+from django.http import HttpRequest
+from django.http import HttpResponseNotFound
+from GoldenTimes import settings
+import os
+from PIL import Image
+from io import BytesIO
+
+def record_cover(request: HttpRequest, pk, id: str, size: str):
+    # print("record_cover", "pk", pk)
+    # print("record_cover", "id", id)
+    # print("record_cover", "size", size)
+
+    try:
+        id_str = id
+
+        # path_image = ""
+        if id_str == 'front':
+            record = Record.objects.get(pk=pk)
+            path_image = record.recordcover.image.path
+        else:
+            object = RecordImages.objects.get(pk=id_str)
+            path_image = object.image.path
+        #     print('object', object)
+        # print('path_image', path_image)
+
+        size_str = size
+
+        # 支持的尺寸
+        VALID_SIZES = [250, 500, 1200]
+        default_size = 250
+        # size_param = request.GET.get('size', str(default_size))
+        if size_str == 'small':
+            size = 250
+        elif size_str == 'large':
+            size = 500
+        else:
+            try:
+                size = int(size_str)
+                if size not in VALID_SIZES:
+                    size = default_size  # 如果不在支持的尺寸中，用默认值
+            except ValueError:
+                size = default_size
+            # print("size", size)
+
+        image = thumbnail(path_image, size)
+
+        # 保存到内存并返回
+        buffer = BytesIO()
+        image.convert('RGB').save(buffer, format="JPEG")  # 转为 RGB 保存为 JPG
+        buffer.seek(0)
+
+        # 返回图片响应
+        return HttpResponse(buffer.getvalue(), content_type="image/jpeg")
+    # except Exception as e:
+        # print('record_cover', 'except', e)
+        # return HttpResponseNotFound(e)
+    except:
+        return HttpResponseNotFound()
+
+    # try:
+    #     pass
+    # except Exception as e:
+    #     return HttpResponseBadRequest(f"Error processing image: {str(e)}")
+
+def artist_cover(request: HttpRequest, pk, id: str, size: str):
+    # print("record_cover", "pk", pk)
+    # print("record_cover", "id", id)
+    # print("record_cover", "size", size)
+
+    try:
+
+        id_str = id
+
+        path_image = ""
+        if id_str == 'avatar':
+            artist = Artist.objects.get(pk=pk)
+            path_image = artist.artistavatar.image.path
+        else:
+            object = ArtistImages.objects.get(pk=id_str)
+            path_image = object.image.path
+        # print('path_image', path_image)
+
+        size_str = size
+
+        # 支持的尺寸
+        VALID_SIZES = [36, 48, 64, 128, 144, 250, 500, 1200]
+        default_size = 250
+        # size_param = request.GET.get('size', str(default_size))
+        if size_str == 'small':
+            size = 250
+        elif size_str == 'large':
+            size = 500
+        else:
+            try:
+                size = int(size_str)
+                if size not in VALID_SIZES:
+                    size = default_size  # 如果不在支持的尺寸中，用默认值
+            except ValueError:
+                size = default_size
+            # print("size", size)
+
+        image = thumbnail(path_image, size)
+
+        # 保存到内存并返回
+        buffer = BytesIO()
+        image.convert('RGB').save(buffer, format="JPEG")  # 转为 RGB 保存为 JPG
+        buffer.seek(0)
+
+        # 返回图片响应
+        return HttpResponse(buffer.getvalue(), content_type="image/jpeg")
+    # except Exception as e:
+    # print('record_cover', 'except', e)
+    # return HttpResponseNotFound(e)
+    except Exception as e:
+    # except:
+        print(__name__, 'except', e)
+        return HttpResponseNotFound()
+
+def thumbnail(path, size) -> Image:
+    path_watermark = os.path.join(settings.MEDIA_ROOT, 'watermarks','watermark.png')
+
+    image = Image.open(path).convert('RGBA')
+    watermark = Image.open(path_watermark).convert('RGBA')
+
+    image.thumbnail((size, size), Image.Resampling.LANCZOS)
+
+    # # 水印缩放（假设水印占图片宽度的 1/4）
+    # watermark_ratio = new_width / original_width / 4  # 水印按比例缩放
+    watermark_ratio = min(image.width / watermark.width, image.height / watermark.height)
+    # print("watermark_ratio", watermark_ratio)
+    resize_size = (int(watermark.size[0] * watermark_ratio), int(watermark.size[1] * watermark_ratio))
+    watermark = watermark.resize(resize_size, Image.Resampling.LANCZOS)
+
+    # print("image.size", image.size)
+    # print("watermark.size", watermark.size)
+
+    image.paste(watermark, (image.size[0] - watermark.size[0], image.size[1] - watermark.size[1]), watermark)
+
+    return image

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load imagekit %}
 
 {% block navbar %}
     {% with nav_item_active='artist-list' %}
@@ -24,23 +23,29 @@
         <div class="card mb-3 w-100">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <a href="/api/artists/{{ artist.id }}/cover" target="_blank">
-                        <div class="ratio-1x1 w-100 position-relative">
-                            <img class="ratio-1x1 w-100"
+                    <a href="{% url 'portal:artist_cover_id_size' artist.id 'avatar' '1200' %}" target="_blank">
+                        <div class="position-relative">
+                            <img class="w-100 h-100"
                                  src="{% static 'img/illo_default_artistradio_smallcard.png' %}" alt>
 
-                            {% if artist.artistavatar and artist.artistavatar.image_exists %}
-                                <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
-                                     style="width: 80%;"
-                                     src="/api/artists/{{ artist.id }}/cover/?size=200" alt>
-                            {% else %}
-                                <img class="ratio-1x1 rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
-                                     style="width: 80%;"
-                                     src="{% static 'img/illo_default_artistradio_portrait.png' %}" alt>
-                            {% endif %}
+                            <div class="card-img-top rounded-circle position-absolute top-50 start-50 bottom-50 end-50 translate-middle"
+                                 style="width: 80%; height: 80%">
 
-                            <div id="overlayText" class="style-scope sj-card">
-                                <small>{{ artist.type_value|default:'-' }}</small></div>
+                                {% if artist.artistavatar and artist.artistavatar.image_exists %}
+                                    <img class="w-100 h-100 rounded-circle"
+                                         src="{% url 'portal:artist_cover_id_size' artist.id 'avatar' '250' %}"
+                                         onerror="this.src='{% static 'img/illo_default_artistradio_portrait.png' %}';"
+                                         alt/>
+                                {% else %}
+                                    <img class="w-100 h-100 rounded-circle"
+                                         src="{% static 'img/illo_default_artistradio_portrait.png' %}" alt/>
+                                {% endif %}
+
+                            </div>
+
+                            <div id="overlayText">
+                                <small>{{ artist.type_value|default:'-' }}</small>
+                            </div>
                         </div>
                     </a>
                 </div>

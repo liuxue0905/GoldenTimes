@@ -24,15 +24,11 @@
         <div class="card mb-3 w-100">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <div class="ratio-1x1 w-100">
-                        {#                        <img src="..." class="img-fluid rounded-start" alt="...">#}
-                        {% if record.recordcover_exists and record.recordcover.image_exists %}
-                            <img class="img-fluid ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover/?size=128"
-                                 width="128" height="128" alt>
-                        {% else %}
-                            <img class="img-fluid ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}"
-                                 width="128" height="128" alt>
-                        {% endif %}
+                    <div class="w-100 ratio ratio-1x1">
+                        <img src="{% url 'portal:album_cover_id_size' record.id 'front' '250' %}"
+                             onerror="this.src='{% static 'img/svg/default_album.svg' %}';"
+                             class="w-100 h-100 object-fit-cover"
+                             alt>
                     </div>
                 </div>
                 <div class="col-md-8">

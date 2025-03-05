@@ -36,4 +36,9 @@ urlpatterns = [
 
     path("import/records/", views.LogImportRecordsView.as_view(), name='import-records'),
     path("import/artists/", views.LogImportArtistsView.as_view(), name='import-artists'),
+
+    # path('album/<int:pk>/front', views.record_cover, name='album_cover_front'),
+    # path('album/<int:pk>/front-<str:size>', views.record_cover, name='album_cover_front_size'),
+    path('album/<int:pk>/<str:id>-<str:size>', views.record_cover, name='album_cover_id_size'),
+    path('artist/<int:pk>/<str:id>-<str:size>', views.artist_cover, name='artist_cover_id_size'),
 ]

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load imagekit %}
 
 {% block navbar %}
     {% with nav_item_active='record-list' %}
@@ -24,17 +23,16 @@
         <div class="card mb-3 w-100">
             <div class="row g-0">
                 <div class="col-md-4 position-relative">
-                    <a class="ratio-1x1 w-100" href="/api/records/{{ record.id }}/cover" target="_blank" >
-                        <div class="ratio-1x1 w-100 position-relative">
-                            <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
-                            {% if record.recordcover_exists and record.recordcover.image_exists %}
-                                <img class="position-absolute top-0 start-0 bottom-0 end-0 ratio-1x1 w-100" src="/api/records/{{ record.id }}/cover/?size=200" alt>
-                            {% endif %}
-                        </div>
-                        <div id="overlayText" class="">
-                            <small>{{ record.format_value|default:'-' }}</small>
-                        </div>
+                    <a class="w-100 ratio ratio-1x1"
+                       href="{% url 'portal:album_cover_id_size' record.id 'front' '1200' %}" target="_blank">
+                        <img src="{% url 'portal:album_cover_id_size' record.id 'front' '250' %}"
+                             onerror="this.src='{% static 'img/svg/default_album.svg' %}';"
+                             class="w-100 h-100 object-fit-cover"
+                             alt>
                     </a>
+                    <div id="overlayText" class="">
+                        <small>{{ record.format_value|default:'-' }}</small>
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
@@ -45,7 +43,8 @@
                                 {#                                <ul class="list-inline my-0">#}
                                 {% for artist in record.artists.all %}
                                     {#                                    <li class="list-inline-item">#}
-                                    <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                    <a class="text-decoration-none"
+                                       href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                     &nbsp;
                                     {#                                    </li>#}
                                 {% endfor %}
@@ -136,13 +135,15 @@
                             <div class="col-1 p-0"><small>{{ song.track }}</small></div>
                             <div class="col-10 col-xs-10 col-sm-10 col-md-6 col-lg-5 d-flex flex-column justify-content-start align-items-start">
                                 <small>
-                                    <a class="text-decoration-none" href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
+                                    <a class="text-decoration-none"
+                                       href="{% url 'portal:song-detail' song.id %}">{{ song.title }}</a>
                                 </small>
                                 <small class="d-block d-xs-block d-sm-block d-md-none">
                                     <ul class="list-inline my-0">
                                         {% for artist in song.artists.all %}
                                             <li class="list-inline-item">
-                                                <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                <a class="text-decoration-none"
+                                                   href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -153,7 +154,8 @@
                                     <ul class="list-inline my-0">
                                         {% for artist in song.artists.all %}
                                             <li class="list-inline-item">
-                                                <a class="text-decoration-none" href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
+                                                <a class="text-decoration-none"
+                                                   href="{% url 'portal:artist-detail-record-list' artist.id %}">{{ artist.name }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -211,22 +213,15 @@
                         {% for recordimage in record.recordimages_set.all %}
                             <div class="col mb-4">
                                 <div class="card">
-                                    {% if recordimage.image_exists %}
-                                        <a href="/api/records/{{ record.id }}/images/{{ recordimage.id }}?resize=centerInside"
-                                           target="_blank">
-                                            <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                                <img src="/api/records/{{ record.id }}/images/{{ recordimage.id }}?resize=centerInside"
-                                                     class="embed-responsive-item img-thumbnail "
-                                                     alt="{{ record.title }}">
-                                            </div>
-                                        </a>
-                                    {% else %}
-                                        <div class="embed-responsive embed-responsive-1by1 card-img-top">
-                                            <img src="{% static 'img/svg/default_album.svg' %}"
-                                                 class="embed-responsive-item img-thumbnail "
+                                    <a href="{% url 'portal:album_cover_id_size' record.id recordimage.id '1200' %}"
+                                       target="_blank">
+                                        <div class="card-img-top ratio ratio-1x1">
+                                            <img src="{% url 'portal:album_cover_id_size' record.id recordimage.id '250' %}"
+                                                 class="w-100 h-100 img-thumbnail object-fit-contain"
+                                                 onerror="this.src='{% static 'img/svg/default_album.svg' %}';"
                                                  alt="{{ record.title }}">
                                         </div>
-                                    {% endif %}
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

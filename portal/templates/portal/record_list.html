@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% load static %}
-{% load imagekit %}
-{#{% load material_form %}#}
 
 {% block navbar %}
     {% with nav_item_active='record-list' %}
@@ -30,31 +28,6 @@
     </nav>
 
     <div class="card m-100">
-        {#        <div class="card-header">#}
-        {#            <div class="btn-toolbar" role="toolbar">#}
-        {#                <button type="button" class="btn btn-primary btn-sm me-2"#}
-        {#                        data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
-        {#                        aria-expanded="false" aria-controls="collapseExample">#}
-        {#                    <span>#}
-        {#                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">#}
-        {#                            <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"/>#}
-        {#                        </svg>#}
-        {#                    </span>#}
-        {#                    <span>#}
-        {#                        展开 搜索#}
-        {#                    </span>#}
-        {#                </button>#}
-        {#                <button type="button" class="btn btn-secondary btn-sm me-2">标题：{{ request.GET.title }}</button>#}
-        {#                <button type="button" class="btn btn-secondary btn-sm me-2">介质：{{ request.GET.format }}</button>#}
-        {#                <button type="button" class="btn btn-secondary me-2">作曲：{{ request.GET.work_type_1 }}</button>#}
-        {#                <button type="button" class="btn btn-secondary">作词：{{ request.GET.work_type_2 }}</button>#}
-        {#            </div>#}
-        {#            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"#}
-        {#                    aria-expanded="false" aria-controls="collapseExample">#}
-        {#                Button with data-bs-target#}
-        {#            </button>#}
-        {#        </div>#}
-        {#        <div class="card-body collapse" id="collapseExample">#}
         <div class="card-body" id="collapseExample">
             <form class="" method="get" action="#">
                 {% csrf_token %}
@@ -102,17 +75,20 @@
             {% for record in object_list %}
                 <div class="cols mb-2 mb-md-4 px-1 px-md-2">
                     <div class="card">
-                        <div class="card-img-top ratio-1x1 w-100 d-flex position-relative">
-                            <a class="ratio-1x1 w-100" href="{% url 'portal:record-detail' record.id %}">
-                                <img class="ratio-1x1 w-100" src="{% static 'img/svg/default_album.svg' %}" alt>
+                        <div class="card-img-top position-relative">
+                            <a class="w-100 ratio ratio-1x1" href="{% url 'portal:record-detail' record.id %}">
                                 {% if record.recordcover and record.recordcover.image_exists %}
-                                    <img src="/api/records/{{ record.id }}/cover/?size=200"
-                                         class="position-absolute top-0 start-0 bottom-0 end-0 ratio-1x1 w-100"
-                                         alt>
+                                <img src="{% url 'portal:album_cover_id_size' record.id 'front' '250' %}"
+                                     onerror="this.src='{% static 'img/svg/default_album.svg' %}';"
+                                     class="w-100 h-100 object-fit-cover"
+                                     alt>
+                                {% else %}
+                                    <img class="w-100 h-100 object-fit-cover" src="{% static 'img/svg/default_album.svg' %}" alt>
                                 {% endif %}
                             </a>
-                            <div id="overlayText" class="">
-                                <small>{{ record.format_value|default:'-' }}</small></div>
+                            <div id="overlayText">
+                                <small>{{ record.format_value|default:'-' }}</small>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="card-title">
